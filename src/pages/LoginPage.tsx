@@ -1,5 +1,3 @@
-import React from 'react';
-
 const LoginPage = () => (
   <div>
     <h2>Login Page Placeholder</h2>

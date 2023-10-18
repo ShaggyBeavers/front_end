@@ -1,0 +1,69 @@
+html {
+    font-size: 16px;
+}
+
+.navbar {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    top: 94px;
+}
+
+.navbar_con {
+    position: absolute;
+    width: 90vw;
+    max-width: 1280px;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    top: 20px;
+    margin: 0 2.5rem;
+}
+
+.navbar_con ul {
+    display: flex;
+    list-style: none;
+    gap: 1rem;
+    align-items: center;
+}
+
+.navbar_con a{
+    text-decoration: none;
+}
+
+.navbar_con a li {
+    font-size: 0.8125rem;
+    text-align: center;
+    width: 6.5rem;
+    color: white;
+    border-radius: 2.5rem;
+    padding: 0.8125rem 0;
+    background: black;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.navbar_con li a {
+    font-size: 0.8125rem;
+    color: black;
+    text-decoration: underline;
+    transition: 0.5s;
+}
+
+.navbar_con li a:hover {
+    color: white;
+    transition: 0.5s;
+    text-decoration: none;
+}
+
+.navbar_con a li:hover {
+    color: black;
+    background: white;
+    transition: 0.5s;
+}
+
+@media (max-width: 860px) {
+    html {
+        font-size: 14px;
+    }
+}

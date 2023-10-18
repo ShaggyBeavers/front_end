@@ -1,9 +1,10 @@
-import React from 'react';
+import Footer from '../components/Footer/footer';
+import Topper from '../components/Topper/topper';
 
 const HomePage = () => (
   <div>
-    <h2>Home Page Placeholder</h2>
-    <p>This is a temporary placeholder for the Home Page.</p>
+    <Topper/>
+    <Footer/>
   </div>
 );
 

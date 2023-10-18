@@ -1,0 +1,43 @@
+body{
+    font-family: "eUkraine-Regular";
+    background: #ffffff;
+    margin:0;
+    padding: 0;
+    cursor: default;
+}
+
+h1,h2,h3,h4,h5,p,link,button,ul{
+    margin:0;
+    padding: 0;
+    color: black;
+    font-weight: normal;
+}
+
+h1{
+    font-size: 56px;
+}
+
+h2{
+    font-size: 38px;
+}
+
+h3{
+    font-size: 28px;
+}
+
+h4{
+    font-size: 24px;
+}
+
+h5{
+    font-size: 20px;
+}
+
+h6{
+    font-size: 18px;
+}
+
+p{
+    font-size: 16px;
+    font-family: 'eUkraine-Thin';
+}

@@ -1,5 +1,3 @@
-import React from 'react';
-
 const RegisterPage = () => (
   <div>
     <h2>Register Page Placeholder</h2>

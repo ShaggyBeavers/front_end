@@ -1,5 +1,3 @@
-import React from 'react';
-
 const CataloguePage = () => (
   <div>
     <h2>Catalogue Page Placeholder</h2>

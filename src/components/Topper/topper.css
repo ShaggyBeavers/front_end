@@ -1,0 +1,33 @@
+html {
+    font-size: 16px;
+}
+
+.topper h1{
+    font-size: 3.5rem;
+}
+
+.topper {
+    display: flex;
+    height: 38.625rem;
+    background: rgb(191, 152, 198);
+    background: linear-gradient(135deg, rgba(191, 152, 198, 1) 0%, rgba(75, 139, 250, 1) 100%);
+    justify-content: center;
+    position: relative;
+}
+
+.topper_con{
+    width: 29.125rem;
+    display: flex;
+    flex-direction: column;
+    padding:  18.25rem 0 11.5rem;
+    row-gap: 2.0625rem;
+}
+
+@media (max-width: 860px) {
+    html {
+      font-size: 14px; 
+    }
+  }
+
+
+
