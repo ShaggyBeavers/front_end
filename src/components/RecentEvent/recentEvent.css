@@ -1,0 +1,72 @@
+.recent_event{
+    height: 49.5rem;
+    display: flex;
+    justify-content: center;
+}
+
+.rec_ev_con{
+    width: 64.75rem;
+    display: flex;
+    justify-content: space-between;
+    column-gap:  8.375rem;
+    margin: 0 7.5625rem;
+}
+
+.rec_ev_left{
+    padding: 11.125rem 0rem 7.875rem 0;
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.625rem;
+}
+
+.rec_ev_right{
+    display: flex;
+    flex-direction: column;
+    row-gap: 2.625rem;
+    text-align: end;
+    width: 16.375rem;
+    padding: 15.625rem 0;
+}
+
+.rec_ev_right h2{
+    font-family: 'eUkraine-Bold';
+}
+
+@media (max-width: 750px) {
+    html {
+        font-size: 12px;
+    }
+
+    .recent_event img{
+        width: 28rem;
+    }
+}
+
+@media (max-width: 1100px) {
+    html {
+      font-size: 14px;
+    }
+  
+    .recent_event {
+        height: auto; 
+    }
+
+    .rec_ev_con {
+        flex-direction: column; 
+        justify-content: center;
+        align-items: center; 
+        margin: 0; 
+    }
+
+    .rec_ev_left {
+        text-align: center;
+        padding: 2rem 0;
+    }
+
+    .rec_ev_right {
+        padding: 2rem 0; 
+        text-align: center; 
+        width: 100%; 
+    }
+}
+  
