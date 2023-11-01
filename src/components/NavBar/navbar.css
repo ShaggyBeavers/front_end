@@ -11,13 +11,13 @@ html {
 
 .navbar_con {
     position: absolute;
+    display: flex;
+    justify-content: space-between;
     width: 90vw;
     max-width: 1280px;
     z-index: 1;
-    display: flex;
-    justify-content: space-between;
     top: 20px;
-    margin: 0 2.5rem;
+    align-items: center;
 }
 
 .navbar_con ul {
@@ -29,28 +29,36 @@ html {
 
 .navbar_con a{
     text-decoration: none;
+    font-size: 0.8125rem;
+    color: black;
+    text-decoration: underline;
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+.nav_links{
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+}
+
+.nav_catalogue {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .navbar_con a li {
-    font-size: 0.8125rem;
     text-align: center;
     width: 6.5rem;
     color: white;
     border-radius: 2.5rem;
     padding: 0.8125rem 0;
     background: black;
-    cursor: pointer;
-    transition: 0.5s;
+    text-decoration: none;
 }
 
-.navbar_con li a {
-    font-size: 0.8125rem;
-    color: black;
-    text-decoration: underline;
-    transition: 0.5s;
-}
-
-.navbar_con li a:hover {
+.navbar_con a:hover {
     color: white;
     transition: 0.5s;
     text-decoration: none;
@@ -62,8 +70,12 @@ html {
     transition: 0.5s;
 }
 
-@media (max-width: 860px) {
+@media (max-width: 600px) {
     html {
         font-size: 14px;
+    }
+
+    .nav_catalogue {
+        left: 44%;
     }
 }
