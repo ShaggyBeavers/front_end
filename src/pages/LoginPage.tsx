@@ -1,7 +1,10 @@
+import NavBar from "../components/NavBar/navbar";
+import Login from "../components/Login/login";
+
 const LoginPage = () => (
   <div>
-    <h2>Login Page Placeholder</h2>
-    <p>This is a temporary placeholder for the Login Page.</p>
+    <NavBar/>
+    <Login/>
   </div>
 );
 
