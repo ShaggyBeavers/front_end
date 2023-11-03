@@ -13,9 +13,10 @@ const requests = {
   const Account = {
     login: (values: any) => requests.post("account/login", values),
     register: (values: any) => requests.post("account/register", values),
-    currentUser: () => requests.get("account/currentUser"),
+    currentUser: () => requests.get("account/currentUser"),//prototype
     passwodRecovery: (values: any) =>
       requests.post("account/passwordRecovery", values),
+    googleLogin: (values:any) => requests.post("account/google_login",values)//prototype
   };
   
   const agent = {

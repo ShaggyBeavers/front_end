@@ -1,18 +1,18 @@
-.login {
+.register {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.login_con {
+.register_con {
     width: 19.375rem;
     display: flex;
-    position:relative;
-    padding: 8rem 0 0;
+    position: relative;
+    padding: 6.5rem 0 2rem;
     text-align: center;
 }
 
-.login_form {
+.register_form {
     border-radius: 2.5rem;
     background: linear-gradient(149deg, #BF98C6 0%, #4B8BFA 92.19%);
     padding: 2rem;
@@ -22,18 +22,18 @@
     gap: 1.125rem;
 }
 
-.login form {
+.register form {
     text-align: start;
 }
 
-.login_input {
+.register_input {
     display: flex;
     flex-direction: column;
     margin-bottom: 0.625rem;
     gap: 0.1875rem;
 }
 
-.login input {
+.register input {
     padding: 0.5rem 0.8125rem;
     flex: 1;
     border: none;
@@ -43,25 +43,12 @@
     font-size: 0.8125rem;
 }
 
-.login input::placeholder {
+.register input::placeholder {
     font-family: "eUkraine-Regular";
     color: #DADADA;
 }
 
-.log_recovery {
-    display: flex;
-    justify-content: center;
-    gap: 0.1875rem;
-}
-
-.log_recovery p,
-.log_recovery a {
-    font-size: 0.75rem;
-    color: black;
-    font-weight: 700;
-}
-
-.login_btns {
+.register_btns {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -71,7 +58,7 @@
     gap: 1.125rem;
 }
 
-#log_btn {
+#log_btn ,#google_btn{
     width: 100%;
     border-radius: 2.5rem;
     border: none;
@@ -82,22 +69,60 @@
 }
 
 
-.login_input.error p{
+#google_btn {
+    background: var(--White, #FFF);
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    gap:0.3rem; 
+    color: #000;
+    padding: 0.6rem 0;
+}
+.register_input.error p {
     color: red;
     font-size: 11px;
 }
 
-.login_input.error input{
+.register_input.error input {
     border: 1px solid red;
 }
 
-.not_found_message{
+.exists_message,
+.password_message {
     position: absolute;
-    top:55%;
-    left: 95%;
-    width: 10rem;
+    top: 60%;
+    left: 100%;
+    width: 12rem;
 }
 
-.not_found_message p{
+.exists_message p {
     color: red;
+}
+
+.password_message {
+    text-align: left;
+    left: 105%;
+    width: max-content;
+}
+
+.password_message ul {
+    margin-left: 1rem;
+}
+
+.password_message p {
+    font-size: 85%;
+    font-weight: 700;
+}
+
+
+@media (max-width: 750px) {
+
+    .password_message,
+    .exists_message {
+        width: min-content;
+    }
+
+    .exists_message {
+        left: 102%;
+    }
 }
