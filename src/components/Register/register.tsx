@@ -1,24 +1,35 @@
-import { FieldValues, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useGoogleLogin } from '@react-oauth/google';
 import React from 'react';
 import './register.css';
 import agent from '../../app/api/agent';
 
+interface RegisterForm {
+    firstName : string,
+    lastName : string,
+    email : string,
+    password : string,
+    confirmPassword: string
+}
+
 
 export default function Register() {
-    const { register, handleSubmit, formState, getValues, reset } = useForm();
+    const { register, handleSubmit, formState, getValues, reset } = useForm<RegisterForm>();
     const { errors } = formState;
     const [showExistsMessage, setShowExistsMessage] = React.useState(false);
 
-    async function submitForm(data: FieldValues) {
+    const submitForm:SubmitHandler<RegisterForm> = async (data) => {
         try {
             await agent.Account.register(data);
+            reset();
+            setShowExistsMessage(false);
         } catch (error: any) {
-            if (error.response.status === 403) {
+            if (error.response.status === 409) {
                 reset();
                 setShowExistsMessage(true);
             } else {
-
+                console.log(error)
+                setShowExistsMessage(false);
             }
         }
     }
@@ -33,26 +44,26 @@ export default function Register() {
                 <div className='register_form'>
                     <h2>Реєстрація</h2>
                     <form onSubmit={handleSubmit(submitForm)} noValidate>
-                        <div className={`register_input ${errors.name ? 'error' : ''}`}>
+                        <div className={`register_input ${errors.firstName ? 'error' : ''}`}>
                             <label htmlFor="name">Ім'я:</label>
                             <input
                                 type="text"
                                 placeholder="введіть ім'я"
-                                {...register('name', {
+                                {...register('firstName', {
                                     required: 'Заповніть це поле', minLength: {
                                         value: 2,
                                         message: 'Мінімальна довжина - 2 символи',
                                     },
                                 })} />
-                            <p>{errors.name?.message as string}</p>
+                            <p>{errors.firstName?.message as string}</p>
                         </div>
 
-                        <div className={`register_input ${errors.surname ? 'error' : ''}`}>
+                        <div className={`register_input ${errors.lastName ? 'error' : ''}`}>
                             <label htmlFor="surname">Прізвище:</label>
                             <input
                                 type="text"
                                 placeholder='введіть прізвище'
-                                {...register('surname', {
+                                {...register('lastName', {
                                     required: 'Заповніть це поле', minLength: {
                                         value: 2,
                                         message: 'Мінімальна довжина - 2 символи',
@@ -60,7 +71,7 @@ export default function Register() {
                                 })}
 
                             />
-                            <p>{errors.surname?.message as string}</p>
+                            <p>{errors.lastName?.message as string}</p>
                         </div>
 
                         <div className={`register_input ${errors.email ? 'error' : ''}`}>
@@ -110,12 +121,12 @@ export default function Register() {
                         <div className='register_btns'>
                             <button type="submit" id='log_btn'>Зареєструватись</button>
                             <button type='button' onClick={() => login()} id='google_btn'>
-                                Зареєструватись з <img src="./icons/google.svg" style={{width:'20px'}}/>
+                                Зареєструватись з <img src="./icons/google.svg" style={{ width: '20px' }} />
                             </button>
                         </div>
                     </form>
                 </div>
-                {showExistsMessage && (
+                {showExistsMessage && !errors.password && (
                     <div className='exists_message'>
                         <p>Акаунт з такою поштою вже існує. <br />Спробуйте ще раз</p>
                     </div>

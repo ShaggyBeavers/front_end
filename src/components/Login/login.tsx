@@ -1,24 +1,30 @@
-import { FieldValues, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { GoogleLogin } from '@react-oauth/google';
 import React from 'react';
 import './login.css';
 import agent from '../../app/api/agent';
 
+interface LoginForm {
+    email: string;
+    password: string;
+  }
 
 export default function Login() {
-    const { register, handleSubmit, formState, reset } = useForm();
+    const { register, handleSubmit, formState, reset } = useForm<LoginForm>();
     const { errors } = formState;
     const [showNotFoundMessage, setShowNotFoundMessage] = React.useState(false);
 
-    async function submitForm(data: FieldValues) {
+    const submitForm:SubmitHandler<LoginForm> = async (data) => {
         try {
             await agent.Account.login(data);
+            reset();
+            setShowNotFoundMessage(false);
         } catch (error: any) {
-            if (error.response.status === 403 || error.response.status === 401) {
+            if (error.response && (error.response.status === 403 || error.response.status === 401)) {
                 reset();
                 setShowNotFoundMessage(true);
             } else {
-
+                console.log(error)
             }
         }
     }

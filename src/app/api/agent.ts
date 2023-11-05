@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 
-axios.defaults.baseURL = "";
+axios.defaults.baseURL = "http://localhost:8080";
 const responseBody = (response: AxiosResponse) => response.data;
 
 const requests = {
@@ -11,8 +11,8 @@ const requests = {
   };
   
   const Account = {
-    login: (values: any) => requests.post("account/login", values),
-    register: (values: any) => requests.post("account/register", values),
+    login: (values: { email: string; password: string }) => requests.post("api/auth/sign-in", values),
+    register: (values: { firstName:string,lastName:string,email: string; password: string }) => requests.post("api/auth/sign-up", values),
     currentUser: () => requests.get("account/currentUser"),//prototype
     passwodRecovery: (values: any) =>
       requests.post("account/passwordRecovery", values),
