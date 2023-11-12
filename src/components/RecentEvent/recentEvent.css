@@ -1,72 +1,98 @@
-.recent_event{
-    height: 49.5rem;
+.recent_event {
     display: flex;
-    justify-content: center;
+    margin: 0 auto;
+    max-width: 80rem;
 }
 
-.rec_ev_con{
-    width: 64.75rem;
-    display: flex;
-    justify-content: space-between;
-    column-gap:  8.375rem;
-    margin: 0 7.5625rem;
-}
-
-.rec_ev_left{
-    padding: 11.125rem 0rem 7.875rem 0;
+.rec_ev_con {
     display: flex;
     flex-direction: column;
-    row-gap: 0.625rem;
+    padding: 0 2.6875rem 0 5.125rem;
 }
 
-.rec_ev_right{
+.rec_ev_top {
     display: flex;
     flex-direction: column;
-    row-gap: 2.625rem;
-    text-align: end;
-    width: 16.375rem;
-    padding: 15.625rem 0;
+    padding: 5.3125rem 0 2rem 0;
+    gap: 2rem;
 }
 
-.rec_ev_right h2{
+.rec_ev_top h2,
+h6 {
+    color: #A3A3A3;
+    margin: 0;
+}
+
+.rec_ev_left a{
+    color: #4B8BFA;
     font-family: 'eUkraine-Bold';
 }
 
-@media (max-width: 750px) {
-    html {
-        font-size: 12px;
-    }
-
-    .recent_event img{
-        width: 28rem;
-    }
+.rec_head,
+.rec_ev_left {
+    padding-left: 0.875rem;
 }
 
-@media (max-width: 1100px) {
+.rec_ev_bot {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 6rem;
+}
+
+.rec_ev_left {
+    max-width: 42%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.rec_ev_right {
+    max-width: 54%;
+    display: flex;
+    gap: 3rem;
+    align-items: flex-start;
+}
+
+.rec_ev_line {
+    max-height: 89%;
+}
+
+.rec_ev_pic {
+    max-width: 89%;
+    max-height: 89%;
+}
+
+
+@media (max-width: 700px) {
     html {
-      font-size: 14px;
-    }
-  
-    .recent_event {
-        height: auto; 
+        font-size: 14px;
     }
 
     .rec_ev_con {
-        flex-direction: column; 
-        justify-content: center;
-        align-items: center; 
-        margin: 0; 
+        padding: 0 1rem;
+        text-align: center;
     }
 
     .rec_ev_left {
-        text-align: center;
-        padding: 2rem 0;
+        max-width: 70%;
     }
 
     .rec_ev_right {
-        padding: 2rem 0; 
-        text-align: center; 
-        width: 100%; 
+        max-width: 80%;
+    }
+
+    .rec_ev_bot {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    .rec_ev_line {
+        display: none;
+    }
+
+    .rec_ev_pic {
+        margin: 0 auto;
     }
 }
-  

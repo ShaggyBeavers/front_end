@@ -13,6 +13,7 @@
     flex-direction: column;
     padding:  18.25rem 0 11.5rem;
     row-gap: 2.0625rem;
+    text-align: center;
 }
 
 @media (max-width: 860px) {

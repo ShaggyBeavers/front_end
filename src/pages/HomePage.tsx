@@ -3,6 +3,7 @@ import Topper from '../components/Topper/topper';
 import RecentEvent from '../components/RecentEvent/recentEvent';
 import BannerLanding from '../components/BannerLanding/banner';
 import WeeklyExhibit from '../components/WeeklyExhibit/w_exhibit';
+import Categories from '../components/Categories/categories';
 
 const HomePage = () => (
   <div>
@@ -10,6 +11,7 @@ const HomePage = () => (
     <RecentEvent/>
     <BannerLanding/>
     <WeeklyExhibit/>
+    <Categories/>
     <Footer/>
   </div>
 );

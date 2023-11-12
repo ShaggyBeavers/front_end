@@ -5,10 +5,10 @@ import './topper.css';
 const Topper = () => {
     return (
         <div>
-            <NavBar />
+            <NavBar/>
             <div className="topper">
                 <div className='topper_con'>
-                    <h1>Назва проєкту</h1>
+                    <h1>Divi</h1>
                     <Search/>
                 </div>
             </div>
