@@ -1,7 +1,11 @@
+import NavBar from "../components/NavBar/navbar";
+import Footer from "../components/Footer/footer";
+import Catalogue from "../components/Catalogue/catalogue";
 const CataloguePage = () => (
   <div>
-    <h2>Catalogue Page Placeholder</h2>
-    <p>This is a temporary placeholder for the Catalogue Page.</p>
+    <NavBar/>
+    <Catalogue/>
+    <Footer/>
   </div>
 );
 

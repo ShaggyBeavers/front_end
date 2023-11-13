@@ -1,5 +1,5 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { GoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
 import React from 'react';
 import './login.css';
 import agent from '../../app/api/agent';
@@ -28,6 +28,10 @@ export default function Login() {
             }
         }
     }
+
+    const login = useGoogleLogin({
+        onSuccess: tokenResponse => console.log(tokenResponse),
+    });
 
    
     return (
@@ -65,17 +69,9 @@ export default function Login() {
 
                         <div className='login_btns'>
                             <button type="submit" id='log_btn'>Увійти</button>
-                            <GoogleLogin
-                            //temporarily hardcoded
-                                onSuccess={credentialResponse => {
-                                    console.log(credentialResponse);
-                                }}
-                                onError={() => {
-                                    console.log('Login Failed');
-                                }}
-                                shape='pill'
-                                size='medium'                                
-                            />
+                            <button type='button' onClick={() => login()} id='google_btn'>
+                                Увійти з <img src="./icons/google.svg" style={{ width: '20px' }} />
+                            </button>
                         </div>
                     </form>
                 </div>

@@ -15,12 +15,18 @@ const requests = {
     register: (values: { firstName:string,lastName:string,email: string; password: string }) => requests.post("api/auth/sign-up", values),
     currentUser: () => requests.get("account/currentUser"),//prototype
     passwodRecovery: (values: any) =>
-      requests.post("account/passwordRecovery", values),
-    googleLogin: (values:any) => requests.post("account/google_login",values)//prototype
+      requests.post("api/auth/passwordRecovery", values),//prototype
+    googleLogin: (values:any) => requests.post("api/auth/google_login",values)//prototype
   };
+
+  const Catalogue = {
+    fetchItems: (page: number, size: number) =>
+      requests.get(`api/catalogue?page=${page}&size=${size}`),
+  }
   
   const agent = {
     Account,
+    Catalogue
   };
 
   export default agent;

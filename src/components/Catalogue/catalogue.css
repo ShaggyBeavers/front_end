@@ -1,0 +1,228 @@
+.catalogue-container {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 9rem 5rem 0;
+    display: flex;
+    justify-content: center;
+}
+
+.cat_left {
+    min-width: 23%;
+    margin-right: 5rem;
+}
+
+.cat_right {
+    max-width: 48rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.cat_filter {
+    width: 100%;
+    padding: 1.3125rem;
+    background: var(--Linear-Gradient, linear-gradient(135deg, #BF98C6 0%, #4B8BFA 100%));
+    border-radius: 20px;
+    position: sticky;
+    position: -webkit-sticky;
+    top: 2rem;
+    margin-bottom: 6.5rem;
+    transition: top 4s ease;
+}
+
+.cat_photo {
+    max-width: 16.625rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 40px;
+    background: var(--White, #FFF);
+    padding: 0.45rem 0.8125rem;
+}
+
+.cat_photo h6 {
+    background: var(--Linear-Gradient, linear-gradient(135deg, #BF98C6 0%, #4B8BFA 100%));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: 'eUkraine-Bold';
+}
+
+.switch__container {
+    width: 46px;
+}
+
+.switch {
+    visibility: hidden;
+    position: absolute;
+    margin-left: -9999px;
+}
+
+.switch+label {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+}
+
+.switch--flat+label {
+    padding: 2px;
+    width: 42px;
+    height: 18px;
+    background-color: #dddddd;
+    border-radius: 60px;
+    transition: background 0.4s;
+}
+
+.switch--flat+label:before,
+.switch--flat+label:after {
+    display: block;
+    position: absolute;
+    content: "";
+}
+
+.switch--flat+label:before {
+    top: 2px;
+    left: 2px;
+    bottom: 2px;
+    right: 2px;
+    background-color: #fff;
+    border-radius: 60px;
+    transition: background 0.4s;
+}
+
+.switch--flat+label:after {
+    top: 4px;
+    left: 4px;
+    bottom: 4px;
+    width: 14px;
+    background-color: #dddddd;
+    border-radius: 52px;
+    transition: margin 0.4s, background 0.4s;
+}
+
+.switch--flat:checked+label {
+    background-color: #19BE6F;
+}
+
+.switch--flat:checked+label:after {
+    margin-left: 24px;
+    background-color: #19BE6F;
+}
+
+.filter_categories ul {
+    list-style: none;
+}
+
+.filter_categories li {
+    display: flex;
+    margin-top: 0.875rem;
+}
+
+.filter_categories h6 {
+    color: white;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 2.5rem;
+    row-gap: 2.875rem;
+    margin-top: 2rem;
+}
+
+.grid-item {
+    max-width: 14.25rem;
+    border: 1px solid #ddd;
+    text-align: center;
+    position: relative;
+    background-color: #dadada;
+}
+
+.grid-item img {
+    object-fit: cover;
+    width: 100%;
+    background: var(--Linear-Gradient, linear-gradient(135deg, #BF98C6 0%, #4B8BFA 100%));
+    display: block;
+    padding-bottom: 10px;
+}
+
+.test { 
+    overflow:hidden;
+    padding: 0.75rem;
+  }
+  
+  .test a {
+    height: 2rem;
+    font-size: 14px; 
+    display: block;
+    overflow: hidden;
+  }
+
+
+.pagination-container {
+    display: flex;
+    list-style: none;
+    justify-content: center;
+    margin: 3rem 0 2rem;
+    padding: 0;
+    max-width: 100%;
+}
+
+.pagination-container button {
+    margin: 0 2px;
+    padding: 6px 12px;
+    border-radius: 10px;
+    background-color: white;
+    border: 1.5px solid #4B8BFA;
+    cursor: pointer;
+}
+
+.pagination-container button.active {
+    background-color: #4B8BFA;
+    color: white;
+}
+
+.pagination-container button:hover {
+    color: #4B8BFA;
+    transition: 0.5s;
+}
+
+
+@media (max-width: 890px) {
+    .cat_left {
+        padding-right: 0px;
+        min-width: 25%;
+    }
+
+    .grid-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .catalogue-container {
+        padding: 9rem 3rem 0;
+    }
+}
+
+
+@media (max-width: 580px) {
+    .cat_left {
+        padding-right: 0px;
+        min-width: 28%;
+    }
+
+    .grid-container {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .cat_right {
+        max-width: 60%;
+    }
+
+    .catalogue-container {
+        padding: 9rem 2rem 0;
+        margin: 0 auto;
+    }
+}
