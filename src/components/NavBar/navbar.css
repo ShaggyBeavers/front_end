@@ -28,12 +28,16 @@ html {
 }
 
 .navbar_con a{
-    text-decoration: none;
     font-size: 0.8125rem;
     color: black;
     text-decoration: underline;
     transition: 0.5s;
     cursor: pointer;
+}
+
+.nav_logo a{
+    text-decoration: none;
+    color: inherit;
 }
 
 .nav_links{
@@ -48,7 +52,7 @@ html {
     transform: translateX(-50%);
 }
 
-.navbar_con a li {
+#nav_log_btn {
     text-align: center;
     width: 6.5rem;
     color: white;
@@ -56,6 +60,7 @@ html {
     padding: 0.8125rem 0;
     background: black;
     text-decoration: none;
+    transition: 0.7s ease;
 }
 
 .navbar_con a:hover {
@@ -64,10 +69,10 @@ html {
     text-decoration: none;
 }
 
-.navbar_con a li:hover {
+#nav_log_btn:hover {
     color: black;
     background: white;
-    transition: 0.5s;
+    transition: 0.7s;
 }
 
 @media (max-width: 600px) {

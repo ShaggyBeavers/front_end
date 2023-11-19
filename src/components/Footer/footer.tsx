@@ -1,18 +1,20 @@
 import './footer.css';
-import { Link } from 'react-router-dom';
+import { Link} from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 
 const Footer = () => {
+
     return (
-        <div className="footer">
+        <div className="footer" >
             <div className='footer_con'>
                 <div className="footer_left">
                     <Link to="/"><h2>Назва проєкту</h2></Link>
                     <div className="footer_nav">
                         <ul>
-                            <li><Link to="/" >Останні події</Link></li>
-                            <li><Link to="/" >Експонат тижня</Link></li>
-                            <li><Link to="/" >Усі експонати</Link></li>
-                            <li><Link to="/profile">Кабінет</Link></li>
+                            <li><HashLink smooth to="/#recent-event" >Останні події</HashLink></li>
+                            <li><HashLink smooth to="/#week-exhibit" >Експонат тижня</HashLink></li>
+                            <li><Link to="/catalogue?page=1" >Усі експонати</Link></li>
+                            <li><Link to="/profile" >Кабінет</Link></li>
                         </ul>
                     </div>
                 </div>

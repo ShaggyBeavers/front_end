@@ -1,5 +1,4 @@
 .weekly_exhibit {
-    height: 57rem;
     display: flex;
     justify-content: center;
 }
@@ -18,8 +17,8 @@
 }
 
 .week_left {
-    max-width: 50rem;
-    max-height: 42.5rem;
+    max-width: 44rem;
+    max-height: 35.5rem;
     justify-content: center;
     display: flex;
     flex-direction: column;
@@ -30,14 +29,14 @@
 .week_right {
     display: flex;
     flex-direction: column;
-    max-width: 18rem;
+    flex-wrap: wrap;
+    max-width: 26%;
     gap: 0.75rem;
-    padding-top: 9.6875rem;
-    max-height: 27.375rem;
+    padding-top: 7.6875rem;
 }
 
 .week_descr {
-    padding: 2rem;
+    padding: 1.5rem;
     border-radius: 40px;
     background: var(--Linear-Gradient, linear-gradient(135deg, #BF98C6 0%, #4B8BFA 100%));
     max-height: 27.375rem;
@@ -47,8 +46,14 @@
     text-align: center;
 }
 
+.week_title a{
+    text-decoration-color: white;
+}
+
 .week_descr h6 {
     color: white;
+    letter-spacing: 0.2px;
+    font-weight: 300;
 }
 
 .week_img {

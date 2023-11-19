@@ -3,10 +3,10 @@ import './recentEvent.css';
 const RecentEvent = () => {
     return (
         <div>
-            <div className='recent_event'>
+            <div className='recent_event' >
                 <div className='rec_ev_con'>
                     <div className='rec_ev_top'>
-                        <h2>Останні події:</h2>
+                        <h2 id='recent-event'>Останні події:</h2>
                         <div className='rec_head'>
                             <h3>В Іспанії вилучили незаконно вивезені з України старовинні золоті артефакти на 64 млн $</h3>
                             <h6>23 жовт.2023</h6>

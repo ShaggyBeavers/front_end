@@ -1,10 +1,9 @@
-// Catalogue.js
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Search from '../Search/search';
 import './catalogue.css';
+import SwitchBtn from '../SwitchButton/switch_btn';
 
 interface Photo {
   id: number;
@@ -58,10 +57,7 @@ const Catalogue = () => {
         <div className='cat_filter'>
           <div className='cat_photo'>
             <h6>Фото</h6>
-            <div className="switch__container">
-              <input id="switch-flat" className="switch switch--flat" type="checkbox" />
-              <label htmlFor="switch-flat"></label>
-            </div>
+            <SwitchBtn/>
           </div>
           <div className='filter_categories'>
               <ul>

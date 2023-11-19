@@ -1,0 +1,62 @@
+.switch__container {
+    width: 46px;
+}
+
+.switch {
+    visibility: hidden;
+    position: absolute;
+    margin-left: -9999px;
+}
+
+.switch+label {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+}
+
+.switch--flat+label {
+    padding: 2px;
+    width: 42px;
+    height: 18px;
+    background-color: #dddddd;
+    border-radius: 60px;
+    transition: background 0.4s;
+}
+
+.switch--flat+label:before,
+.switch--flat+label:after {
+    display: block;
+    position: absolute;
+    content: "";
+}
+
+.switch--flat+label:before {
+    top: 2px;
+    left: 2px;
+    bottom: 2px;
+    right: 2px;
+    background-color: #fff;
+    border-radius: 60px;
+    transition: background 0.4s;
+}
+
+.switch--flat+label:after {
+    top: 4px;
+    left: 4px;
+    bottom: 4px;
+    width: 14px;
+    background-color: #dddddd;
+    border-radius: 52px;
+    transition: margin 0.4s, background 0.4s;
+}
+
+.switch--flat:checked+label {
+    background-color: #19BE6F;
+}
+
+.switch--flat:checked+label:after {
+    margin-left: 24px;
+    background-color: #19BE6F;
+}
