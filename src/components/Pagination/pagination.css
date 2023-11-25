@@ -1,0 +1,43 @@
+.pagination-container {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 0 2rem;
+    max-width: 100%;
+}
+
+.pagination-container button {
+    margin: 0 0.25rem;
+    background-color: white;
+    border: none;
+    cursor: pointer;
+    color: #DADADA;
+    font-size: 16px;
+    transition: 0.5s;
+}
+
+.pagination-container button.active {
+    color: black;
+}
+
+.pagination-container button:not(.active):hover {
+    color: #4B8BFA;
+    transition: 0.5s;
+}
+
+.to_top{
+    margin-top:0.125rem;
+}
+
+.to_top a{
+    font-size: 14px;
+    color: black;
+    transition: 0.5s;
+}
+
+.to_top a:hover{
+    color: #4B8BFA;
+    transition: 0.5s;
+}

@@ -63,7 +63,7 @@
     color: white;
 }
 
-.grid-container {
+.cat-items-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     column-gap: 2.5rem;
@@ -71,7 +71,7 @@
     margin-top: 2rem;
 }
 
-.grid-item {
+.cat-item {
     max-width: 14.25rem;
     border: 1px solid #ddd;
     text-align: center;
@@ -79,7 +79,7 @@
     background-color: #dadada;
 }
 
-.grid-item img {
+.cat-item img {
     object-fit: cover;
     width: 100%;
     background: var(--Linear-Gradient, linear-gradient(135deg, #BF98C6 0%, #4B8BFA 100%));
@@ -87,46 +87,17 @@
     padding-bottom: 10px;
 }
 
-.test { 
+.cat-item-title { 
     overflow:hidden;
     padding: 0.75rem;
   }
   
-  .test a {
+  .cat-item-title a {
     height: 2.25rem;
     font-size: 14px; 
     display: block;
     overflow: hidden;
   }
-
-
-.pagination-container {
-    display: flex;
-    list-style: none;
-    justify-content: center;
-    margin: 3rem 0 2rem;
-    padding: 0;
-    max-width: 100%;
-}
-
-.pagination-container button {
-    margin: 0 2px;
-    padding: 6px 12px;
-    border-radius: 10px;
-    background-color: white;
-    border: 1.5px solid #4B8BFA;
-    cursor: pointer;
-}
-
-.pagination-container button.active {
-    background-color: #4B8BFA;
-    color: white;
-}
-
-.pagination-container button:hover {
-    color: #4B8BFA;
-    transition: 0.5s;
-}
 
 
 @media (max-width: 890px) {
@@ -135,7 +106,7 @@
         min-width: 25%;
     }
 
-    .grid-container {
+    .cat-items-container {
         grid-template-columns: repeat(2, 1fr);
     }
 
@@ -155,7 +126,7 @@
         min-width: 28%;
     }
 
-    .grid-container {
+    .cat-items-container {
         grid-template-columns: repeat(1, 1fr);
     }
 

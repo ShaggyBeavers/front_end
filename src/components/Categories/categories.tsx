@@ -1,4 +1,5 @@
 import Category from '../Category/category';
+import { Link } from 'react-router-dom';
 import './categories.css';
 
 const Categories = () => {
@@ -11,7 +12,7 @@ const Categories = () => {
 
   return (
     <div className='categories'>
-      <a href="/catalogue">Подивитись усі:</a>
+      <Link to="/catalogue?page=1">Подивитись усі:</Link>
       <div className="categories_con">
         {categories.map((category) => (
           <Category title={category.title} />

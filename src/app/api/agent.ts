@@ -21,7 +21,7 @@ const requests = {
 
   const Catalogue = {
     fetchItems: (page: number, size: number) =>
-      requests.get(`api/catalogue?page=${page}&size=${size}`),
+      requests.get(`api/relics/page?page=${page}&size=${size}`),
   }
   
   const agent = {

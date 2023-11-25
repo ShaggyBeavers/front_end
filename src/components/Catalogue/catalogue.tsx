@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import Search from '../Search/search';
 import './catalogue.css';
 import SwitchBtn from '../SwitchButton/switch_btn';
+import Pagination from '../Pagination/pagination';
 
 interface Photo {
   id: number;
@@ -43,7 +44,7 @@ const Catalogue = () => {
   }, [currentPage, navigate]);
 
 
-  const totalPages = 5;//temporarily hardcoded
+  const totalPages = 6;//temporarily hardcoded
 
   const paginate = (pageNumber: number) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -52,75 +53,56 @@ const Catalogue = () => {
   };
 
   return (
-    <div className="catalogue-container">
+    <div className="catalogue-container" id='cat_top'>
       <div className='cat_left'>
         <div className='cat_filter'>
           <div className='cat_photo'>
             <h6>Фото</h6>
-            <SwitchBtn/>
+            <SwitchBtn />
           </div>
           <div className='filter_categories'>
-              <ul>
-                <li>
-                  <img src=""/>
-                  <h6>Категорія</h6>
-                  <img src=""/>
-                  </li>
-                <li>
-                  <img src=""/>
-                  <h6>Категорія</h6>
-                  <img src=""/>
-                  </li>
-                <li>
-                  <img src=""/>
-                  <h6>Категорія</h6>
-                  <img src=""/>
-                  </li>
-                <li>
-                  <img src=""/>
-                  <h6>Категорія</h6>
-                  <img src=""/>
-                  </li>
-                <li>
-                  <img src=""/>
-                  <h6>Категорія</h6>
-                  <img src=""/>
-                  </li>
-              </ul>
+            <ul>
+              <li>
+                <img src="" />
+                <h6>Категорія</h6>
+                <img src="" />
+              </li>
+              <li>
+                <img src="" />
+                <h6>Категорія</h6>
+                <img src="" />
+              </li>
+              <li>
+                <img src="" />
+                <h6>Категорія</h6>
+                <img src="" />
+              </li>
+              <li>
+                <img src="" />
+                <h6>Категорія</h6>
+                <img src="" />
+              </li>
+              <li>
+                <img src="" />
+                <h6>Категорія</h6>
+                <img src="" />
+              </li>
+            </ul>
           </div>
         </div>
       </div>
       <div className='cat_right'>
         <Search />
-        <div className="grid-container">
+        <div className="cat-items-container">
           {items.map((item) => (
-            <div key={item.id} className="grid-item">
+            <div key={item.id} className="cat-item">
               <img src={item.thumbnailUrl} alt={item.title} />
-              <div className='test'><a>{item.title}</a></div>
+              <div className='cat-item-title'><a>{item.title}</a></div>
             </div>
           ))}
         </div>
 
-        <div className="pagination-container">
-          <button onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>
-            &#8592;
-          </button>
-          {Array.from({ length: totalPages }, (_, index) => (
-            <button
-              key={index + 1}
-              onClick={() => paginate(index + 1)}
-              className={currentPage === index + 1 ? 'active' : ''}
-            >
-              {index + 1}
-            </button>
-          ))}
-          <button
-            onClick={() => paginate(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          >
-            &#8594;
-          </button>
-        </div>
+        <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={paginate} topRef='cat_top' />
       </div>
     </div>
   );
