@@ -1,15 +1,17 @@
 import './pagination.css';
 import React from 'react';
-import { HashLink } from 'react-router-hash-link';
 
 interface PaginationProps {
   totalPages: number;
   currentPage: number;
-  onPageChange: (pageNumber: number) => void;
-  topRef: string
+  onPageChange: (pageNumber: number) => void
 }
 
-const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage, onPageChange, topRef }) => {
+const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage, onPageChange}) => {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <div className="pagination-container">
       <div>
@@ -36,7 +38,7 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage, onPage
           </button>
         )}
       </div>
-      <div className='to_top'><HashLink smooth to={`#${topRef}`}>Перейти до гори</HashLink></div>
+      <div className='to_top' onClick={scrollToTop}>Перейти до гори</div>
     </div>
   );
 };

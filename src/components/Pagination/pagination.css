@@ -29,15 +29,14 @@
 
 .to_top{
     margin-top:0.125rem;
-}
-
-.to_top a{
     font-size: 14px;
     color: black;
     transition: 0.5s;
+    cursor: pointer;
+    text-decoration: underline;
 }
 
-.to_top a:hover{
+.to_top:hover{
     color: #4B8BFA;
     transition: 0.5s;
 }

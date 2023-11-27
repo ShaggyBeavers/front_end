@@ -5,6 +5,7 @@ import Search from '../Search/search';
 import './catalogue.css';
 import SwitchBtn from '../SwitchButton/switch_btn';
 import Pagination from '../Pagination/pagination';
+import NotFound from '../NotFound/not_found';
 
 interface Photo {
   id: number;
@@ -16,9 +17,11 @@ const PAGE_SIZE = 18;
 
 const Catalogue = () => {
   const [items, setItems] = useState<Photo[]>([]);
+  const [notFound, setNotFound] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
   const location = useLocation();
+  const totalPages = 6;//temporarily hardcoded
 
   const fetchItems = async (page: number) => {
     //request is ready in agent.ts,this is just to display styling
@@ -34,26 +37,26 @@ const Catalogue = () => {
     const searchParams = new URLSearchParams(location.search);
     const pageParam = searchParams.get('page');
     const pageNumber = pageParam ? parseInt(pageParam, 10) : 1;
-    setCurrentPage(pageNumber);
+    if (pageNumber >= 1 && pageNumber <= totalPages) {
+      setCurrentPage(pageNumber);
+    } else {
+      setNotFound(true);
+    }
   }, [location.search]);
-
 
   useEffect(() => {
     fetchItems(currentPage);
-    navigate(`?page=${currentPage}`);
   }, [currentPage, navigate]);
-
-
-  const totalPages = 6;//temporarily hardcoded
 
   const paginate = (pageNumber: number) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
       setCurrentPage(pageNumber);
+      navigate(`?page=${pageNumber}`);
     }
   };
 
-  return (
-    <div className="catalogue-container" id='cat_top'>
+  return (<>{
+    notFound ? <NotFound/> : <div className="catalogue-container" >
       <div className='cat_left'>
         <div className='cat_filter'>
           <div className='cat_photo'>
@@ -102,9 +105,11 @@ const Catalogue = () => {
           ))}
         </div>
 
-        <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={paginate} topRef='cat_top' />
+        <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={paginate} />
       </div>
     </div>
+  }
+  </>
   );
 };
 
