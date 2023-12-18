@@ -1,0 +1,44 @@
+.relic_con {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 6rem 5rem 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.relic_left {
+    max-width: 35%;
+    margin-right: 5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.prev_relic{
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 1rem;
+}
+
+.prev_relic p{
+    font-family: 'eUkraine-Bold';
+    text-decoration: underline;
+    font-size:   0.85rem;
+}
+
+.relic_left h4{
+    font-family: 'eUkraine-Thin';
+    font-weight: 700;
+    background: linear-gradient(286deg, #F4A815 48.72%, #4E3421 89.82%);
+    background-clip: text;
+    color: transparent;
+}
+
+.relic_right {
+    max-width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

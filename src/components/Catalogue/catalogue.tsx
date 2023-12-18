@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import Search from '../Search/search';
 import './catalogue.css';
 import SwitchBtn from '../SwitchButton/switch_btn';
 import Pagination from '../Pagination/pagination';
 import NotFound from '../NotFound/not_found';
+import agent from '../../app/api/agent';
 
 interface Photo {
   id: number;
@@ -24,10 +25,12 @@ const Catalogue = () => {
   const totalPages = 6;//temporarily hardcoded
 
   const fetchItems = async (page: number) => {
-    //request is ready in agent.ts,this is just to display styling
+    //request is under,this is just to display styling
     try {
       const response = await axios.get<Photo[]>(`https://jsonplaceholder.typicode.com/photos?_page=${page}&_limit=${PAGE_SIZE}`);
+      // const response = await agent.Catalogue.fetchItems(page, PAGE_SIZE);
       setItems(response.data);
+      console.log(response.data, 'Items fetched succesfully')
     } catch (error) {
       console.error('Error fetching items:', error);
     }
@@ -56,7 +59,7 @@ const Catalogue = () => {
   };
 
   return (<>{
-    notFound ? <NotFound/> : <div className="catalogue-container" >
+    notFound ? <NotFound /> : <div className="catalogue-container" >
       <div className='cat_left'>
         <div className='cat_filter'>
           <div className='cat_photo'>
@@ -97,11 +100,11 @@ const Catalogue = () => {
       <div className='cat_right'>
         <Search />
         <div className="cat-items-container">
-          {items.map((item) => (
-            <div key={item.id} className="cat-item">
+          {items && items.map((item) => (
+            <Link key={item.id} to={`/catalogue/${item.id}`} className="cat-item">
               <img src={item.thumbnailUrl} alt={item.title} />
               <div className='cat-item-title'><a>{item.title}</a></div>
-            </div>
+            </Link>
           ))}
         </div>
 
