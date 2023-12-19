@@ -100,10 +100,11 @@ const Catalogue = () => {
       <div className='cat_right'>
         <Search />
         <div className="cat-items-container">
-          {items && items.map((item) => (
+          {items && items.map((item,index) => (
             <Link key={item.id} to={`/catalogue/${item.id}`} className="cat-item">
               <img src={item.thumbnailUrl} alt={item.title} />
-              <div className='cat-item-title'><a>{item.title}</a></div>
+              {/* <div className='cat-item-title'><a>{item.title}</a></div> */}
+              {index === 0 ? <a>Мозаїчне зображення Димитрія Солунського</a> : <a>{item.title}</a>}
             </Link>
           ))}
         </div>

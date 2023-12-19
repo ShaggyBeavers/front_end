@@ -13,7 +13,7 @@ const WeeklyExhibit = () => {
                     <div className='week_right'>
                         <h2>Опис:</h2>
                         <div className='week_descr'>
-                            <div className='week_title'><Link to={'/'}><h6>Мозаїчне зображення Димитрія Солунського з Михайлівського Золотоверхого собору<br /><br /></h6></Link></div>
+                            <div className='week_title'><Link to={'/catalogue/1'}><h6>Мозаїчне зображення Димитрія Солунського з Михайлівського Золотоверхого собору<br /><br /></h6></Link></div>
                             <div>
                                 <h6 style={{ fontWeight: 700 }}>Категорія</h6>
                                 <h6>Живопис</h6>
