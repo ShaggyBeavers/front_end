@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import Search from '../Search/search';
 import './catalogue.css';
 import SwitchBtn from '../SwitchButton/switch_btn';
 import Pagination from '../Pagination/pagination';
+import NotFound from '../NotFound/not_found';
+import agent from '../../app/api/agent';
 
 interface Photo {
   id: number;
@@ -16,15 +18,19 @@ const PAGE_SIZE = 18;
 
 const Catalogue = () => {
   const [items, setItems] = useState<Photo[]>([]);
+  const [notFound, setNotFound] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
   const location = useLocation();
+  const totalPages = 6;//temporarily hardcoded
 
   const fetchItems = async (page: number) => {
-    //request is ready in agent.ts,this is just to display styling
+    //request is under,this is just to display styling
     try {
       const response = await axios.get<Photo[]>(`https://jsonplaceholder.typicode.com/photos?_page=${page}&_limit=${PAGE_SIZE}`);
+      // const response = await agent.Catalogue.fetchItems(page, PAGE_SIZE);
       setItems(response.data);
+      console.log(response.data, 'Items fetched succesfully')
     } catch (error) {
       console.error('Error fetching items:', error);
     }
@@ -34,26 +40,26 @@ const Catalogue = () => {
     const searchParams = new URLSearchParams(location.search);
     const pageParam = searchParams.get('page');
     const pageNumber = pageParam ? parseInt(pageParam, 10) : 1;
-    setCurrentPage(pageNumber);
+    if (pageNumber >= 1 && pageNumber <= totalPages) {
+      setCurrentPage(pageNumber);
+    } else {
+      setNotFound(true);
+    }
   }, [location.search]);
-
 
   useEffect(() => {
     fetchItems(currentPage);
-    navigate(`?page=${currentPage}`);
   }, [currentPage, navigate]);
-
-
-  const totalPages = 6;//temporarily hardcoded
 
   const paginate = (pageNumber: number) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
       setCurrentPage(pageNumber);
+      navigate(`?page=${pageNumber}`);
     }
   };
 
-  return (
-    <div className="catalogue-container" id='cat_top'>
+  return (<>{
+    notFound ? <NotFound /> : <div className="catalogue-container" >
       <div className='cat_left'>
         <div className='cat_filter'>
           <div className='cat_photo'>
@@ -94,17 +100,20 @@ const Catalogue = () => {
       <div className='cat_right'>
         <Search />
         <div className="cat-items-container">
-          {items.map((item) => (
-            <div key={item.id} className="cat-item">
+          {items && items.map((item,index) => (
+            <Link key={item.id} to={`/catalogue/${item.id}`} className="cat-item">
               <img src={item.thumbnailUrl} alt={item.title} />
-              <div className='cat-item-title'><a>{item.title}</a></div>
-            </div>
+              {/* <div className='cat-item-title'><a>{item.title}</a></div> */}
+              {index === 0 ? <a>Мозаїчне зображення Димитрія Солунського</a> : <a>{item.title}</a>}
+            </Link>
           ))}
         </div>
 
-        <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={paginate} topRef='cat_top' />
+        <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={paginate} />
       </div>
     </div>
+  }
+  </>
   );
 };
 
