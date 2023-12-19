@@ -8,7 +8,8 @@ const WeeklyExhibit = () => {
                 <div className='week_con'>
                     <div className='week_left'>
                         <h2 id='week-exhibit'>Експонат тижня:</h2>
-                        <div className='week_img'><img src="/temp/rec_ev_placeholder.svg" /></div>
+                        {/* <div className='week_img'><img src="/temp/rec_ev_placeholder.svg" /></div> */}
+                        <div className='week_img'><img src="assets/images/dima_wide.jpg" /></div>
                     </div>
                     <div className='week_right'>
                         <h2>Опис:</h2>
