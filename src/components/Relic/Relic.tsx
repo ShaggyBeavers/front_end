@@ -5,7 +5,6 @@ import NotFound from '../NotFound/not_found';
 import './relic.css'
 import { useNavigate } from 'react-router-dom';
 
-
 interface RelicProps {
     relicId: number;
 }
@@ -86,8 +85,6 @@ const Relic = ({ relicId }: RelicProps) => {
         navigate(-1);
     };
     const placeholderImages = [
-        '/../../assets/images/dima_tall.png',
-        // '/../../assets/images/dima_wide.jpg',
         'https://via.placeholder.com/400x300?text=Image+1',
         'https://via.placeholder.com/400x300?text=Image+2',
         'https://via.placeholder.com/400x300?text=Image+3',
@@ -105,7 +102,6 @@ const Relic = ({ relicId }: RelicProps) => {
 
 
     return (
-        
         <div className='relic_con'>
             <div className='relic_left'>
                 <div className='prev_relic' onClick={goBack}>
