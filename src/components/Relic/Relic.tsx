@@ -99,6 +99,8 @@ const Relic = ({ relicId }: RelicProps) => {
             Math.min(prevIndex + 1, placeholderImages.length - 1)
         );
     };
+
+
     return (
         <div className='relic_con'>
             <div className='relic_left'>
@@ -174,7 +176,7 @@ const Relic = ({ relicId }: RelicProps) => {
             </div>
             <div className='relic_right'>
                 <div className='relic_carousel'>
-                    <div>
+                    <div className='relic_pic_nav'>
                         <img
                             src={currentImageIndex === 0 ? "/icons/prev_arrow_relic.svg" : "/icons/prev_arrow_relic_d.svg"}
                             className={`arrow prev ${currentImageIndex === 0 ? 'disabled' : ''}`}
@@ -182,17 +184,40 @@ const Relic = ({ relicId }: RelicProps) => {
                             alt="Previous"
                         />
                     </div>
-                    <img
-                        src={placeholderImages[currentImageIndex]}
-                        // src={item.imageUrl[currentImageIndex]}
-                        alt={`Relic Image ${currentImageIndex + 1}`}
-                    />
-                    <div className={`arrow next ${currentImageIndex === placeholderImages.length - 1 ? 'disabled' : ''}`}
-                        onClick={handleNextImage}>
+                    <div className='relic_img_con'>
                         <img
+                            src={placeholderImages[currentImageIndex]}
+                            // src={item.imageUrl[currentImageIndex]}
+                            alt={`Relic Image ${currentImageIndex + 1}`}
+                        // src='/vert.jpg'
+                        />
+                    </div>
+
+                    <div className='relic_pic_nav'>
+                        <img
+                            className={`arrow next ${currentImageIndex === placeholderImages.length - 1 ? 'disabled' : ''}`}
+                            onClick={handleNextImage}
                             src={currentImageIndex === placeholderImages.length - 1 ? "/icons/next_arrow_relic_d.svg" : "/icons/next_arrow_relic.svg"}
                             alt="Next"
                         />
+                    </div>
+
+                    <div className='relic_pic_nav_resp hidden'>
+                        <div>
+                            <img
+                                src={currentImageIndex === 0 ? "/icons/prev_arrow_relic.svg" : "/icons/prev_arrow_relic_d.svg"}
+                                className={`arrow prev ${currentImageIndex === 0 ? 'disabled' : ''}`}
+                                onClick={handlePrevImage}
+                                alt="Previous"
+                            />
+                        </div>
+                        <div className={`arrow next ${currentImageIndex === placeholderImages.length - 1 ? 'disabled' : ''}`}
+                            onClick={handleNextImage}>
+                            <img
+                                src={currentImageIndex === placeholderImages.length - 1 ? "/icons/next_arrow_relic_d.svg" : "/icons/next_arrow_relic.svg"}
+                                alt="Next"
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

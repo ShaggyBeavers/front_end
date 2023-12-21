@@ -71,27 +71,27 @@ const Catalogue = () => {
               <li>
                 <img src="" />
                 <h6>Категорія</h6>
-                <img src="" />
+                <img src="/icons/filter_expand.svg" />
               </li>
               <li>
                 <img src="" />
-                <h6>Категорія</h6>
-                <img src="" />
+                <h6>Місце</h6>
+                <img src="/icons/filter_expand.svg" />
               </li>
               <li>
                 <img src="" />
-                <h6>Категорія</h6>
-                <img src="" />
+                <h6>Матеріал</h6>
+                <img src="/icons/filter_expand.svg" />
               </li>
               <li>
                 <img src="" />
-                <h6>Категорія</h6>
-                <img src="" />
+                <h6>Дата створення</h6>
+                <img src="/icons/filter_expand.svg" />
               </li>
               <li>
                 <img src="" />
-                <h6>Категорія</h6>
-                <img src="" />
+                <h6>Статус</h6>
+                <img src="/icons/filter_expand.svg" />
               </li>
             </ul>
           </div>

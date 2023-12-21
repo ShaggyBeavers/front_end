@@ -56,7 +56,13 @@
 
 .filter_categories li {
     display: flex;
+    gap: 1rem;
     margin-top: 0.875rem;
+    align-items: center;
+}
+
+.filter_categories li img {
+    cursor: pointer;
 }
 
 .filter_categories h6 {
@@ -87,28 +93,28 @@
     padding-bottom: 10px;
 }
 
-.cat-item-title { 
-    overflow:hidden;
+.cat-item-title {
+    overflow: hidden;
     padding: 0.75rem;
-  }
+}
 
-.cat-items-container a{
+.cat-items-container a {
     text-decoration: none;
     color: black;
     transition: 0.5s;
 }
 
-.cat-items-container a:hover{
+.cat-items-container a:hover {
     text-decoration: underline;
     transition: 0.5s;
 }
-  
-  .cat-item-title a {
+
+.cat-item-title a {
     height: 2.25rem;
-    font-size: 14px; 
+    font-size: 14px;
     display: block;
     overflow: hidden;
-  }
+}
 
 
 @media (max-width: 900px) {
@@ -127,7 +133,7 @@
 
     .test a {
         height: 2.4rem;
-      }
+    }
 }
 
 
