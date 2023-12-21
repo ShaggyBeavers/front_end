@@ -1,3 +1,4 @@
+
 .relic_con {
     max-width: 80rem;
     margin: 0 auto;
@@ -8,7 +9,7 @@
 
 .relic_left {
     max-width: 33%;
-    margin-right: 5rem;
+    margin-right: 4rem;
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
@@ -64,6 +65,8 @@
     height: 30rem;
     display: flex;
     justify-content: center;
+    align-items: flex-start;
+    margin-right: 1rem;
 }
 
 .relic_carousel {
