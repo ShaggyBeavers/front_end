@@ -85,9 +85,8 @@ const Relic = ({ relicId }: RelicProps) => {
         navigate(-1);
     };
     const placeholderImages = [
-        'https://via.placeholder.com/400x300?text=Image+1',
-        'https://via.placeholder.com/400x300?text=Image+2',
-        'https://via.placeholder.com/400x300?text=Image+3',
+        '/assets/images/dima_tall.png',
+        '/assets/images/dima_wide.jpg',
     ]
     const handlePrevImage = () => {
         setCurrentImageIndex((prevIndex) => Math.max(prevIndex - 1, 0));

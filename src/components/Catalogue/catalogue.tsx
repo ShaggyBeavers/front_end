@@ -6,6 +6,7 @@ import './catalogue.css';
 import SwitchBtn from '../SwitchButton/switch_btn';
 import Pagination from '../Pagination/pagination';
 import NotFound from '../NotFound/not_found';
+import FilterRelicsLine from '../icons/filter_relics_line';
 import agent from '../../app/api/agent';
 
 interface Photo {
@@ -69,29 +70,62 @@ const Catalogue = () => {
           <div className='filter_categories'>
             <ul>
               <li>
-                <img src="" />
-                <h6>Категорія</h6>
-                <img src="/icons/filter_expand.svg" />
+                <FilterRelicsLine />
+                <div>
+                  <h6>Категорія</h6>
+                  <img src="/icons/filter_expand.svg" />
+                </div>
+
               </li>
               <li>
-                <img src="" />
+              <FilterRelicsLine />
+                <div>
                 <h6>Місце</h6>
                 <img src="/icons/filter_expand.svg" />
+                </div>
               </li>
               <li>
-                <img src="" />
+              <FilterRelicsLine />
+                <div>
                 <h6>Матеріал</h6>
                 <img src="/icons/filter_expand.svg" />
+                </div>
               </li>
               <li>
-                <img src="" />
+              <FilterRelicsLine />
+                <div>
                 <h6>Дата створення</h6>
                 <img src="/icons/filter_expand.svg" />
+                </div>
               </li>
               <li>
-                <img src="" />
+              <FilterRelicsLine />
+                <div>
                 <h6>Статус</h6>
                 <img src="/icons/filter_expand.svg" />
+                </div>
+              </li>
+              <li>
+              <FilterRelicsLine />
+                <div>
+                <h6>Колекція</h6>
+                <img src="/icons/filter_expand.svg" />
+                </div>
+              </li>
+              <li>
+              <FilterRelicsLine />
+                <div>
+                <h6>Автор</h6>
+                <img src="/icons/filter_expand.svg" />
+                </div>
+              </li>
+              <li>
+              <FilterRelicsLine />
+                <div>
+                <h6>Техніка</h6>
+                <img src="/icons/filter_expand.svg" />
+                </div>
+                <FilterRelicsLine />
               </li>
             </ul>
           </div>
@@ -100,7 +134,7 @@ const Catalogue = () => {
       <div className='cat_right'>
         <Search />
         <div className="cat-items-container">
-          {items && items.map((item,index) => (
+          {items && items.map((item, index) => (
             <Link key={item.id} to={`/catalogue/${item.id}`} className="cat-item">
               <img src={item.thumbnailUrl} alt={item.title} />
               {/* <div className='cat-item-title'><a>{item.title}</a></div> */}

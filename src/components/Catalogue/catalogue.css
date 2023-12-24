@@ -21,13 +21,13 @@
 
 .cat_filter {
     width: 100%;
-    padding: 1.3125rem;
+    padding: 1.3125rem  1.3125rem  1.6rem;
     background: var(--Linear-Gradient, linear-gradient(135deg, #BF98C6 0%, #4B8BFA 100%));
     border-radius: 20px;
     position: sticky;
     position: -webkit-sticky;
     top: 2rem;
-    margin-bottom: 6.5rem;
+    margin-bottom: 7.3rem;
     transition: top 4s ease;
     letter-spacing: 0.3px;
 }
@@ -56,12 +56,18 @@
 
 .filter_categories li {
     display: flex;
+    flex-direction: column;
+}
+
+.filter_categories li div {
+    display: flex;
+    justify-content: space-between;
     gap: 1rem;
     margin-top: 0.875rem;
     align-items: center;
 }
 
-.filter_categories li img {
+.filter_categories li div {
     cursor: pointer;
 }
 
@@ -129,6 +135,10 @@
 
     .catalogue-container {
         padding: 9rem 3rem 0;
+    }
+
+    .cat_right{
+        width: 90%;
     }
 
     .test a {
