@@ -1,0 +1,49 @@
+.filter-modal {
+  position: absolute;
+  top: 60%;
+  left: 40%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 14px 25px;
+  border: 1px solid #ccc;
+  z-index: 2000;
+  border-radius: 20px;
+}
+
+.filter-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  column-gap: 3rem;
+  row-gap: 1rem;
+}
+
+.filter-options > div {
+  cursor: pointer;
+}
+
+.filter-options > div.selected {
+  background-color: red;
+}
+
+.filter-btns{
+  display: flex;
+  gap: 0.5rem ;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 0.875rem;
+}
+
+.filter-btns a{
+  text-decoration: underline;
+  border:none;
+  background: none;
+  font-size: small;
+}
+
+.filter-btns button{
+  padding: 3px 13px;
+  border-radius: 28px;
+  background-color: black;
+  color: white;
+  border: none;
+}
