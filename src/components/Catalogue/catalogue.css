@@ -5,6 +5,8 @@
     display: flex;
     justify-content: center;
     background-color: #FFF;
+    position: relative;
+    z-index: 0;
 }
 
 .cat_left {
@@ -22,12 +24,10 @@
 
 .cat_filter {
     width: 100%;
-    padding: 1.3125rem  0  1.6rem;
+    padding: 1.3125rem 0 1.6rem;
     background: var(--Linear-Gradient, linear-gradient(135deg, #BF98C6 0%, #4B8BFA 100%));
     border-radius: 20px;
-    position: sticky;
-    position: -webkit-sticky;
-    top:2rem;
+    position: relative;
     margin-bottom: 7.3rem;
     transition: top 4s ease;
     letter-spacing: 0.3px;
@@ -45,6 +45,7 @@
     border-radius: 40px;
     background: var(--White, #FFF);
     padding: 0.45rem 0.8125rem;
+    margin-bottom: 0.75rem;
 }
 
 .cat_photo h6 {
@@ -63,26 +64,22 @@
     display: flex;
     flex-direction: column;
     padding: 0 1.3125rem;
+    position: relative;
 }
 
-.filter_categories li div {
+.filter_inner {
     display: flex;
     justify-content: space-between;
     gap: 1rem;
     align-items: center;
-}
-
-.filter_categories li div {
     cursor: pointer;
+    padding: 0.6rem 0;
 }
 
 .filter_categories h6 {
     color: white;
 }
 
-.filter_inner{
-    padding: 0.6rem 0;
-}
 
 .cat-items-container {
     display: grid;
@@ -132,27 +129,33 @@
     font-weight: 700;
 }
 
-/* BLUR */
+/* dimmed */
 
-.catalogue-container.dim  {
-    filter: brightness(0.7);
-  }
-  
-  .filter_categories li.selected {
+.filter_categories li.selected {
     background-color: white;
     color: black;
-    z-index: 3001;
-    filter: brightness(1);
-  }
+    z-index: 3;
+    position: relative;
+}
 
-  .filter_categories li.selected h6{
+.filter_categories li.selected h6 {
     color: black;
-  }
-  
-  .filter-categories li {
-    transition: background-color 0.3s, color 0.3s;
-  }
-  
+}
+
+.dimmed-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+    display: none;
+}
+
+.dimmed-overlay.active {
+    display: block;
+}
 
 @media (max-width: 900px) {
     .cat_left {
@@ -168,7 +171,7 @@
         padding: 9rem 3rem 0;
     }
 
-    .cat_right{
+    .cat_right {
         width: 90%;
     }
 
@@ -192,4 +195,7 @@
         margin: 0 auto;
     }
 
+    .dimmed-overlay.active {
+        display: none !important;;
+    }
 }

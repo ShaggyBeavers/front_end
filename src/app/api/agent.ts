@@ -16,7 +16,8 @@ const Account = {
   currentUser: () => requests.get("account/currentUser"),//prototype
   passwodRecovery: (values: any) =>
     requests.post("api/auth/passwordRecovery", values),//prototype
-  googleLogin: (values: any) => requests.post("api/auth/google_login", values)//prototype
+  googleLogin: (values: any) => requests.post("api/auth/google_login", values),//prototype
+  report: (values:any) => requests.post("api/report",values)//idk real one yet
 };
 
 const Catalogue = {

@@ -15,6 +15,9 @@ const FilterModal: React.FC<FilterModalProps> = ({
   onClose,
   onOptionClick,
 }) => {
+  const handleClearFilters = () => {
+    onOptionClick('clear');
+  };
   return (
     <div className="filter-modal">
       <div className="filter-options">
@@ -29,7 +32,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
         ))}
       </div>
       <div className='filter-btns'>
-        <a onClick={onClose} >Очистити</a>
+        <a onClick={handleClearFilters} >Очистити</a>
         <button onClick={onClose} >Готово</button>
         </div>
     </div>

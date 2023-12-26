@@ -1,0 +1,68 @@
+.report {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.report_con {
+  width: 50rem;
+  display: flex;
+  position: relative;
+  padding: 6.5rem 2rem 2rem;
+  text-align: center;
+}
+
+.report_form {
+  flex: 1;
+  background: linear-gradient(white, white) padding-box,
+    linear-gradient(to right, #BF98C6, #4B8BFA) border-box;
+  border-radius: 20px;
+  border: 2px solid transparent;
+  outline: none;
+  padding: 1.5rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.125rem;
+}
+
+.report_group {
+  display: flex;
+  justify-content: space-between;
+}
+
+.report_input {
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+  gap: 0.5rem;
+}
+
+.report input {
+  padding: 0.5rem 0.8125rem;
+  flex: 1;
+  border: 2px solid;
+  outline: none;
+  border-radius: 10px;
+  font-family: "eUkraine-Regular";
+  font-size: 0.8125rem;
+}
+
+.report_input select {
+  padding: 0.5rem 0.8125rem;
+  font-size: 16px;
+  border: 2px solid;
+  border-radius: 10px;
+  box-sizing: border-box;
+  font-family: "eUkraine-Regular";
+  font-size: 0.8125rem;
+  cursor: pointer;
+  
+}
+
+
+
+
+
+
+
