@@ -17,9 +17,9 @@
   background: linear-gradient(white, white) padding-box,
     linear-gradient(to right, #BF98C6, #4B8BFA) border-box;
   border-radius: 20px;
-  border: 2px solid transparent;
+  border: 4px solid transparent;
   outline: none;
-  padding: 1.5rem;
+  padding: 1.5rem 1.5rem 1.8rem;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -29,6 +29,8 @@
 .report_group {
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1.5rem;
 }
 
 .report_input {
@@ -43,26 +45,77 @@
   flex: 1;
   border: 2px solid;
   outline: none;
-  border-radius: 10px;
+  border-radius: 15px;
   font-family: "eUkraine-Regular";
   font-size: 0.8125rem;
+}
+
+.report input::placeholder,
+.report textarea::placeholder {
+  font-family: "eUkraine-Regular";
+  color: #DADADA;
+}
+
+.report_input.error p {
+  color: red;
+  font-size: 11px;
+}
+
+.report_input.error input,
+.report_input.error select {
+  border: 2px solid red;
 }
 
 .report_input select {
   padding: 0.5rem 0.8125rem;
   font-size: 16px;
   border: 2px solid;
-  border-radius: 10px;
+  border-radius: 15px;
   box-sizing: border-box;
   font-family: "eUkraine-Regular";
   font-size: 0.8125rem;
   cursor: pointer;
-  
+  background: transparent;
 }
 
+select::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
 
+select::-webkit-scrollbar-track {
+  border: rgb(180, 180, 180);
+  background-color: #dadada;
+}
 
+select::-webkit-scrollbar-thumb {
+  background-color: black;
+  border-radius: 15px;
+  border: 1px solid rgb(193, 193, 193);
+}
 
+.report label {
+  font-size: 20px;
+  display: flex;
+  align-items: last baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
 
+.report textarea {
+  resize: none;
+  width: 100%;
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 15px;
+  box-sizing: border-box;
+}
 
-
+.report button {
+  width: 100%;
+  border-radius: 40px;
+  background:  #000;
+  color: white;
+  padding: 1rem 0;
+  border:none;
+}
