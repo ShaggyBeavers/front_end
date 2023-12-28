@@ -1,0 +1,46 @@
+.switch__container {
+    width: 52px;
+}
+
+.switch {
+    visibility: hidden;
+    position: absolute;
+    margin-left: -9999px;
+}
+
+.switch+label {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+}
+
+.switch--flat+label {
+    width: 52px; 
+    height: 26px;
+    background-color: #dddddd;
+    border-radius: 40px; 
+    transition: background 0.4s;
+    display: flex;
+    align-items: center;
+}
+
+.switch--flat+label:before {
+    content: "";
+    width: 20.8px; 
+    height: 20.8px; 
+    background-color: #fff;
+    border-radius: 50%;
+    transition: background 0.4s, transform 0.4s;
+    transform: translateX(3px);
+}
+
+.switch--flat:checked+label {
+    background-color: #19BE6F;
+}
+
+.switch--flat:checked+label:before {
+    transform: translateX(28.5px);
+    background-color: #fff;
+}

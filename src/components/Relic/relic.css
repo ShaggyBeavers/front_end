@@ -1,0 +1,135 @@
+.relic_con {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 6rem 5rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.relic_left {
+    max-width: 33%;
+    margin-right: 5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+}
+
+.prev_relic {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 1rem;
+}
+
+.prev_relic p {
+    font-family: 'eUkraine-Bold';
+    text-decoration: underline;
+    font-size: 0.85rem;
+}
+
+.relic_left h4 {
+    font-family: 'eUkraine-Thin';
+    font-weight: 700;
+    background: linear-gradient(286deg, #F4A815 48.72%, #4E3421 89.82%);
+    background-clip: text;
+    color: transparent;
+}
+
+.relic_left h6 {
+    color: black;
+    font-weight: 700;
+}
+
+.relic_dates,
+.relic_am_status {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.relic_source,
+.relic_col {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.relic_right {
+    position: sticky;
+    top: 4rem;
+    margin-top: 2rem;
+    width: 55%;
+    height: 30rem;
+    display: flex;
+    justify-content: center;
+}
+
+.relic_carousel {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+.relic_img_con{
+    width: 80%;
+    height: 100%;
+}
+
+.relic_carousel img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.arrow {
+    cursor: pointer;
+}
+
+.disabled {
+    color: lightgrey;
+    cursor: unset;
+}
+
+.hidden{
+    display: none;
+}
+
+@media (max-width: 900px) {
+
+    .relic_con{
+        flex-direction: column;
+        justify-content: center;
+        padding: 6rem 5rem ;
+    }
+
+    .relic_left,.relic_right{
+        width: 100%;
+        max-width: none;
+    }
+
+    .relic_left{
+        margin-bottom: 3rem;
+    }
+
+    .relic_right{   
+        height: auto;
+        max-height: 30rem;
+    }
+    .relic_carousel{
+        gap: 1rem;
+        flex-direction: column;
+    }
+
+    .relic_pic_nav_resp{
+        display: flex;
+        gap:4rem;
+    }
+
+    .relic_pic_nav{
+        display: none;
+    }
+}

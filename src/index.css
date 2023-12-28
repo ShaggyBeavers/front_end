@@ -13,6 +13,10 @@ h1,h2,h3,h4,h5,p,link,button,ul{
     font-weight: normal;
 }
 
+a,link,button{
+    cursor: pointer;
+}
+
 h1 {
     font-size: 3.5rem;
 }
@@ -42,3 +46,5 @@ p {
     font-size: 1rem;
     font-family: 'eUkraine-Thin';
 }
+
+

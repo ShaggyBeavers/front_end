@@ -28,12 +28,16 @@ html {
 }
 
 .navbar_con a{
-    text-decoration: none;
     font-size: 0.8125rem;
     color: black;
     text-decoration: underline;
     transition: 0.5s;
     cursor: pointer;
+}
+
+.nav_logo a{
+    text-decoration: none;
+    color: inherit;
 }
 
 .nav_links{
@@ -48,7 +52,7 @@ html {
     transform: translateX(-50%);
 }
 
-.navbar_con a li {
+#nav_log_btn {
     text-align: center;
     width: 6.5rem;
     color: white;
@@ -56,26 +60,55 @@ html {
     padding: 0.8125rem 0;
     background: black;
     text-decoration: none;
+    transition: 0.7s ease;
+}
+
+.main:hover a{
+    color: white;
 }
 
 .navbar_con a:hover {
-    color: white;
     transition: 0.5s;
     text-decoration: none;
 }
 
-.navbar_con a li:hover {
+#nav_log_btn:hover {
     color: black;
     background: white;
-    transition: 0.5s;
+    transition: 0.7s;
+}
+
+.reg_links, .log_links{
+    display: flex;
+    gap: 0.25rem;
+}
+
+.reg_links p,.log_links p{
+    font-size: 0.8125rem;
+    letter-spacing: 0.3px;
+    font-family:'eUkraine-Thin';
+    font-weight: 700;
+}
+
+.reg_links a:hover,.log_links a:hover{
+    color: black;
 }
 
 @media (max-width: 600px) {
-    html {
-        font-size: 14px;
-    }
+    
 
     .nav_catalogue {
         left: 44%;
     }
+}
+
+@media (max-width: 750px) {
+    html {
+        font-size: 14px;
+    }
+
+   .log_links{
+    flex-direction: column;
+    align-items: center;
+   }
 }

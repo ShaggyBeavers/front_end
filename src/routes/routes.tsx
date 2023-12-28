@@ -7,6 +7,8 @@ import RegisterPage from "../pages/RegisterPage";
 import CataloguePage from "../pages/CataloguePage";
 import ReportPage from "../pages/ReportPage";
 import RecoveryPage from "../pages/RecoveryPage";
+import NotFoundPage from "../pages/NotFoundPage";
+import RelicPage from "../pages/RelicPage";
 
 export const router = createBrowserRouter([
     {
@@ -17,9 +19,11 @@ export const router = createBrowserRouter([
             { path: 'login', element: <LoginPage /> },
             { path: 'register', element: <RegisterPage /> },
             { path: 'catalogue', element: <CataloguePage /> },
+            { path: 'catalogue/:relicsid', element: <RelicPage /> },
             { path: 'profile', element: <ProfilePage/> },
             { path: 'report', element: <ReportPage/> },
-            { path: 'recovery', element: <RecoveryPage/> }
+            { path: 'recovery', element: <RecoveryPage/> },
+            { path: '*', element: <NotFoundPage /> },
         ]
     }
 ]);

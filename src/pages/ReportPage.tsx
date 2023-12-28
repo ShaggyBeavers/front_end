@@ -1,7 +1,11 @@
+import Report from "../components/Report/report";
+import Footer from "../components/Footer/footer";
+import NavBar from "../components/NavBar/navbar";
 const ReportPage = () => (
     <div>
-      <h2>Report Page Placeholder</h2>
-      <p>This is a temporary placeholder for the Report Page.</p>
+      <NavBar/>
+      <Report/>
+      <Footer/>
     </div>
   );
   

@@ -1,34 +1,36 @@
 .search-container {
-    position: relative;
-    display: flex;
-  }
-  
-  .search_input {
-    padding: 0.8125rem 1.875rem 0.8125rem 1.5rem;
-    flex: 1;
-    border: none;
-    outline: none;
-    border-radius: 40px;
-    font-family:"eUkraine-Regular"; 
-  }
-  
-  .search_input::placeholder {
-    font-family:"eUkraine-Regular"; 
-    color: #DADADA;
-  }
+  position: relative;
+  display: flex;
+  width: 100%;
+}
 
-  .search_btn {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    transition: filter 0.3s;
-  }
+.search_input {
+  padding: 0.8125rem 1.875rem 0.8125rem 1.5rem;
+  flex: 1;
+  background: linear-gradient(white, white) padding-box,
+              linear-gradient(to right, #BF98C6, #4B8BFA) border-box;
+  border-radius: 40px;
+  border: 2px solid transparent;
+  outline: none;
+  font-family: "eUkraine-Regular";
+}
 
-  .search_btn:hover {
-    filter: invert(100%);
-  }
-  
+.search_input::placeholder {
+  font-family: "eUkraine-Regular";
+  color: #DADADA;
+}
+
+.search_btn {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: filter 0.3s;
+}
+
+.search_btn:hover {
+  filter: invert(100%);
+}
