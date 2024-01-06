@@ -53,7 +53,7 @@
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    font-family: 'eUkraine-Bold';
+    font-weight: 700;
 }
 
 .filter_categories ul {
@@ -78,6 +78,7 @@
 
 .filter_categories h6 {
     color: white;
+    font-weight: 300;
 }
 
 
@@ -126,7 +127,6 @@
     font-size: 0.8125rem;
     display: block;
     overflow: hidden;
-    font-weight: 700;
 }
 
 /* dimmed */
