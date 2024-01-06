@@ -67,8 +67,7 @@
 }
 
 .report_input select {
-  padding: 0.5rem 0.8125rem;
-  font-size: 16px;
+  padding: 0.44rem 0.8125rem;
   border: 2px solid;
   border-radius: 15px;
   box-sizing: border-box;
@@ -109,6 +108,7 @@ select::-webkit-scrollbar-thumb {
   border: 2px solid black;
   border-radius: 15px;
   box-sizing: border-box;
+  font-family: 'eUkraine-Regular';
 }
 
 .report button {
@@ -118,4 +118,8 @@ select::-webkit-scrollbar-thumb {
   color: white;
   padding: 1rem 0;
   border:none;
+}
+
+.report label p{
+  color: #dadada;
 }
