@@ -105,7 +105,7 @@ export default function Report() {
             </div>
 
 
-            <div className='report_group' style={{ alignItems: 'reverse'}}>
+            <div className='report_group drop' >
               <div className='report_input' style={{ width: '65%' }}>
                 <div className={`report_input ${errors.location ? 'error' : ''}`} style={{ width: '100%' }}>
                   <label htmlFor="location">Ймовірне місце розташування:<p>(опційно)</p></label>

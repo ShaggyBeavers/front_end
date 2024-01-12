@@ -1,15 +1,18 @@
 
 .upload-input {
-    padding: 0.63rem 0.8125rem;
+    padding: 0.64rem 0.8125rem;
     background: var(--Linear-Gradient, linear-gradient(135deg, #BF98C6 0%, #4B8BFA 100%));
     cursor: pointer;
-    border-radius: 40px;
+    border-radius: 15px;
     text-align: center;
     color: white;
     font-size: 0.8125rem;
     font-family: "eUkraine-Regular";
 }
 
+.uploaded-files{
+    margin: 0 auto;
+}
 
 .uploaded-file {
     display: flex;
@@ -33,7 +36,6 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     max-width: 75%; 
-    
   }
 
   .upload-input.disabled-upload {
@@ -41,5 +43,12 @@
     cursor: not-allowed;
   }
 
+  @media (max-width: 750px) {
+    .uploaded-file p {
+        max-width: 50%; 
+      }
+
+    
+}
   
   

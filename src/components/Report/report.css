@@ -33,6 +33,9 @@
   margin-bottom: 1.5rem;
 }
 
+.report_group.drop{
+  align-items: start;
+}
 .report_input {
   display: flex;
   flex-direction: column;
@@ -122,4 +125,11 @@ select::-webkit-scrollbar-thumb {
 
 .report label p{
   color: #dadada;
+}
+
+@media (max-width: 990px) {
+  .report_group.drop{
+    align-items: center;
+  }
+  
 }

@@ -11,7 +11,6 @@ const FileUpload: FC<FileUploadProps> = ({ onFilesChange, initialFiles }) => {
   const [isUploadDisabled, setUploadDisabled] = React.useState(false);
   React.useEffect(() => {
     if (initialFiles.length >= 3) {
-      // If total files exceed or equal to 3, disable further uploads
       setUploadDisabled(true);
     } else {
       setUploadDisabled(false);
@@ -32,15 +31,15 @@ const FileUpload: FC<FileUploadProps> = ({ onFilesChange, initialFiles }) => {
 
   return (
     
-      <div className='report_input drop' style={{ width: '32%' }}>
-        <label htmlFor="drop" style={{alignSelf:'center'}}><p>Завантажте до 3х фото</p></label>
+      <div className='report_input' style={{ width: '32%'}}>
+        <label htmlFor="drop" style={{alignSelf:'center',marginBottom:'2px'}}><p>Завантажте до 3х фото</p></label>
         <div {...getRootProps()} className={`dropzone ${isUploadDisabled ? 'disabled' : ''}`}>
           <input {...getInputProps()} disabled={isUploadDisabled} />
           <p className={`upload-input ${isUploadDisabled ? 'disabled-upload' : ''}`}>
           Завантажити фото
         </p>
         </div>
-        <div className='uploaded-files' style={{alignSelf:'center'}}>
+        <div className='uploaded-files'>
           {initialFiles.map((file, index) => (
             <div key={index} className='uploaded-file'>
               <img src="/icons/report/image_icon.svg" alt="" />
