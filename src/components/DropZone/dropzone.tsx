@@ -43,7 +43,7 @@ const FileUpload: FC<FileUploadProps> = ({ onFilesChange, initialFiles }) => {
           {initialFiles.map((file, index) => (
             <div key={index} className='uploaded-file'>
               <img src="/icons/report/image_icon.svg" alt="" />
-              <p>{file.name}</p>
+              <span>{file.name}</span>
               <button type="button" onClick={() => onFilesChange(initialFiles.filter((_, i) => i !== index))}>
                 <img src="/icons/report/trash.svg"/>
               </button>

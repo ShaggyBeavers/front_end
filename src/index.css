@@ -6,7 +6,7 @@ body{
     cursor: default;
 }
 
-h1,h2,h3,h4,h5,p,link,button,ul{
+h1,h2,h3,h4,h5,h6,p,link,button,ul{
     margin:0;
     padding: 0;
     color: black;

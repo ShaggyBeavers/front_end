@@ -5,9 +5,9 @@
 
 .week_con {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     width: 70rem;
-    padding: 0 5rem 4rem;
+    padding: 0 3rem 6rem;
     gap: 4rem;
 }
 
@@ -42,18 +42,12 @@
     max-height: 27.375rem;
 }
 
-.week_title {
-    text-align: center;
-}
-
 .week_title a{
     text-decoration-color: white;
 }
 
 .week_descr h6 {
     color: white;
-    letter-spacing: 0.2px;
-    font-weight: 300;
 }
 
 .week_img {
@@ -67,6 +61,13 @@
     object-fit: cover;
 }
 
+.week_inner{
+   margin: 1rem 0 0 0.9rem;
+}
+
+.week_inner_small{
+    font-size: 1rem;
+}
 
 @media (max-width: 990px) {
     html {

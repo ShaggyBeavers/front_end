@@ -17,15 +17,17 @@
     gap: 2rem;
 }
 
-.rec_ev_top h2,
-h6 {
+.rec_ev_top h2, .rec_ev_top h6 {
     color: #A3A3A3;
-    margin: 0;
+}
+
+.rec_ev_top h6{
+    margin-top: 0.6rem;
 }
 
 .rec_ev_left a{
     color: #4B8BFA;
-    font-family: 'eUkraine-Bold';
+    font-weight: 700;
 }
 
 .rec_head,

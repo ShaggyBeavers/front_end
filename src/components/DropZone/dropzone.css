@@ -11,44 +11,49 @@
 }
 
 .uploaded-files{
-    margin: 0 auto;
+  margin: 0 auto ;
 }
 
 .uploaded-file {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.4rem;
-    overflow: hidden;
+    gap: 0.2rem;
 }
 
 .uploaded-file button {
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
     background: none;
     border-radius: 0;
     color: none;
     padding: 0;
 }
 
-.uploaded-file p {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    max-width: 75%; 
-  }
 
   .upload-input.disabled-upload {
     opacity: 0.5; 
     cursor: not-allowed;
   }
 
-  @media (max-width: 750px) {
-    .uploaded-file p {
-        max-width: 50%; 
-      }
+  .uploaded-file span {
+    width: 150px;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
-    
+@media (max-width: 730px) {
+  .uploaded-file span{
+    width: 120px;
+  }
+}
+
+@media (max-width: 650px) {
+  .uploaded-file span{
+    width: 70px;
+  }
 }
   
   
