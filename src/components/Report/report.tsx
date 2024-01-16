@@ -1,8 +1,8 @@
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { useDropzone } from 'react-dropzone';
+import { SubmitHandler, useForm, FieldValues } from 'react-hook-form';
 import './report.css';
 import agent from '../../app/api/agent';
 import { useEffect, useState } from 'react';
+import DropZone from '../DropZone/dropzone';
 
 interface ReportForm {
   name: string,
@@ -11,24 +11,26 @@ interface ReportForm {
   sources: string[],
   description: string,
   photos: File[],
+  abduction:string,
 }
 
 export default function Report() {
-  const { register, handleSubmit, formState, reset } = useForm<ReportForm>();
+  const { register, handleSubmit, formState, reset, setValue } = useForm<ReportForm>();
   const { errors } = formState;
   const [remainingChars, setRemainingChars] = useState(3);
   const [isTyping, setIsTyping] = useState(false);
   const [urlInput, setUrlInput] = useState('');
-
+  const [photos, setPhotos] = useState<File[]>([]);
   const submitForm: SubmitHandler<ReportForm> = async (data) => {
 
     data.sources = urlInput.split(' ').filter(url => url.trim() !== '');
+    data.photos = photos;
     try {
-      console.log(data.sources)
+      console.log(data)
       await agent.Account.report(data);
       reset();
     } catch (error: any) {
-      if (error.response.status === 409) {
+      if (error && error.response.status === 409) {
         reset();
         // setShowExistsMessage(true);
       } else {
@@ -80,29 +82,9 @@ export default function Report() {
                 <p>{errors.category?.message as string}</p>
               </div>
             </div>
-
-            <div className='report_group'>
-              <div className={`report_input ${errors.location ? 'error' : ''}`} style={{ width: '60%' }}>
-                <label htmlFor="location">Ймовірне місце розташування:<p style={{ color: '#DADADA' }}>(опційно)</p></label>
-                <input
-                  type="text"
-                  placeholder="Введіть місце розташування"
-                  {...register('location', {
-                    minLength: {
-                      value: 2,
-                      message: 'Мінімальна довжина - 2 символи',
-                    },
-                  })} />
-                <p>{errors.location?.message as string}</p>
-              </div>
-
-            {/* HERE GO PICS */}
-
-            </div>
-
             <div className='report_group'>
               <div className='report_input' style={{ width: '100%' }}>
-                <label htmlFor="description">Опис:<p style={{ color: '#DADADA' }}>(опційно)</p></label>
+                <label htmlFor="description">Опис:<p>(опційно)</p></label>
                 <textarea
                   rows={4}
                   maxLength={300}
@@ -114,6 +96,7 @@ export default function Report() {
                     const remainingChars = maxLength - inputLength;
                     setRemainingChars(remainingChars);
                     setIsTyping(true);
+                    setValue('description', e.target.value);
                   }}
                   onBlur={() => setIsTyping(false)}
                 />
@@ -121,18 +104,41 @@ export default function Report() {
               </div>
             </div>
 
-            <div className='report_group'>
-              <div className={`report_input`} style={{ width: '100%' }}>
-                <label htmlFor="urls">Джерела:<p style={{ color: '#DADADA' }}>(опційно)</p></label>
-                <input
-                  type="text"
-                  placeholder="Введіть посилання через пробіл"
-                  value={urlInput}
-                  onChange={(e) => setUrlInput(e.target.value)}
-                />
-              </div>
-            </div>
 
+            <div className='report_group drop' >
+              <div className='report_input' style={{ width: '65%' }}>
+                <div className={`report_input ${errors.location ? 'error' : ''}`} style={{ width: '100%' }}>
+                  <label htmlFor="location">Ймовірне місце розташування:<p>(опційно)</p></label>
+                  <input
+                    type="text"
+                    placeholder="Введіть місце розташування"
+                    {...register('location', {
+                      minLength: {
+                        value: 2,
+                        message: 'Мінімальна довжина - 2 символи',
+                      },
+                    })} />
+                  <p>{errors.location?.message as string}</p>
+                </div>
+
+                <div className={`report_input ${errors.abduction ? 'error' : ''}`} style={{ width: '100%' }}>
+                  <label htmlFor="abduction">Ймовірне місце викрадення:<p >(опційно)</p></label>
+                  <input
+                    type="text"
+                    placeholder="Введіть місце викрадення"
+                    {...register('abduction', {
+                      minLength: {
+                        value: 2,
+                        message: 'Мінімальна довжина - 2 символи',
+                      },
+                    })} />
+                  <p>{errors.abduction?.message as string}</p>
+                </div>
+              </div>
+
+              <DropZone onFilesChange={setPhotos} initialFiles={photos} />
+
+            </div>
 
             <button type="submit">Опублікувати</button>
 
