@@ -1,8 +1,10 @@
 .recovery-email-con{
     display: flex;
+    flex-direction: column;
+    gap: 1rem;
     justify-content: center;
     align-items: center;
-    padding:12rem 2rem 0;
+    padding:12rem 4rem 0;
 }
 
 .recovery-email{
@@ -59,4 +61,12 @@
     padding: 0.75rem 3.25rem;
     border:none;
     margin-top: 2rem;
+}
+
+.not_found_message_rec{
+    max-width: 583px;
+}
+
+.not_found_message_rec p{
+    color: red;
 }

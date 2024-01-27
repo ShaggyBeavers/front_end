@@ -1,6 +1,8 @@
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import './recovery_email.css';
+import agent from '../../app/api/agent';
 
 interface RecoveryEmailForm {
   email: string;
@@ -9,14 +11,23 @@ interface RecoveryEmailForm {
 const RecoveryEmail: React.FC = () => {
   const { register, handleSubmit, formState, reset } = useForm<RecoveryEmailForm>();
   const { errors } = formState;
+  const [showNotFoundMessage, setShowNotFoundMessage] = React.useState(false);
+  const navigate = useNavigate();
 
   const handleFormSubmit: SubmitHandler<RecoveryEmailForm> = async (data) => {
     try {
-      console.log('data:', data);
-
+      await agent.Account.recoveryRequest(data);
       reset();
-    } catch (error) {
-      console.error('Error:', error);
+      setShowNotFoundMessage(false);
+      navigate('/success_recovery');
+    } catch (error: any) {
+      if (error.response && (error.response.status === 409)) {
+        reset();
+        setShowNotFoundMessage(true);
+      } else {
+        reset();
+        console.log(error)
+      }
     }
   };
 
@@ -42,6 +53,11 @@ const RecoveryEmail: React.FC = () => {
           <button type="submit">Отримати</button>
         </form>
       </div>
+      {showNotFoundMessage && (
+                    <div className='not_found_message_rec'>
+                        <p>Акаунт не знайдено. Перевірте введені дані</p>
+                    </div>
+                )}
     </div>
   );
 };
