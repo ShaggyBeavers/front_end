@@ -20,10 +20,10 @@ export const router = createBrowserRouter([
             { path: 'register', element: <RegisterPage /> },
             { path: 'catalogue', element: <CataloguePage /> },
             { path: 'catalogue/:relicsid', element: <RelicPage /> },
-            { path: 'profile', element: <ProfilePage/> },
             { path: 'report', element: <ReportPage/> },
             { path: 'recovery', element: <RecoveryPage/> },
             { path: '*', element: <NotFoundPage /> },
+            { path: 'profile', element: <ProfilePage/> },
         ]
     }
 ]);

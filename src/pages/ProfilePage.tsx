@@ -1,8 +1,12 @@
+import NavBar from "../components/NavBar/navbar";
+import Profile from "../components/Profile/profile";
+
+
 const ProfilePage = () => (
-  <div>
-    <h2>Profile Page Placeholder</h2>
-    <p>This is a temporary placeholder for the Profile Page.</p>
-  </div>
+  <>
+    <NavBar/>
+    <Profile/>
+  </>
 );
 
 export default ProfilePage;

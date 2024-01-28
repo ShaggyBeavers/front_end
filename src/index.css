@@ -1,3 +1,26 @@
+/* font */
+@font-face {
+    font-family: "eUkraine-Regular";
+    src: url("../src/fonts/e-Ukraine-Regular.otf");
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "eUkraine-Bold";
+    src: url("../src/fonts/e-Ukraine-Bold.otf");
+    font-style: bold;
+}
+
+@font-face {
+    font-family: "eUkraine-Thin";
+    src: url("../src/fonts/e-Ukraine-Thin.otf");
+    font-style: thin;
+}
+
+*{
+    border: 0;
+}
+
 body{
     font-family: "eUkraine-Regular";
     background: #ffffff;
