@@ -1,7 +1,7 @@
 const FilterExpand = () => (
-    <div >
-      <img src="/icons/catalogue/filter_expand.svg"/>
+    <div>
+        <img src="/icons/catalogue/filter_expand.svg" />
     </div>
-  );
-  
-  export default FilterExpand;
+);
+
+export default FilterExpand;

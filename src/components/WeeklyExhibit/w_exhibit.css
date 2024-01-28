@@ -13,7 +13,7 @@
 
 .week_con img {
     border-radius: 40px;
-    border: 3px solid var(--Linear-Gradient, #BF98C6);
+    border: 3px solid var(--Linear-Gradient, #bf98c6);
 }
 
 .week_left {
@@ -38,11 +38,14 @@
 .week_descr {
     padding: 1.5rem;
     border-radius: 40px;
-    background: var(--Linear-Gradient, linear-gradient(135deg, #BF98C6 0%, #4B8BFA 100%));
+    background: var(
+        --Linear-Gradient,
+        linear-gradient(135deg, #bf98c6 0%, #4b8bfa 100%)
+    );
     max-height: 27.375rem;
 }
 
-.week_title a{
+.week_title a {
     text-decoration-color: white;
 }
 
@@ -61,11 +64,11 @@
     object-fit: cover;
 }
 
-.week_inner{
-   margin: 1rem 0 0 0.9rem;
+.week_inner {
+    margin: 1rem 0 0 0.9rem;
 }
 
-.week_inner_small{
+.week_inner_small {
     font-size: 1rem;
 }
 
@@ -97,6 +100,4 @@
         align-items: center;
         max-width: 25rem;
     }
-
-
 }

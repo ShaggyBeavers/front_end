@@ -1,42 +1,53 @@
 /* font */
 @font-face {
-    font-family: "eUkraine-Regular";
-    src: url("../src/fonts/e-Ukraine-Regular.otf");
+    font-family: 'eUkraine-Regular';
+    src: url('../src/fonts/e-Ukraine-Regular.otf');
     font-style: normal;
 }
 
 @font-face {
-    font-family: "eUkraine-Bold";
-    src: url("../src/fonts/e-Ukraine-Bold.otf");
+    font-family: 'eUkraine-Bold';
+    src: url('../src/fonts/e-Ukraine-Bold.otf');
     font-style: bold;
 }
 
 @font-face {
-    font-family: "eUkraine-Thin";
-    src: url("../src/fonts/e-Ukraine-Thin.otf");
+    font-family: 'eUkraine-Thin';
+    src: url('../src/fonts/e-Ukraine-Thin.otf');
     font-style: thin;
 }
 
-*{
+* {
     border: 0;
 }
 
-body{
-    font-family: "eUkraine-Regular";
+body {
+    font-family: 'eUkraine-Regular';
     background: #ffffff;
-    margin:0;
+    margin: 0;
     padding: 0;
     cursor: default;
 }
 
-h1,h2,h3,h4,h5,h6,p,link,button,ul{
-    margin:0;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+link,
+button,
+ul {
+    margin: 0;
     padding: 0;
     color: black;
     font-weight: normal;
 }
 
-a,link,button{
+a,
+link,
+button {
     cursor: pointer;
 }
 
@@ -67,5 +78,3 @@ h6 {
 p {
     font-size: 1rem;
 }
-
-

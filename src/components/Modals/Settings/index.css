@@ -1,23 +1,23 @@
-.table-form{
+.table-form {
     width: 100%;
     display: flex;
     flex-direction: column;
 }
 
-.categories-label{
+.categories-label {
     text-decoration-line: underline;
-    font-size:1rem;
+    font-size: 1rem;
     line-height: 1.5rem;
     font-family: e-Ukraine;
     font-weight: 400;
     cursor: pointer;
 }
 
-.categories-list{
+.categories-list {
     position: absolute;
     width: 250px;
     background: white;
-    box-shadow: 1px 1px 8px 0px rgba(0,0,0,0.65);
+    box-shadow: 1px 1px 8px 0px rgba(0, 0, 0, 0.65);
     padding: 5px 15px;
     display: flex;
     flex-direction: column;
@@ -25,19 +25,19 @@
     font-weight: 400;
     margin: 2px 0 10px 0;
 }
-.categories-list > * > *{
+.categories-list > * > * {
     /* no list styles */
     list-style: none;
 }
 
-.arrow{
+.arrow {
     margin: 5px 0 1px 5px;
 }
-.arrow-up{
+.arrow-up {
     transform: rotate(180deg);
 }
 
-.input-section{
+.input-section {
     display: flex;
     flex-direction: column;
     margin-bottom: 10px;

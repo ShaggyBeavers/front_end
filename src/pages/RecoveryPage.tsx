@@ -1,9 +1,9 @@
-import NavBar from "../components/NavBar/navbar";
+import NavBar from '../components/NavBar/navbar';
 
 const RecoveryPage = () => (
-  <div>
-    <NavBar/>
-  </div>
+    <div>
+        <NavBar />
+    </div>
 );
 
 export default RecoveryPage;

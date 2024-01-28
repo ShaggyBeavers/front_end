@@ -4,7 +4,7 @@
     padding: 9rem 5rem 0;
     display: flex;
     justify-content: center;
-    background-color: #FFF;
+    background-color: #fff;
     position: relative;
     z-index: 0;
 }
@@ -25,7 +25,10 @@
 .cat_filter {
     width: 100%;
     padding: 1.3125rem 0 1.6rem;
-    background: var(--Linear-Gradient, linear-gradient(135deg, #BF98C6 0%, #4B8BFA 100%));
+    background: var(
+        --Linear-Gradient,
+        linear-gradient(135deg, #bf98c6 0%, #4b8bfa 100%)
+    );
     border-radius: 20px;
     position: relative;
     margin-bottom: 7.3rem;
@@ -43,13 +46,16 @@
     justify-content: space-between;
     align-items: center;
     border-radius: 40px;
-    background: var(--White, #FFF);
+    background: var(--White, #fff);
     padding: 0.45rem 0.8125rem;
     margin-bottom: 0.75rem;
 }
 
 .cat_photo h6 {
-    background: var(--Linear-Gradient, linear-gradient(135deg, #BF98C6 0%, #4B8BFA 100%));
+    background: var(
+        --Linear-Gradient,
+        linear-gradient(135deg, #bf98c6 0%, #4b8bfa 100%)
+    );
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -81,7 +87,6 @@
     font-weight: 300;
 }
 
-
 .cat-items-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -101,7 +106,10 @@
 .cat-item img {
     object-fit: cover;
     width: 100%;
-    background: var(--Linear-Gradient, linear-gradient(135deg, #BF98C6 0%, #4B8BFA 100%));
+    background: var(
+        --Linear-Gradient,
+        linear-gradient(135deg, #bf98c6 0%, #4b8bfa 100%)
+    );
     display: block;
     padding-bottom: 10px;
 }
@@ -180,7 +188,6 @@
     }
 }
 
-
 @media (max-width: 700px) {
     .cat_left {
         display: none;
@@ -196,6 +203,6 @@
     }
 
     .dimmed-overlay.active {
-        display: none !important;;
+        display: none !important;
     }
 }

@@ -17,16 +17,17 @@
     gap: 2rem;
 }
 
-.rec_ev_top h2, .rec_ev_top h6 {
-    color: #A3A3A3;
+.rec_ev_top h2,
+.rec_ev_top h6 {
+    color: #a3a3a3;
 }
 
-.rec_ev_top h6{
+.rec_ev_top h6 {
     margin-top: 0.6rem;
 }
 
-.rec_ev_left a{
-    color: #4B8BFA;
+.rec_ev_left a {
+    color: #4b8bfa;
     font-weight: 700;
 }
 
@@ -63,7 +64,6 @@
     max-width: 89%;
     max-height: 89%;
 }
-
 
 @media (max-width: 700px) {
     html {

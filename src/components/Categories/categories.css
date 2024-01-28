@@ -1,32 +1,32 @@
-.categories{
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  margin: 0 auto;
-  max-width: 70rem;
+.categories {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    margin: 0 auto;
+    max-width: 70rem;
 }
 
 .categories_con {
-  display: grid;
-  grid-template-columns: repeat(4,1fr);
-  gap: 2rem;
-  padding: 1rem 2rem 4rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    padding: 1rem 2rem 4rem;
 }
 
-.categories a{
-  color: black;
-  align-self: flex-end;
-  padding-right: 2rem;
+.categories a {
+    color: black;
+    align-self: flex-end;
+    padding-right: 2rem;
 }
 
 @media (max-width: 900px) {
-  .categories_con {
-    grid-template-columns: repeat(2,1fr);
-    margin: 0 auto;
-  }
+    .categories_con {
+        grid-template-columns: repeat(2, 1fr);
+        margin: 0 auto;
+    }
 
-  .categories a{
-    align-self: center;
-    padding: 0;
-  }
+    .categories a {
+        align-self: center;
+        padding: 0;
+    }
 }

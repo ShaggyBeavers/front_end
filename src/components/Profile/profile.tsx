@@ -4,10 +4,10 @@ import TableInfo from '../TableInfo/tableinfo';
 import SideMenu from '../SideMenu/sidemenu';
 
 const Profile = () => {
-  return (
+    return (
         <div className="profile-container">
-            <TableInfo/>
-            <SideMenu/>
+            <TableInfo />
+            <SideMenu />
         </div>
     );
 };
