@@ -58,7 +58,6 @@ const AddModeratorModal = () => {
                         options={regions}
                         menuPortalTarget={document.body}
                         styles={{
-                            // menuPortal: (base) => ({...base, zIndex: 9999}),
                             menu: (provided) => ({
                                 ...provided,
                                 maxHeight: 180,

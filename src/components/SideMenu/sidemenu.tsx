@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 import AddRelicModal from '../Modals/AddRelicModal';
 import AddModeratorModal from '../Modals/AddModeratorModal';
 import ModeratorsListModal from '../Modals/ModeratorsListModal';
-import AddCategoryModal from '../Modals/AddCategoryModal';
+import AddTermModal from '../Modals/AddTermModal';
 import Settings from '../Modals/Settings';
 
 Modal.setAppElement('#root');
@@ -41,10 +41,10 @@ const SideMenu = () => {
             content: <ModeratorsListModal />,
             styles: 'moderators-list-window',
         },
-        addCategory: {
+        addTerm: {
             isOpen: false,
-            content: <AddCategoryModal />,
-            styles: 'add-category-window',
+            content: <AddTermModal />,
+            styles: 'add-term-window',
         },
     });
 
@@ -133,15 +133,10 @@ const SideMenu = () => {
                 <DefaultButton
                     height={38}
                     width={300}
-                    text="Додати Категорію"
-                    action={() => handleModal('addCategory', true)}
+                    text="Додати термін"
+                    action={() => handleModal('addTerm', true)}
                 />
-                <DefaultButton
-                    height={38}
-                    width={300}
-                    text="Додати додаткову характеристику"
-                    action={() => handleModal('addCategory', true)}
-                />
+                
             </div>
         </>
     );
