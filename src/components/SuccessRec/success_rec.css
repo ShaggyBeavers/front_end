@@ -1,0 +1,24 @@
+.success_rec_con{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding:12rem 2rem 0;
+    text-align: center;
+}
+
+.success_rec{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.success_rec h3{
+    color: #19BE6F;
+    margin: 1rem 0 0.5rem;
+}
+
+.success_rec h6{
+    width: 65%;
+    text-align: center;
+}

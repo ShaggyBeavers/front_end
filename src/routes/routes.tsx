@@ -9,6 +9,7 @@ import ReportPage from "../pages/ReportPage";
 import RecoveryPage from "../pages/RecoveryPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import RelicPage from "../pages/RelicPage";
+import SuccessRecovery from "../pages/SuccessRecovery";
 
 export const router = createBrowserRouter([
     {
@@ -23,6 +24,7 @@ export const router = createBrowserRouter([
             { path: 'profile', element: <ProfilePage/> },
             { path: 'report', element: <ReportPage/> },
             { path: 'recovery', element: <RecoveryPage/> },
+            { path: 'success_recovery' ,element: <SuccessRecovery/>},
             { path: '*', element: <NotFoundPage /> },
         ]
     }
