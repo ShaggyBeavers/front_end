@@ -1,17 +1,17 @@
 @font-face {
-  font-family: 'eUkraine-Regular';
-  font-style: normal;
-  src: url('./e-Ukraine-Regular.otf') format('opentype');
+    font-family: 'eUkraine-Regular';
+    font-style: normal;
+    src: url('./e-Ukraine-Regular.otf') format('opentype');
 }
 
 @font-face {
-  font-family: 'eUkraine-Bold';
-  font-style: normal;
-  src: url('./e-Ukraine-Bold.otf') format('opentype');
+    font-family: 'eUkraine-Bold';
+    font-style: normal;
+    src: url('./e-Ukraine-Bold.otf') format('opentype');
 }
 
 @font-face {
-  font-family: 'eUkraine-Thin';
-  font-style: normal;
-  src: url('./e-Ukraine-Thin.otf') format('opentype');
+    font-family: 'eUkraine-Thin';
+    font-style: normal;
+    src: url('./e-Ukraine-Thin.otf') format('opentype');
 }

@@ -6,14 +6,14 @@ import WeeklyExhibit from '../components/WeeklyExhibit/w_exhibit';
 import Categories from '../components/Categories/categories';
 
 const HomePage = () => (
-  <div>
-    <Topper/>
-    <RecentEvent/>
-    <BannerLanding/>
-    <WeeklyExhibit/>
-    <Categories/>
-    <Footer/>
-  </div>
+    <div>
+        <Topper />
+        <RecentEvent />
+        <BannerLanding />
+        <WeeklyExhibit />
+        <Categories />
+        <Footer />
+    </div>
 );
 
 export default HomePage;

@@ -17,6 +17,7 @@ html {
     max-width: 1280px;
     z-index: 1;
     top: 20px;
+    padding-top: 20px;
     align-items: center;
 }
 
@@ -27,7 +28,7 @@ html {
     align-items: center;
 }
 
-.navbar_con a{
+.navbar_con a {
     font-size: 0.8125rem;
     color: black;
     text-decoration: underline;
@@ -35,15 +36,15 @@ html {
     cursor: pointer;
 }
 
-.nav_logo a{
+.nav_logo a {
     text-decoration: none;
     color: inherit;
 }
 
-.nav_links{
+.nav_links {
     display: flex;
     align-items: center;
-    justify-content: space-between; 
+    justify-content: space-between;
 }
 
 .nav_catalogue {
@@ -63,7 +64,7 @@ html {
     transition: 0.7s ease;
 }
 
-.main:hover a{
+.main:hover a {
     color: white;
 }
 
@@ -78,25 +79,26 @@ html {
     transition: 0.7s;
 }
 
-.reg_links, .log_links{
+.reg_links,
+.log_links {
     display: flex;
     gap: 0.25rem;
 }
 
-.reg_links p,.log_links p{
+.reg_links p,
+.log_links p {
     font-size: 0.8125rem;
     letter-spacing: 0.3px;
-    font-family:'eUkraine-Thin';
+    font-family: 'eUkraine-Thin';
     font-weight: 700;
 }
 
-.reg_links a:hover,.log_links a:hover{
+.reg_links a:hover,
+.log_links a:hover {
     color: black;
 }
 
 @media (max-width: 600px) {
-    
-
     .nav_catalogue {
         left: 44%;
     }
@@ -107,8 +109,8 @@ html {
         font-size: 14px;
     }
 
-   .log_links{
-    flex-direction: column;
-    align-items: center;
-   }
+    .log_links {
+        flex-direction: column;
+        align-items: center;
+    }
 }

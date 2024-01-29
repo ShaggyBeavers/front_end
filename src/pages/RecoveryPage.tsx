@@ -13,6 +13,5 @@ const RecoveryPage = () => {
       </div>
     );
   };
-  
 
 export default RecoveryPage;

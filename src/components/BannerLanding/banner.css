@@ -3,7 +3,11 @@
     display: flex;
     justify-content: center;
     background: rgb(255, 214, 0);
-    background: linear-gradient(135deg, rgba(255, 214, 0, 1) 0%, rgba(250, 89, 79, 1) 100%);
+    background: linear-gradient(
+        135deg,
+        rgba(255, 214, 0, 1) 0%,
+        rgba(250, 89, 79, 1) 100%
+    );
 }
 
 .banner_landing span {
@@ -21,6 +25,6 @@
 
 @media (max-width: 860px) {
     html {
-      font-size: 14px;
+        font-size: 14px;
     }
 }

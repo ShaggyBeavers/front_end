@@ -11,6 +11,7 @@ import NotFoundPage from "../pages/NotFoundPage";
 import RelicPage from "../pages/RelicPage";
 import SuccessRecovery from "../pages/SuccessRecovery";
 
+
 export const router = createBrowserRouter([
     {
         path: '/',
@@ -26,6 +27,8 @@ export const router = createBrowserRouter([
             { path: 'recovery', element: <RecoveryPage/> },
             { path: 'success_recovery' ,element: <SuccessRecovery/>},
             { path: '*', element: <NotFoundPage /> },
-        ]
-    }
+            { path: 'profile', element: <ProfilePage /> },
+            { path: 'add-relic', element: <AddRelicPage/>},
+        ],
+    },
 ]);

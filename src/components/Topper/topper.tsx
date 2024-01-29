@@ -5,11 +5,11 @@ import './topper.css';
 const Topper = () => {
     return (
         <div>
-            <NavBar/>
+            <NavBar />
             <div className="topper">
-                <div className='topper_con'>
+                <div className="topper_con">
                     <h1>Divi</h1>
-                    <Search/>
+                    <Search />
                 </div>
             </div>
         </div>

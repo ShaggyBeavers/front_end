@@ -29,8 +29,9 @@
 .not_found button:hover {
     color: black;
     flex: 1;
-    background: linear-gradient(white, white) padding-box,
-        linear-gradient(to right, #BF98C6, #4B8BFA) border-box;
+    background:
+        linear-gradient(white, white) padding-box,
+        linear-gradient(to right, #bf98c6, #4b8bfa) border-box;
     border-radius: 40px;
     border: 2px solid transparent;
     transition: 0.5s;

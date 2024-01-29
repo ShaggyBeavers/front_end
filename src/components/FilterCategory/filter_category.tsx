@@ -6,7 +6,7 @@ import FilterRelicsLine from '../icons/filter_relics_line';
 
 interface FilterCategoryProps {
     category: string;
-    title: string; 
+    title: string;
     selectedCategory: string | null;
     handleFilterCategoryClick: (category: string) => void;
     isFilterModalOpen: boolean;
@@ -25,14 +25,21 @@ export const FilterCategory: React.FC<FilterCategoryProps> = ({
     options,
     selectedFilterOptions,
     handleFilterOptionClick,
-    setIsFilterModalOpen
+    setIsFilterModalOpen,
 }) => {
     return (
         <li className={selectedCategory === category ? 'selected' : ''}>
             <FilterRelicsLine />
-            <div className='filter_inner' onClick={() => handleFilterCategoryClick(category)}>
+            <div
+                className="filter_inner"
+                onClick={() => handleFilterCategoryClick(category)}
+            >
                 <h6>{title}</h6>
-                {selectedCategory === category ? <SelFilterExpand /> : <FilterExpand />}
+                {selectedCategory === category ? (
+                    <SelFilterExpand />
+                ) : (
+                    <FilterExpand />
+                )}
             </div>
 
             {isFilterModalOpen && selectedCategory === category && (

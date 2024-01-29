@@ -1,13 +1,13 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from 'axios';
 
-axios.defaults.baseURL = "http://localhost:8080";
+axios.defaults.baseURL = 'http://localhost:8081';
 const responseBody = (response: AxiosResponse) => response.data;
 
 const requests = {
-  get: (url: string) => axios.get(url).then(responseBody),
-  post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
-  put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
-  delete: (url: string) => axios.delete(url).then(responseBody),
+    get: (url: string) => axios.get(url).then(responseBody),
+    post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
+    put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
+    delete: (url: string) => axios.delete(url).then(responseBody),
 };
 
 const Account = {
@@ -20,19 +20,18 @@ const Account = {
 };
 
 const Catalogue = {
-  fetchItems: (page: number, size: number) =>
-    requests.get(`api/relics/page?page=${page}&size=${size}`),
-}
+    fetchItems: (page: number, size: number) =>
+        requests.get(`api/relics/page?page=${page}&size=${size}`),
+};
 
 const Relic = {
-  fetchDetails: (relicId: number) =>
-    requests.get(`api/relics/${relicId}`),
-}
+    fetchDetails: (relicId: number) => requests.get(`api/relics/${relicId}`),
+};
 
 const agent = {
-  Account,
-  Catalogue,
-  Relic
+    Account,
+    Catalogue,
+    Relic,
 };
 
 export default agent;

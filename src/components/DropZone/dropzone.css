@@ -1,17 +1,19 @@
-
 .upload-input {
     padding: 0.64rem 0.8125rem;
-    background: var(--Linear-Gradient, linear-gradient(135deg, #BF98C6 0%, #4B8BFA 100%));
+    background: var(
+        --Linear-Gradient,
+        linear-gradient(135deg, #bf98c6 0%, #4b8bfa 100%)
+    );
     cursor: pointer;
     border-radius: 15px;
     text-align: center;
     color: white;
     font-size: 0.8125rem;
-    font-family: "eUkraine-Regular";
+    font-family: 'eUkraine-Regular';
 }
 
-.uploaded-files{
-  margin: 0 auto ;
+.uploaded-files {
+    margin: 0 auto;
 }
 
 .uploaded-file {
@@ -30,13 +32,12 @@
     padding: 0;
 }
 
-
-  .upload-input.disabled-upload {
-    opacity: 0.5; 
+.upload-input.disabled-upload {
+    opacity: 0.5;
     cursor: not-allowed;
-  }
+}
 
-  .uploaded-file span {
+.uploaded-file span {
     width: 150px;
     display: block;
     white-space: nowrap;
@@ -45,15 +46,13 @@
 }
 
 @media (max-width: 730px) {
-  .uploaded-file span{
-    width: 120px;
-  }
+    .uploaded-file span {
+        width: 120px;
+    }
 }
 
 @media (max-width: 650px) {
-  .uploaded-file span{
-    width: 70px;
-  }
+    .uploaded-file span {
+        width: 70px;
+    }
 }
-  
-  

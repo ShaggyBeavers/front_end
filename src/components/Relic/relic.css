@@ -32,7 +32,7 @@
 .relic_left h4 {
     font-family: 'eUkraine-Thin';
     font-weight: 700;
-    background: linear-gradient(286deg, #F4A815 48.72%, #4E3421 89.82%);
+    background: linear-gradient(286deg, #f4a815 48.72%, #4e3421 89.82%);
     background-clip: text;
     color: transparent;
 }
@@ -74,7 +74,7 @@
     gap: 2rem;
 }
 
-.relic_img_con{
+.relic_img_con {
     width: 80%;
     height: 100%;
 }
@@ -94,42 +94,42 @@
     cursor: unset;
 }
 
-.hidden{
+.hidden {
     display: none;
 }
 
 @media (max-width: 900px) {
-
-    .relic_con{
+    .relic_con {
         flex-direction: column;
         justify-content: center;
-        padding: 6rem 5rem ;
+        padding: 6rem 5rem;
     }
 
-    .relic_left,.relic_right{
+    .relic_left,
+    .relic_right {
         width: 100%;
         max-width: none;
     }
 
-    .relic_left{
+    .relic_left {
         margin-bottom: 3rem;
     }
 
-    .relic_right{   
+    .relic_right {
         height: auto;
         max-height: 30rem;
     }
-    .relic_carousel{
+    .relic_carousel {
         gap: 1rem;
         flex-direction: column;
     }
 
-    .relic_pic_nav_resp{
+    .relic_pic_nav_resp {
         display: flex;
-        gap:4rem;
+        gap: 4rem;
     }
 
-    .relic_pic_nav{
+    .relic_pic_nav {
         display: none;
     }
 }
