@@ -1,9 +1,17 @@
-import NavBar from '../components/NavBar/navbar';
+import NavBar from "../components/NavBar/navbar";
+import RecoveryEmail from "../components/RecoveryEmail/recovery_email";
 
-const RecoveryPage = () => (
-    <div>
+const RecoveryPage = () => {
+    const handleStep1Submit = (data: { email: string }) => {
+      console.log('Step 1 form data:', data);
+    };
+  
+    return (
+      <div>
         <NavBar />
-    </div>
-);
+        <RecoveryEmail/>
+      </div>
+    );
+  };
 
 export default RecoveryPage;

@@ -20,14 +20,13 @@ export default function Login() {
             reset();
             setShowNotFoundMessage(false);
         } catch (error: any) {
-            if (
-                error.response &&
-                (error.response.status === 403 || error.response.status === 401)
-            ) {
+
+            if (error.response && (error.response.status === 403)) {
                 reset();
                 setShowNotFoundMessage(true);
             } else {
-                console.log(error);
+                console.log(data);
+                console.log(error)
             }
         }
     };

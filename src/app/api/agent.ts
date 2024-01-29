@@ -11,20 +11,12 @@ const requests = {
 };
 
 const Account = {
-    login: (values: { email: string; password: string }) =>
-        requests.post('api/auth/sign-in', values),
-    register: (values: {
-        firstName: string;
-        lastName: string;
-        email: string;
-        password: string;
-    }) => requests.post('api/auth/sign-up', values),
-    currentUser: () => requests.get('account/currentUser'), //prototype
-    passwodRecovery: (values: any) =>
-        requests.post('api/auth/passwordRecovery', values), //prototype
-    googleLogin: (values: any) =>
-        requests.post('api/auth/google_login', values), //prototype
-    report: (values: any) => requests.post('api/report', values), //idk real one yet
+  login: (values: { email: string; password: string }) => requests.post("api/auth/sign-in", values),
+  register: (values: { firstName: string, lastName: string, email: string; password: string }) => requests.post("api/auth/sign-up", values),
+  recoveryRequest: (values: {email:string}) =>
+    requests.post("api/user/password/request-reset", values),
+  googleLogin: (values: any) => requests.post("api/auth/google_login", values),//prototype
+  report: (values:any) => requests.post("api/report",values)//idk real one yet
 };
 
 const Catalogue = {
