@@ -6,9 +6,10 @@ interface buttonProps {
     font?: string;
     text: string;
     action: () => void;
+    selected?: boolean;
 }
 
-const DefaultButton = ({ height, width, font, text, action }: buttonProps) => {
+const DefaultButton = ({ height, width, font, text, action, selected }: buttonProps) => {
     const buttonStyle = {
         height: `${height}px`,
         width: `${width}px`,
@@ -16,7 +17,7 @@ const DefaultButton = ({ height, width, font, text, action }: buttonProps) => {
     };
 
     return (
-        <button className="default-button" style={buttonStyle} onClick={action}>
+        <button className={`default-button ${selected ? 'selected' : ''}`} style={buttonStyle} onClick={action}>
             {text}
         </button>
     );

@@ -7,7 +7,7 @@
     font-size: 13px;
 }
 
-.default-button:hover {
+.default-button:hover, .selected {
     /* color: black; */
     color: white;
     background: linear-gradient(135deg, #bf98c6 0%, #4b8bfa 100%);
