@@ -4,16 +4,20 @@ interface buttonProps {
     height: number;
     width: number;
     font?: string;
+    bgcolor?:string;
+    color?: string;
     text: string;
     action: () => void;
     selected?: boolean;
 }
 
-const DefaultButton = ({ height, width, font, text, action, selected }: buttonProps) => {
+const DefaultButton = ({ height, width, bgcolor, color, font, text, action, selected }: buttonProps) => {
     const buttonStyle = {
         height: `${height}px`,
         width: `${width}px`,
         fontSize: font ? `${font}` : '13px',
+        backgroundColor: bgcolor ? `${bgcolor}` : '',
+        color: color ? `${color}` : '',
     };
 
     return (
