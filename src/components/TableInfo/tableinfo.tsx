@@ -46,7 +46,7 @@ const TableInfo = () => {
         <>
             <div className="table-info">
                 <div className="table-info-header__row">
-                    <div className="table-info__cell">Назва</div>
+                    <div className="table-info__cell ">Назва</div>
                     <div className="table-info__cell">Категорія</div>
                     <div className="table-info__cell">Статус</div>
                 </div>

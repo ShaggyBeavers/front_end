@@ -10,7 +10,7 @@ import RecoveryPage from "../pages/RecoveryPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import RelicPage from "../pages/RelicPage";
 import SuccessRecovery from "../pages/SuccessRecovery";
-
+import AddRelicPage from "../pages/AddRelicPage";
 
 export const router = createBrowserRouter([
     {
