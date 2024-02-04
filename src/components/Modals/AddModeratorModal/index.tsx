@@ -5,7 +5,7 @@ import DefaultButton from '../../DefaultButton/defaultbutton';
 import { toast } from 'sonner';
 
 const AddModeratorModal = () => {
-    const { handleSubmit, control, reset } = useForm();
+    const { handleSubmit, control } = useForm();
 
     const onSubmit = (data: any) => {
         toast('Успішно додано модератора', {
@@ -16,7 +16,6 @@ const AddModeratorModal = () => {
             ),
         });
         console.log(data);
-        reset();
     };
 
     const categories = [
@@ -84,7 +83,9 @@ const AddModeratorModal = () => {
                                 className="select"
                                 options={regions}
                                 onChange={(option) =>
-                                    field.onChange(option?.value)
+                                    option ? 
+                                    field.onChange(option?.value) :
+                                    field.onChange(null)
                                 }
                                 onBlur={field.onBlur}
                                 value={regions.find(
@@ -131,15 +132,17 @@ const AddModeratorModal = () => {
                                 // to submit only values
                                 onChange={(options) =>
                                     field.onChange(
-                                        options.map((option) => option.value)
+                                        options ? 
+                                        options.map((option) => option.value) :
+                                        []
                                     )
                                 }
-                                // to submit only values
                                 onBlur={field.onBlur}
-                                // to submit only values
-                                value={categories.filter((category) =>
-                                    field.value.includes(category.value)
-                                )}
+                                value={
+                                    categories.filter((category) =>
+                                        field.value?.includes(category.value)
+                                    )
+                                }
                                 menuPortalTarget={document.body}
                                 styles={{
                                     menu: (provided) => ({
