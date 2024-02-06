@@ -46,11 +46,10 @@ export function DataTable<TData, TValue>({
     const selectFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
         const selectedValues = value;
         const values: any = new Set(row.getValue(columnId) as string[]);
-        const included = [...selectedValues].every(
-            (selected) =>
-                Array.from(values).some(
-                    (item: any) => item.categoryName === selected 
-                )
+        const included = [...selectedValues].every((selected) =>
+            Array.from(values).some(
+                (item: any) => item.categoryName === selected
+            )
         );
 
         // console.log(
@@ -126,7 +125,10 @@ export function DataTable<TData, TValue>({
                                     }
                                 >
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>
+                                        <TableCell
+                                            key={cell.id}
+                                            className="first:rounded-l-2xl  last:rounded-r-2xl "
+                                        >
                                             {flexRender(
                                                 cell.column.columnDef.cell,
                                                 cell.getContext()
