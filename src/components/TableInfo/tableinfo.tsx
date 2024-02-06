@@ -1,8 +1,10 @@
 import React from 'react';
 import './tableinfo.css';
+import { DataTable } from './DataTable';
+import { columns } from './columns';
 
 interface TableInfoProps {
-    name: string;
+    title: string;
     categoryList: string[];
     status: string;
 }
@@ -12,39 +14,55 @@ const TableInfo = () => {
 
     const props: any = [
         {
-            name: 'Казан',
-            categoryList: ['Посуд', 'Антикваріат'],
-            status: 'Вкрадено',
+            title: 'Казан',
+            categoryList: [],
+            status: 'BEING_PROCESSED',
         },
         {
-            name: 'Келішек',
-            status: 'Знищено',
-            categoriesDTO: [
+            title: 'Келішек',
+            status: 'NEW',
+            categoryList: [],
+        },
+        {
+            title: 'Золото Кримського ханства',
+            categoryList: [
                 {
-                    name: 'Посуд',
-                    id: 0,
+                    id: 10,
+                    categoryName: 'Ancient Artifacts',
                 },
                 {
-                    name: 'Фарфор',
+                    id: 7,
+                    categoryName: 'Золото',
+                },
+                {
+                    id: 5,
+                    categoryName: 'Ware',
+                },
+                {
                     id: 1,
+                    categoryName: 'Inscriptions',
+                }
+            ],
+            status: 'APPROVED',
+        },
+        {
+            title: 'Останній з Василів',
+            categoryList: [
+                {
+                    id: 7,
+                    categoryName: 'Золото',
                 },
             ],
+            status: 'REJECTED',
         },
-        {
-            name: 'Золото Кримського ханства',
-            categoryList: ['Скарб', 'Брошка', 'Золото'],
-            status: 'Знищено',
-        },
-        {
-            name: 'Останній з Василів',
-            categoryList: ['Книга'],
-            status: 'Вкрадено',
-        }
     ];
 
     return (
         <>
-            <div className="table-info">
+            <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">
+                <DataTable columns={columns} data={props} />
+            </div>
+            {/* <div className="table-info">
                 <div className="table-info-header__row">
                     <div className="table-info__cell ">Назва</div>
                     <div className="table-info__cell">Категорія</div>
@@ -61,20 +79,8 @@ const TableInfo = () => {
                         <div className="table-info__cell">{row.status}</div>
                     </div>
                 ))}
-            </div>
+            </div> */}
         </>
-        // <table>
-        //     <th className="header">Назва</th>
-        //     <th className="header">Категорія</th>
-        //     <th className="header">Статус</th>
-        //     {matrix.map((row, i) => (
-        //         <tr key={i}>
-        //             {row.map((cell: any, j: any) => (
-        //                 <td key={j}>{cell}</td>
-        //             ))}
-        //         </tr>
-        //     ))}
-        // </table>
     );
 };
 
