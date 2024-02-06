@@ -48,21 +48,6 @@ export const columns: any = [
 
             return <ShowLabels labels={labels} />;
         },
-        // cell: ({ row } : any) => (
-        //     <div className="max-w-[500px] truncate font-medium">
-        //         {(
-        //             (row.getValue('categoryList') as categoryType[]) || []
-        //         ).map((category, index) => (
-        //             // <span key={index}>{category.categoryName}</span>
-        //             <Badge
-        //                 variant="secondary"
-        //                 className="rounded-sm px-1 font-normal"
-        //             >
-        //                 {category.categoryName}
-        //             </Badge>
-        //         ))}
-        //     </div>
-        // ),
         filterFn: 'select',
     },
     {
@@ -78,12 +63,18 @@ export const columns: any = [
             return (
                 <div className="flex items-center space-x-2">
                     {status?.icon && (
-                        <status.icon className="mr-0.5 h-4 w-4 text-muted-foreground" />
+                        <status.icon
+                            className={`mr-0.5 h-4 w-4 text-muted-foreground`}
+                        />
                     )}
                     {status ? (
-                        <span>{status.label}</span>
+                        <span className={`p-2 ${status.color && false} `}>
+                            {status.label}
+                        </span>
                     ) : (
-                        <span>{row.getValue('status')}</span>
+                        <span>
+                            {row.getValue('status')}
+                        </span>
                     )}
                 </div>
             );

@@ -10,21 +10,25 @@ export const statuses = [
         value: 'NEW',
         label: 'Нове',
         icon: CircleIcon,
+        color: 'bg-zinc-300', 
     },
     {
         value: 'BEING_PROCESSED',
         label: 'Опрацьовується',
         icon: StopwatchIcon,
+        color: 'bg-yellow-400'
     },
     {
         value: 'APPROVED',
         label: 'Cхвалено',
         icon: CheckCircledIcon,
+        color: 'bg-green-500 text-white'
     },
     {
         value: 'REJECTED',
         label: 'Відхилено',
         icon: CrossCircledIcon,
+        color: 'bg-red-500 text-white'
     },
 ];
 
