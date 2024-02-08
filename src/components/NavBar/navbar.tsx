@@ -1,11 +1,15 @@
 import { Link, useLocation } from 'react-router-dom';
 import './navbar.css';
 
-const NavBar = () => {
+interface NavBarProps {
+    styles?: string;
+}
+
+const NavBar: React.FC<NavBarProps> = ({ styles }) => {
     const location = useLocation();
     return (
-        <div className="navbar">
-            <div className="navbar_con">
+        <div className='navbar'>
+            <div className={`navbar_con ${styles}`}>
                 <div className="nav_logo">
                     <Link to="/">
                         <h2>Divi</h2>

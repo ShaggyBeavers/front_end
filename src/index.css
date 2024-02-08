@@ -47,11 +47,12 @@
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 240 5.9% 90%;
+    --border: 0 0% 64%;
+    /* --border: 240 5.9% 90%; */
     --input: 240 5.9% 90%;
     --ring: 240 10% 3.9%;
  
-    --radius: 1rem;
+    --radius: 1.1rem;
   }
  
   .dark {
