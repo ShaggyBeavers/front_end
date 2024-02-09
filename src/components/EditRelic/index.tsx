@@ -15,6 +15,7 @@ import {
 } from '../ui/form';
 import { useForm } from 'react-hook-form';
 import NavBar from '../NavBar/navbar';
+import { Button } from '../ui/button';
 
 export const EditRelic = () => {
     const location = useLocation();
@@ -47,15 +48,16 @@ export const EditRelic = () => {
                         name="name"
                         render={() => (
                             <>
-                                {isMain && <AddMainRelic form={form}/>}
-                                {isReturned && <AddReturnedRelic />}
-                                {isLost && <AddLostRelic />}
+                                {isMain && <AddMainRelic form={form} />}
+                                {isReturned && <AddReturnedRelic form={form} />}
+                                {isLost && <AddLostRelic form={form} />}
                             </>
                         )}
                     />
+                    <Button type="submit">Submit</Button>
                 </form>
             </Form>
-            <Toaster />{' '}
+            <Toaster />
         </>
     );
 };
