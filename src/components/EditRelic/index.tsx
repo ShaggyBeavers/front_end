@@ -43,17 +43,17 @@ export const EditRelic = () => {
                     onSubmit={form.handleSubmit(onSubmit)}
                     className="space-y-8 p-20"
                 >
-                    <FormField
+                    {/* <FormField
                         control={form.control}
                         name="name"
                         render={() => (
-                            <>
+                            <> */}
                                 {isMain && <AddMainRelic form={form} />}
                                 {isReturned && <AddReturnedRelic form={form} />}
                                 {isLost && <AddLostRelic form={form} />}
-                            </>
+                            {/* </>
                         )}
-                    />
+                    /> */}
                     <Button type="submit">Submit</Button>
                 </form>
             </Form>

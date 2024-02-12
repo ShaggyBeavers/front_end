@@ -18,7 +18,6 @@ const AddReturnedRelic = ({ form }: any) => {
             </h2>
             <div className="grid grid-cols-2 gap-10">
                 <div className="grid grid-rows-2 gap-5">
-                    {/* Dimensions */}
                     <FormField
                         control={form.control}
                         name="lossWay"
@@ -34,7 +33,6 @@ const AddReturnedRelic = ({ form }: any) => {
                             </FormItem>
                         )}
                     />
-                    {/* Signatures */}
                     <FormField
                         control={form.control}
                         name="probableLocation"
@@ -52,7 +50,6 @@ const AddReturnedRelic = ({ form }: any) => {
                     />
                 </div>
                 <div className="grid grid-rows-2 gap-5">
-                    {/* labels */}
                     <FormField
                         control={form.control}
                         name="lossTime"

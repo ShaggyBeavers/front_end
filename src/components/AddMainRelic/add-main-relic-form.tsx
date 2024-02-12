@@ -1,4 +1,5 @@
 import './index.css';
+import { useState } from 'react';
 import { Input } from 'src/components/ui/input';
 import {
     FormControl,
@@ -31,8 +32,38 @@ import {
     CommandEmpty,
 } from '../ui/command';
 import { Separator } from '../ui/separator';
+import {
+    Dropzone,
+    FileMosaic,
+    ExtFile,
+    FullScreen,
+    ImagePreview,
+} from '@dropzone-ui/react';
 
 const AddMainRelic = ({ form }: any) => {
+    const [files, setFiles] = useState<any>([]);
+    const [imgSrc, setImgSrc] = useState<any>(undefined);
+
+    const handleSeeImage = (imageSource: any) => {
+        setImgSrc(imageSource);
+    };
+
+    const updateFile = (newFile: any) => {
+        setFiles(newFile);
+    };
+    const removeFile = (id: string | number | undefined) => {
+        setFiles(files.filter((x: ExtFile) => x.id !== id));
+    };
+
+    const properties = [
+        { id: 1, label: 'Вага', value: 'weight' },
+        { id: 2, label: 'Висота', value: 'height' },
+        { id: 3, label: 'Ширина', value: 'width' },
+        { id: 4, label: 'Довжина', value: 'length' },
+    ];
+    const [propertyFields, setPropertyFields] = useState<any>([
+        { id: properties[0].id, value: '' },
+    ]);
     const region = [
         { label: 'Київ', value: 'Kyiv' },
         { label: 'Харків', value: 'Kharkiv' },
@@ -142,7 +173,7 @@ const AddMainRelic = ({ form }: any) => {
                                             Повернено
                                         </SelectItem>
                                         <SelectItem value="UNKNOWN">
-                                           Невідомо 
+                                            Невідомо
                                         </SelectItem>
                                     </SelectContent>
                                     <FormMessage />
@@ -150,8 +181,129 @@ const AddMainRelic = ({ form }: any) => {
                             </FormItem>
                         )}
                     />
+                    <h4>Додаткові Характеристики</h4>
+                    {propertyFields.map((propertyField: any, index: number) => {
+                        return (
+                            <FormField
+                                control={form.control}
+                                name={`property-${propertyField.id}`}
+                                key={propertyField.id}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel htmlFor="property">
+                                            {
+                                                properties.find(
+                                                    (property) =>
+                                                        property.id ===
+                                                        propertyField.id
+                                                )?.label
+                                            }
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="text"
+                                                placeholder="Значення"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        );
+                    })}
+                    {/* <FormField
+                        control={form.control}
+                        name="properties"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel htmlFor="properties">
+                                    Додаткова характеристика
+                                </FormLabel>
+                                <div className="flex flex-row">
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                            <FormControl className="rounded-r-none">
+                                                <Button
+                                                    variant="outline"
+                                                    role="combobox"
+                                                    className={cn(
+                                                        !field.value &&
+                                                            'text-muted-foreground',
+                                                        'w-full justify-between'
+                                                    )}
+                                                >
+                                                    {field.value
+                                                        ? properties.find(
+                                                              (property) =>
+                                                                  property.value ===
+                                                                  field.value
+                                                          )?.label
+                                                        : 'Виберіть характеристику'}
+                                                    <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                </Button>
+                                            </FormControl>
+                                        </PopoverTrigger>
+                                        <PopoverContent>
+                                            <Command>
+                                                <CommandInput
+                                                    className="w-full"
+                                                    placeholder="Search property..."
+                                                />
+                                                <CommandEmpty>
+                                                    Жодної характеристики не
+                                                    знайдено
+                                                </CommandEmpty>
+                                                <CommandGroup>
+                                                    {properties.map(
+                                                        (property) => (
+                                                            <CommandItem
+                                                                value={
+                                                                    property.label
+                                                                }
+                                                                key={
+                                                                    property.value
+                                                                }
+                                                                onSelect={() => {
+                                                                    form.setValue(
+                                                                        'properties',
+                                                                        property.value
+                                                                    );
+                                                                }}
+                                                            >
+                                                                <CheckIcon
+                                                                    className={cn(
+                                                                        '',
+                                                                        property.value ===
+                                                                            field.value
+                                                                            ? 'opacity-100'
+                                                                            : 'opacity-0'
+                                                                    )}
+                                                                />
+                                                                {property.label}
+                                                            </CommandItem>
+                                                        )
+                                                    )}
+                                                </CommandGroup>
+                                            </Command>
+                                        </PopoverContent>
+                                    </Popover>
+
+                                    <Input
+                                        type="text"
+                                        className="rounded-l-none"
+                                    />
+                                    <Button className="bg-red-500">
+                                        Trash
+                                    </Button>
+                                </div>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    /> */}
                 </div>
-                <div className="grid grid-rows-5 gap-5">
+                {/* Second Column */}
+                <div className="grid grid-rows-4 gap-5">
                     <FormField
                         control={form.control}
                         name="region"
@@ -262,16 +414,70 @@ const AddMainRelic = ({ form }: any) => {
                             )}
                         />
                     </div>
+                    {/* Image Upload */}
                     <FormField
                         control={form.control}
-                        name="properties"
+                        name="image"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor="properties">
-                                    Додаткова характеристика
+                                <FormLabel htmlFor="material">
+                                    Матеріал
                                 </FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Додаткова характеристика" {...field} />
+                                <FormControl><>
+                                    <Dropzone
+                                        onChange={(files) => {
+                                            field.onChange(files);
+                                            updateFile(files);
+                                        }}
+                                        maxFileSize={50 * 1024 * 1024}
+                                        maxFiles={3}
+                                        accept="image/*"
+                                        value={files}
+                                        header={false}
+                                        style={{
+                                            height: 'auto',
+                                            border: '1px solid #e4e4e7',
+                                        }}
+                                        label={
+                                            'Перетягніть фото сюди або клікніть, щоб вибрати'
+                                        }
+                                        background=""
+                                        // headerConfig={{
+                                        //     customHeader: (
+                                        //         <></>
+                                        //         // <p className="flex justify-end p-4 text-muted-foreground">
+                                        //         //     Макс. розмір файлу: 50Mб,
+                                        //         //     Файлів: 3{' '}
+                                        //         // </p>
+                                        //     ),
+                                        // }}
+                                        footerConfig={{
+                                            customMessage: (
+                                                <>
+                                                    Макс. розмір файлу: 50Mб,
+                                                    Файлів: 3
+                                                </>
+                                            ),
+                                        }}
+                                        clickable
+                                    >
+                                        {files.map((file: ExtFile) => (
+                                            <FileMosaic
+                                                key={file.id}
+                                                {...file}
+                                                onDelete={removeFile}
+                                                preview
+                                                onSee={handleSeeImage}
+                                            />
+                                        ))}
+                                    </Dropzone>
+                                    <FullScreen
+                                        open={imgSrc !== undefined}
+                                        onClose={() => setImgSrc(undefined)}
+                                    >
+                                        <ImagePreview src={imgSrc} />
+                                    </FullScreen>
+                                    </>
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>

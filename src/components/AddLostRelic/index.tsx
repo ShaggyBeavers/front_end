@@ -64,7 +64,7 @@ const AddLostRelic = ({ form }: any) => {
                                     Процес повернення
                                 </FormLabel>
                                 <FormControl>
-                                    <Input type="text" {...field} />
+                                    <Input type="text" {...field}/>
                                 </FormControl>
                                 <FormDescription>
                                     Вкажіть, як відбувався процес повернення
