@@ -32,24 +32,11 @@ const AddLostRelic = ({ form }: any) => {
                                     Джерело інформації про повернення
                                 </FormLabel>
                                 <FormControl>
-                                    <>
-                                        <Input type="text" {...field} />
-                                        <TooltipProvider>
-                                            <Tooltip>
-                                                <TooltipTrigger>
-                                                    krk
-                                                </TooltipTrigger>
-                                                <TooltipContent>
-                                                    <p>
-                                                        Вкажіть, звідки ви
-                                                        дізналися про повернення
-                                                        реліквії
-                                                    </p>
-                                                </TooltipContent>
-                                            </Tooltip>
-                                        </TooltipProvider>
-                                    </>
+                                    <Input type="text" {...field} />
                                 </FormControl>
+                                <FormDescription className='mr-10'>
+                                Інформації, за допомогою якої було знайдено культурну цінність (каталог виставки, електронна база даних втрат культурних цінностей)
+                                </FormDescription>
                                 <FormMessage />
                             </FormItem>
                         )}
@@ -83,7 +70,7 @@ const AddLostRelic = ({ form }: any) => {
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel htmlFor="previousSearchInfo">
-                                    Попереднє Джерело про пошук
+                                Додаткова інформація про попередній розшук
                                 </FormLabel>
                                 <FormControl>
                                     <Input type="text" {...field} />

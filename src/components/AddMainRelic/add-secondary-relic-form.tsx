@@ -25,7 +25,9 @@ export const AddSecondaryRelicForm = ({ form }: any) => {
                                     Первинний інвентарний номер
                                 </FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Номер" {...field} />
+                                    <Input 
+                                    placeholder="Введіть інвентарний номер реліквії"
+                                    {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -59,6 +61,9 @@ export const AddSecondaryRelicForm = ({ form }: any) => {
                                 <FormControl>
                                     <Input type="text" {...field} />
                                 </FormControl>
+                                <FormDescription>
+                                    І вкажіть валюту
+                                </FormDescription>
                                 <FormMessage />
                             </FormItem>
                         )}
@@ -77,7 +82,7 @@ export const AddSecondaryRelicForm = ({ form }: any) => {
                                 <FormControl>
                                     <Input
                                         type="number"
-                                        placeholder="Номер"
+                                        placeholder="Введіть інвентарний номер реліквії"
                                         {...field}
                                     />
                                 </FormControl>
@@ -97,10 +102,13 @@ export const AddSecondaryRelicForm = ({ form }: any) => {
                                 <FormControl>
                                     <Input
                                         type="text"
-                                        placeholder="Інформація"
+                                        // placeholder="Інформація"
                                         {...field}
                                     />
                                 </FormControl>
+                                <FormDescription>
+                                За наявності
+                                </FormDescription>
                                 <FormMessage />
                             </FormItem>
                         )}
@@ -117,6 +125,9 @@ export const AddSecondaryRelicForm = ({ form }: any) => {
                                 <FormControl>
                                     <Input type="text" {...field} />
                                 </FormControl>
+                                <FormDescription>
+                                    І вкажіть валюту
+                                </FormDescription>
                                 <FormMessage />
                             </FormItem>
                         )}
