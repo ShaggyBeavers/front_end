@@ -17,6 +17,7 @@ import {
 import { ShowLabels } from './DataTableShowLabels';
 import { cva } from 'class-variance-authority';
 import { stat } from 'fs';
+import { DataTableRowActions } from './DataTableRowActions';
 
 export const columns: any = [
     {
@@ -79,4 +80,5 @@ export const columns: any = [
             return value.includes(row.getValue(id));
         },
     },
+    { id: 'action', cell: ({ row }: any) => <DataTableRowActions row={row} /> },
 ];
