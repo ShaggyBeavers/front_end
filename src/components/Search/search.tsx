@@ -18,7 +18,7 @@ const Search = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Знайти експонат"
             />
-            <button onClick={performSearch} className="search_btn">
+            <button onClick={performSearch} className="search_btn" >
                 <img src="./icons/search.svg" />
             </button>
         </div>
