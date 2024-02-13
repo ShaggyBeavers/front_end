@@ -1,34 +1,38 @@
-import {
-    StopwatchIcon,
-    CircleIcon,
-    CrossCircledIcon,
-    CheckCircledIcon,
-} from '@radix-ui/react-icons';
+// import {
+//     StopwatchIcon,
+//     CircleIcon,
+//     CrossCircledIcon,
+//     CheckCircledIcon,
+// } from '@radix-ui/react-icons';
 
+import { Timer, CircleIcon, XCircle, CheckCircle2 } from 'lucide-react';
 export const statuses = [
     {
         value: 'NEW',
         label: 'Нове',
         icon: CircleIcon,
-        color: 'bg-zinc-300', 
+        color: 'text-zinc-300',
     },
     {
         value: 'BEING_PROCESSED',
         label: 'Опрацьовується',
-        icon: StopwatchIcon,
-        color: 'bg-yellow-400'
+        // icon: StopwatchIcon,
+        icon: Timer,
+        color: 'text-yellow-400',
     },
     {
         value: 'APPROVED',
         label: 'Cхвалено',
-        icon: CheckCircledIcon,
-        color: 'bg-green-500 text-white'
+        // icon: CheckCircledIcon,
+        icon: CheckCircle2,
+        color: 'text-green-500',
     },
     {
         value: 'REJECTED',
         label: 'Відхилено',
-        icon: CrossCircledIcon,
-        color: 'bg-red-500 text-white'
+        // icon: CrossCircledIcon,
+        icon: XCircle,
+        color: 'text-red-500 ',
     },
 ];
 

@@ -15,6 +15,9 @@ import {
     categoryType,
 } from '../../types/report-table-columns';
 import { ShowLabels } from './DataTableShowLabels';
+import { cva } from 'class-variance-authority';
+import { stat } from 'fs';
+import { DataTableRowActions } from './DataTableRowActions';
 
 export const columns: any = [
     {
@@ -63,18 +66,12 @@ export const columns: any = [
             return (
                 <div className="flex items-center space-x-2">
                     {status?.icon && (
-                        <status.icon
-                            className={`mr-0.5 h-4 w-4 text-muted-foreground`}
-                        />
+                        <status.icon className={`${status.color}`} />
                     )}
                     {status ? (
-                        <span className={`p-2 ${status.color && false} `}>
-                            {status.label}
-                        </span>
+                        <span className={`p-2`}>{status.label}</span>
                     ) : (
-                        <span>
-                            {row.getValue('status')}
-                        </span>
+                        <span>{row.getValue('status')}</span>
                     )}
                 </div>
             );
@@ -83,4 +80,5 @@ export const columns: any = [
             return value.includes(row.getValue(id));
         },
     },
+    { id: 'action', cell: ({ row }: any) => <DataTableRowActions row={row} /> },
 ];
