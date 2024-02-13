@@ -48,10 +48,10 @@ export const EditRelic = () => {
                         name="name"
                         render={() => (
                             <> */}
-                                {isMain && <AddMainRelic form={form} />}
-                                {isReturned && <AddReturnedRelic form={form} />}
-                                {isLost && <AddLostRelic form={form} />}
-                            {/* </>
+                    {isMain && <AddMainRelic form={form} />}
+                    {isReturned && <AddReturnedRelic form={form} />}
+                    {isLost && <AddLostRelic form={form} />}
+                    {/* </>
                         )}
                     /> */}
                     <Button type="submit">Submit</Button>

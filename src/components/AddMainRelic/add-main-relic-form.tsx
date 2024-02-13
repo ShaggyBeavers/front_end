@@ -18,6 +18,8 @@ import {
     SelectValue,
 } from '../ui/select';
 
+import ReactSelect from 'react-select';
+
 import { Textarea } from '../ui/textarea';
 import { Form } from 'react-router-dom';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
@@ -39,10 +41,13 @@ import {
     FullScreen,
     ImagePreview,
 } from '@dropzone-ui/react';
+import { Badge } from 'lucide-react';
+import { optionCSS } from 'react-select/dist/declarations/src/components/Option';
 
 const AddMainRelic = ({ form }: any) => {
     const [files, setFiles] = useState<any>([]);
     const [imgSrc, setImgSrc] = useState<any>(undefined);
+    const [selectedProperties, setSelectedProperties] = useState<string[]>([]);
 
     const handleSeeImage = (imageSource: any) => {
         setImgSrc(imageSource);
@@ -181,37 +186,7 @@ const AddMainRelic = ({ form }: any) => {
                             </FormItem>
                         )}
                     />
-                    <h4>Додаткові Характеристики</h4>
-                    {propertyFields.map((propertyField: any, index: number) => {
-                        return (
-                            <FormField
-                                control={form.control}
-                                name={`property-${propertyField.id}`}
-                                key={propertyField.id}
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel htmlFor="property">
-                                            {
-                                                properties.find(
-                                                    (property) =>
-                                                        property.id ===
-                                                        propertyField.id
-                                                )?.label
-                                            }
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                type="text"
-                                                placeholder="Значення"
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        );
-                    })}
+
                     {/* <FormField
                         control={form.control}
                         name="properties"
@@ -303,7 +278,7 @@ const AddMainRelic = ({ form }: any) => {
                     /> */}
                 </div>
                 {/* Second Column */}
-                <div className="grid grid-rows-4 gap-5">
+                <div className="grid grid-rows-5 gap-5">
                     <FormField
                         control={form.control}
                         name="region"
@@ -414,6 +389,92 @@ const AddMainRelic = ({ form }: any) => {
                             )}
                         />
                     </div>
+                </div>
+            </div>
+            <h4>Додаткові Характеристики</h4>
+            <div className="grid grid-cols-2 gap-10">
+                <div className="grid grid-rows-1 gap-5 self-start">
+                    <FormField
+                        control={form.control}
+                        name="categories"
+                        render={({ field }) => (
+                            <ReactSelect
+                                options={properties}
+                                isMulti
+                                closeMenuOnSelect={false}
+                                noOptionsMessage={() =>
+                                    'Жодної характеристики не знайдено'
+                                }
+                                menuPortalTarget={document.body}
+                                onChange={(selectedOptions, actionMeta) => {
+                                    if (actionMeta.action === 'remove-value') {
+                                        form.resetField(
+                                            actionMeta.removedValue.value
+                                        );
+                                        console.log(
+                                            'Removed:',
+                                            actionMeta.removedValue
+                                        );
+                                    }
+                                    const selectedValues = selectedOptions
+                                        ? selectedOptions.map(
+                                              (option) => option.value
+                                          )
+                                        : [];
+                                    field.onChange(selectedValues);
+
+                                    setSelectedProperties(selectedValues);
+                                }}
+                                onBlur={field.onBlur}
+                                value={properties.filter((properties) =>
+                                    field.value?.includes(properties.value)
+                                )}
+                                styles={{
+                                    menu: (provided) => ({
+                                        ...provided,
+                                        maxHeight: 180,
+                                        overflow: 'hidden',
+                                    }),
+                                }}
+                                theme={(theme) => ({
+                                    ...theme,
+                                    border: 'none',
+                                    borderRadius: 20,
+                                    fontSize: 10,
+                                    colors: {
+                                        ...theme.colors,
+                                        primary25: 'rgba(0, 0, 0, 0.1)',
+                                        primary: '#1C1C1C',
+                                    },
+                                })}
+                            />
+                        )}
+                    />
+                    <div>
+                        {selectedProperties.map((option, index) => (
+                            <FormField
+                                control={form.control}
+                                name={option}
+                                key={index}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel htmlFor={option}>
+                                            {option}
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="text"
+                                                placeholder=""
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+                        ))}
+                    </div>
+                </div>
+                <div className="grid grid-rows-1 gap-5">
                     {/* Image Upload */}
                     <FormField
                         control={form.control}
@@ -423,60 +484,63 @@ const AddMainRelic = ({ form }: any) => {
                                 <FormLabel htmlFor="material">
                                     Матеріал
                                 </FormLabel>
-                                <FormControl><>
-                                    <Dropzone
-                                        onChange={(files) => {
-                                            field.onChange(files);
-                                            updateFile(files);
-                                        }}
-                                        maxFileSize={50 * 1024 * 1024}
-                                        maxFiles={3}
-                                        accept="image/*"
-                                        value={files}
-                                        header={false}
-                                        style={{
-                                            height: 'auto',
-                                            border: '1px solid #e4e4e7',
-                                        }}
-                                        label={
-                                            'Перетягніть фото сюди або клікніть, щоб вибрати'
-                                        }
-                                        background=""
-                                        // headerConfig={{
-                                        //     customHeader: (
-                                        //         <></>
-                                        //         // <p className="flex justify-end p-4 text-muted-foreground">
-                                        //         //     Макс. розмір файлу: 50Mб,
-                                        //         //     Файлів: 3{' '}
-                                        //         // </p>
-                                        //     ),
-                                        // }}
-                                        footerConfig={{
-                                            customMessage: (
-                                                <>
-                                                    Макс. розмір файлу: 50Mб,
-                                                    Файлів: 3
-                                                </>
-                                            ),
-                                        }}
-                                        clickable
-                                    >
-                                        {files.map((file: ExtFile) => (
-                                            <FileMosaic
-                                                key={file.id}
-                                                {...file}
-                                                onDelete={removeFile}
-                                                preview
-                                                onSee={handleSeeImage}
-                                            />
-                                        ))}
-                                    </Dropzone>
-                                    <FullScreen
-                                        open={imgSrc !== undefined}
-                                        onClose={() => setImgSrc(undefined)}
-                                    >
-                                        <ImagePreview src={imgSrc} />
-                                    </FullScreen>
+                                <FormControl>
+                                    <>
+                                        <Dropzone
+                                            onChange={(files) => {
+                                                field.onChange(files);
+                                                updateFile(files);
+                                            }}
+                                            maxFileSize={50 * 1024 * 1024}
+                                            maxFiles={3}
+                                            accept="image/*"
+                                            value={files}
+                                            header={false}
+                                            style={{
+                                                // height: 'auto',
+                                                // height: '50px',
+                                                border: '1px solid #e4e4e7',
+                                                // maxHeight: '50px',
+                                            }}
+                                            label={
+                                                'Перетягніть фото сюди або клікніть, щоб вибрати'
+                                            }
+                                            background=""
+                                            // headerConfig={{
+                                            //     customHeader: (
+                                            //         <></>
+                                            //         // <p className="flex justify-end p-4 text-muted-foreground">
+                                            //         //     Макс. розмір файлу: 50Mб,
+                                            //         //     Файлів: 3{' '}
+                                            //         // </p>
+                                            //     ),
+                                            // }}
+                                            footerConfig={{
+                                                customMessage: (
+                                                    <>
+                                                        Макс. розмір файлу:
+                                                        50Mб, Файлів: 3
+                                                    </>
+                                                ),
+                                            }}
+                                            clickable
+                                        >
+                                            {files.map((file: ExtFile) => (
+                                                <FileMosaic
+                                                    key={file.id}
+                                                    {...file}
+                                                    onDelete={removeFile}
+                                                    preview
+                                                    onSee={handleSeeImage}
+                                                />
+                                            ))}
+                                        </Dropzone>
+                                        <FullScreen
+                                            open={imgSrc !== undefined}
+                                            onClose={() => setImgSrc(undefined)}
+                                        >
+                                            <ImagePreview src={imgSrc} />
+                                        </FullScreen>
                                     </>
                                 </FormControl>
                                 <FormMessage />
