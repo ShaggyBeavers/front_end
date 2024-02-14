@@ -1,5 +1,4 @@
-
-label {
+.input-row > label {
     font-size: 1rem;
     line-height: 1.5rem;
     font-family: e-Ukraine;
@@ -7,24 +6,23 @@ label {
     cursor: pointer;
 }
 
-select {
+.input-row > select {
     background-color: white;
     font-size: 1rem;
     padding-right: 5px;
     line-height: 1.5rem;
 }
 
-select:disabled {
+.input-row > select:disabled {
     color: black;
 }
 
-input{
+.input-row > input {
     font-family: e-Ukraine;
     font-size: 1rem;
     line-height: 1.5rem;
     padding: 0px;
 }
-
 
 .table-form {
     width: 100%;
@@ -82,13 +80,13 @@ input{
     margin-bottom: 10px;
 }
 
-.input-row{
+.input-row {
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
-.submit-button{
+.submit-button {
     width: 7.125rem;
     height: 2.5rem;
     flex-shrink: 0;
@@ -100,20 +98,19 @@ input{
     font-family: e-Ukraine;
     font-style: normal;
     font-weight: 400;
-    
 }
 
 .disabled {
-    background: var(--Grey, #DADADA);
-    color: var(--GreyText, #8E8E8E);
+    background: var(--Grey, #dadada);
+    color: var(--GreyText, #8e8e8e);
 }
 
-.col-1{
+.col-1 {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
-.col-2{
+.col-2 {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -121,17 +118,23 @@ input{
     margin-left: 10px;
 }
 
-.password{
+.col-2 > label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.password {
     border: 2px solid var(--Black, #000);
     border-radius: 2.5rem;
     width: 75%;
 }
 
-.password-block{
+.password-block {
     margin-top: 3rem;
 }
 
-.errors{
+.errors {
     position: absolute;
     right: 5rem;
     color: red;
@@ -140,7 +143,7 @@ input{
     margin-top: 0.5rem;
 }
 
-.password-req{
+.password-req {
     position: absolute;
     font-family: e-Ukraine;
     line-height: 1.125rem;
@@ -149,16 +152,16 @@ input{
     left: 40%;
 }
 
-.password-req > * > li{
+.password-req > * > li {
     margin-left: 1rem;
 }
 
-.password-req-default{
+.password-req-default {
     color: black;
 }
-.password-req-valid{
-    color:green;
+.password-req-valid {
+    color: green;
 }
-.password-req-invalid{
-    color:red;
+.password-req-invalid {
+    color: red;
 }

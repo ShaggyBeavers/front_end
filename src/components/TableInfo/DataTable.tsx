@@ -123,11 +123,12 @@ export function DataTable<TData, TValue>({
                                     data-state={
                                         row.getIsSelected() && 'selected'
                                     }
+                                    // className='odd:bg-gray-50'
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell
                                             key={cell.id}
-                                            className="first:rounded-l-2xl  last:rounded-r-2xl "
+                                            // className="first:rounded-l-2xl  last:rounded-r-2xl "
                                         >
                                             {flexRender(
                                                 cell.column.columnDef.cell,

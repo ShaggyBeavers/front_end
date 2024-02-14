@@ -13,11 +13,11 @@ const AddRelicModal = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="center">
-            <h4 className="header">Яку інформацію ви бажаєте записати?</h4>
-            <p className="hint">Можете вибрати декілька опцій</p>
+        <div className="flex flex-col items-center justify-center w-full">
+            <h4 className="header-add">Яку інформацію ви бажаєте записати?</h4>
+            <p className="hint-add">Можете вибрати декілька опцій</p>
 
-            <div className="row">
+            <div className="row-add">
                 <DefaultButton
                     height={40}
                     width={150}
@@ -55,7 +55,7 @@ const AddRelicModal = () => {
                     selected={selectedOptions.isLost}
                 />
             </div>
-            <div className="last-row">
+            <div className="last-row-add">
                 <DefaultButton
                     height={40}
                     width={114}
@@ -68,11 +68,6 @@ const AddRelicModal = () => {
                                 isLost: selectedOptions.isLost,
                             },
                         })
-                        // console.log({
-                        //     isReturned: selectedOptions.isReturned,
-                        //     isMain: selectedOptions.isMain,
-                        //     isLost: selectedOptions.isLost,
-                        // })
                     }
                 />
             </div>

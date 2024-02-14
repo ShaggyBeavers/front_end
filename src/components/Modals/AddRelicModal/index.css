@@ -1,4 +1,4 @@
-.center {
+.center-add {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -6,12 +6,12 @@
     width: 100%;
 }
 
-.header{
+.header-add {
     margin-top: 25px;
 }
 
-.hint{
-    color: var(--Dark-Grey, #A3A3A3);
+.hint-add {
+    color: var(--Dark-Grey, #a3a3a3);
     font-family: e-Ukraine;
     font-style: normal;
     font-weight: normal;
@@ -21,17 +21,17 @@
     margin-bottom: 15px;
 }
 
-.row {
+.row-add {
     width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
 }
 
-.last-row {
+.last-row-add {
     margin: 30px 0 10px 0;
     width: 100%;
-    height:100%;
+    height: 100%;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;

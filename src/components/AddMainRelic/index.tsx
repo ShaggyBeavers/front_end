@@ -1,11 +1,19 @@
 import './index.css';
 
-const AddMainRelic = () => {
+import { Button } from '../ui/button';
+import AddMainRelic from './add-main-relic-form';
+import { AddSecondaryRelicForm } from './add-secondary-relic-form';
+import { AddTertiaryRelicForm } from './add-tertiary-relic-form';
+
+
+const AddRelic = ({ form }: any) => {
     return (
-        <div>
-            <h1>Add Main Relic</h1>
-        </div>
+        <>
+            <AddMainRelic form={form} />
+            <AddSecondaryRelicForm form={form}/>
+            <AddTertiaryRelicForm form={form}/>
+        </>
     );
 };
 
-export default AddMainRelic;
+export default AddRelic;
