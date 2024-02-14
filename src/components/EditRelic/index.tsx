@@ -101,7 +101,7 @@ export const EditRelic = () => {
                 <form
                     id="relic-form"
                     onSubmit={form.handleSubmit(onSubmit)}
-                    className="space-y-8 p-20"
+                    className="space-y-8 py-20 px-28"
                 >
                     {isMain && <AddMainRelic form={form} />}
                     {isReturned && <AddReturnedRelic form={form} />}

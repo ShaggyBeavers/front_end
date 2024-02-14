@@ -138,7 +138,7 @@ const AddMainRelic = ({ form }: any) => {
                                     Кількість
                                 </FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Кількість" {...field} />
+                                    <Input placeholder="Введіть кількість" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -269,7 +269,7 @@ const AddMainRelic = ({ form }: any) => {
                                     Колекція
                                 </FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Колекція" {...field} />
+                                    <Input placeholder="Введіть колекцію" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -287,7 +287,7 @@ const AddMainRelic = ({ form }: any) => {
                                     </FormLabel>
                                     <FormControl>
                                         <Textarea
-                                            placeholder="Опис"
+                                            placeholder="Введіть опис реліквії"
                                             {...field}
                                             className="min-h-[6.25rem] max-h-[8.25rem]"
                                         />
@@ -297,6 +297,22 @@ const AddMainRelic = ({ form }: any) => {
                             )}
                         />
                     </div>
+                    <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel htmlFor="name">Історичний період</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        placeholder="Введіть історичний період"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                 </div>
             </div>
             <h4>Додаткові Характеристики</h4>
@@ -310,6 +326,7 @@ const AddMainRelic = ({ form }: any) => {
                                 options={properties}
                                 isMulti
                                 closeMenuOnSelect={false}
+                                placeholder={'Оберіть додаткові характеристики'}
                                 noOptionsMessage={() =>
                                     'Жодної характеристики не знайдено'
                                 }
@@ -338,6 +355,10 @@ const AddMainRelic = ({ form }: any) => {
                                     field.value?.includes(properties.value)
                                 )}
                                 styles={{
+                                    placeholder: (base) => ({
+                                        ...base,
+                                        fontSize: '0.9rem',
+                                      }),
                                     menu: (provided) => ({
                                         ...provided,
                                         maxHeight: 180,
