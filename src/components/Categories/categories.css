@@ -4,13 +4,14 @@
     flex-wrap: wrap;
     margin: 0 auto;
     max-width: 70rem;
+    padding-top: 4rem;
 }
 
 .categories_con {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 2rem;
-    padding: 1rem 2rem 4rem;
+    padding: 1rem 2rem 5rem;
 }
 
 .categories a {

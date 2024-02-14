@@ -1,7 +1,8 @@
 .banner_landing {
-    height: 53.875rem;
+    height: 50rem;
     display: flex;
     justify-content: center;
+    align-items: center;
     background: rgb(255, 214, 0);
     background: linear-gradient(
         135deg,
@@ -20,7 +21,6 @@
     flex-direction: column;
     row-gap: 1.875rem;
     text-align: center;
-    padding: 20rem 0;
 }
 
 @media (max-width: 860px) {

@@ -46,13 +46,13 @@ const NavBar: React.FC<NavBarProps> = ({ styles }) => {
                         {location.pathname === '/register' && (
                             <div className="reg_links">
                                 <p>Уже маєте акаунт?</p>
-                                <Link to="/login">Увійти</Link>
+                                <Link to="/login" style={{fontFamily:'eUkraine-Bold'}}>Увійти</Link>
                             </div>
                         )}
                         {location.pathname === '/login' && (
                             <div className="log_links">
                                 <p>Ще не маєте акаунта?</p>
-                                <Link to="/register">Зареєструватися</Link>
+                                <Link to="/register" style={{fontFamily:'eUkraine-Bold'}}>Зареєструватися</Link>
                             </div>
                         )}
                     </ul>

@@ -67,6 +67,7 @@
     background: var(--Black, #000);
     color: white;
     padding: 0.75rem 0;
+    font-size: small;
 }
 
 #google_btn {
@@ -76,7 +77,7 @@
     display: flex;
     gap: 0.3rem;
     color: #000;
-    padding: 0.55rem 0;
+    padding: 0.65rem 0;
 }
 .register_input.error p {
     color: red;
