@@ -30,12 +30,12 @@
             font-size: 1.65rem;
             line-height: 28px;
             color: #ffffff;
+            margin-bottom: 6px;
         }
     }
 
     .row2 {
-        .contact,
-        .email {
+        .contact {
             font-family: e-Ukraine;
             font-style: normal;
             font-weight: normal;
@@ -45,6 +45,14 @@
         }
     }
 }
+.email {
+    word-wrap: break-word; 
+    max-width: 100%; 
+    font-size: 80%; 
+    color: #ffffff; 
+    /* margin-top: 4px; */
+}
+
 
 .row1 {
     display: flex;
@@ -52,6 +60,8 @@
     justify-content: space-between;
     align-items: center;
 }
+
+
 
 .settings-window,
 .add-relic-window,
@@ -72,7 +82,6 @@
     border-radius: 20px;
     outline: none;
     padding: 20px;
-
     transform: translate(-50%, -50%);
 }
 

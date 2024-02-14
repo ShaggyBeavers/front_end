@@ -57,7 +57,17 @@
 .log_recovery p,
 .log_recovery a {
     font-size: 0.75rem;
+
     color: black;
+}
+.recovery-link {
+    color: #000; 
+    text-decoration: underline; 
+    transition: color 0.3s; 
+}
+.recovery-link:hover,
+.recovery-link:focus {
+    text-decoration: none; 
 }
 
 .login_btns {
