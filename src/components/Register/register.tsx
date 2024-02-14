@@ -2,7 +2,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useGoogleLogin } from '@react-oauth/google';
 import React from 'react';
 import './register.css';
-import agent from '../../app/api/agent';
+import AuthAPI from '../../app/api/Account/Auth/auth';
 
 interface RegisterForm {
     firstName: string;
@@ -20,7 +20,7 @@ export default function Register() {
 
     const submitForm: SubmitHandler<RegisterForm> = async (data) => {
         try {
-            await agent.Account.register(data);
+            await AuthAPI.register(data);
             reset();
             setShowExistsMessage(false);
         } catch (error: any) {

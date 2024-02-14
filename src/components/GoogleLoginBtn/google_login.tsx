@@ -1,6 +1,5 @@
 import { GoogleLogin } from '@react-oauth/google';
-import React from 'react';
-import agent from '../../app/api/agent'; // Import your agent library
+import React from 'react'; 
 
 interface GoogleLoginButtonProps {
     onSuccess?: () => void;
@@ -20,7 +19,6 @@ const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
                 onSuccess();
             }
         } catch (error) {
-            // Handle the error here
             console.error('Google login error:', error);
 
             // Call the onError callback if provided

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import agent from '../../app/api/agent';
 import NotFound from '../NotFound/not_found';
 import './relic.css';
 import { useNavigate } from 'react-router-dom';
+import RelicAPI from '../../app/api/Relic/relic';
 
 interface RelicProps {
     relicId: number;
@@ -64,7 +63,7 @@ const Relic = ({ relicId }: RelicProps) => {
     useEffect(() => {
         const fetchItemDetails = async () => {
             try {
-                const response = await agent.Relic.fetchDetails(relicId);
+                const response = await RelicAPI.fetchDetails(relicId);
                 console.log('Request Details:', response.config);
                 setItem(response.data);
                 console.log(item);
@@ -195,7 +194,7 @@ const Relic = ({ relicId }: RelicProps) => {
                                     ? '/icons/prev_arrow_relic.svg'
                                     : '/icons/prev_arrow_relic_d.svg'
                             }
-                            className={`arrow prev ${currentImageIndex === 0 ? 'disabled' : ''}`}
+                            className={`arrow prev ${currentImageIndex === 0 ? 'relic_disabled' : ''}`}
                             onClick={handlePrevImage}
                             alt="Previous"
                         />
@@ -211,7 +210,7 @@ const Relic = ({ relicId }: RelicProps) => {
 
                     <div className="relic_pic_nav">
                         <img
-                            className={`arrow next ${currentImageIndex === placeholderImages.length - 1 ? 'disabled' : ''}`}
+                            className={`arrow next ${currentImageIndex === placeholderImages.length - 1 ? 'relic_disabled' : ''}`}
                             onClick={handleNextImage}
                             src={
                                 currentImageIndex ===
@@ -231,13 +230,13 @@ const Relic = ({ relicId }: RelicProps) => {
                                         ? '/icons/prev_arrow_relic.svg'
                                         : '/icons/prev_arrow_relic_d.svg'
                                 }
-                                className={`arrow prev ${currentImageIndex === 0 ? 'disabled' : ''}`}
+                                className={`arrow prev ${currentImageIndex === 0 ? 'relic_disabled' : ''}`}
                                 onClick={handlePrevImage}
                                 alt="Previous"
                             />
                         </div>
                         <div
-                            className={`arrow next ${currentImageIndex === placeholderImages.length - 1 ? 'disabled' : ''}`}
+                            className={`arrow next ${currentImageIndex === placeholderImages.length - 1 ? 'relic_disabled' : ''}`}
                             onClick={handleNextImage}
                         >
                             <img
