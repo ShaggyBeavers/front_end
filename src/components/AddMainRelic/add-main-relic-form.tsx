@@ -66,9 +66,6 @@ const AddMainRelic = ({ form }: any) => {
         { id: 3, label: 'Ширина', value: 'width' },
         { id: 4, label: 'Довжина', value: 'length' },
     ];
-    const [propertyFields, setPropertyFields] = useState<any>([
-        { id: properties[0].id, value: '' },
-    ]);
     const region = [
         { label: 'Київ', value: 'Kyiv' },
         { label: 'Харків', value: 'Kharkiv' },
@@ -89,6 +86,7 @@ const AddMainRelic = ({ form }: any) => {
                                     <Input
                                         placeholder="Ім'я реліквії"
                                         {...field}
+                                        required
                                     />
                                 </FormControl>
                                 <FormMessage />
