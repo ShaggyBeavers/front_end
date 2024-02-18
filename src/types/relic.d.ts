@@ -61,3 +61,11 @@ export enum RelicStatusEnum {
   RETURNED = 'RETURNED',
   UNKNOWN = 'UNKNOWN',
 }
+
+interface RelicFilterRequest {
+  historicalPeriods: string[];
+  statuses: string[];
+  techniques: string[];
+  collections: string[];
+  categories: string[];
+}
