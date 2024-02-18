@@ -23,10 +23,11 @@ const AddTermModal = () => {
         <>
             <form className="center-term" onSubmit={handleSubmit(onSubmit)}>
                 <div className="row-mod">
-                    <label htmlFor="categories">Виберіть категорію:</label>
+                    <label htmlFor="categories">Категорія:</label>
                     <Select
                         className="select"
                         options={categories}
+                        placeholder={'Виберіть категорію'}
                         menuPortalTarget={document.body}
                         styles={{
                             menu: (provided) => ({

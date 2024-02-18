@@ -50,7 +50,7 @@ const AddModeratorModal = () => {
             <form className="center-mod" onSubmit={handleSubmit(onSubmit)}>
                 <div className="row-mod">
                     <label htmlFor="email">
-                        Введіть пошту нового модератора:
+                        Введіть пошту нового модератора
                     </label>
                     <Controller
                         name="email"
@@ -72,7 +72,7 @@ const AddModeratorModal = () => {
                     /> */}
                 </div>
                 <div className="row-mod">
-                    <label htmlFor="region">Виберіть регіон модератора:</label>
+                    <label htmlFor="region">Регіон модератора:</label>
                     <Controller
                         name="region"
                         control={control}
@@ -82,6 +82,7 @@ const AddModeratorModal = () => {
                                 id="region"
                                 className="select"
                                 options={regions}
+                                placeholder={'Виберіть регіон модератора'}
                                 onChange={(option) =>
                                     option ? 
                                     field.onChange(option?.value) :
@@ -116,7 +117,7 @@ const AddModeratorModal = () => {
                 </div>
                 <div className="row-mod">
                     <label htmlFor="categories">
-                        Виберіть категорії модератора:
+                        Категорії модератора:
                     </label>
                     <Controller
                         name="categories"
@@ -128,6 +129,7 @@ const AddModeratorModal = () => {
                                 className="select"
                                 isMulti
                                 options={categories}
+                                placeholder={'Виберіть категорії модератора'}
                                 closeMenuOnSelect={false}
                                 // to submit only values
                                 onChange={(options) =>

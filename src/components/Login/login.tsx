@@ -80,7 +80,7 @@ export default function Login() {
 
                         <div className="log_recovery">
                             <p>Забув пароль?</p>
-                            <a href="/recovery">Відновити</a>
+                            <a className="recovery-link" href="/recovery">Відновити</a>
                         </div>
 
                         <div className="login_btns">
