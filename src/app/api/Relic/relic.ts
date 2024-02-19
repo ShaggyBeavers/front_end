@@ -1,11 +1,11 @@
 import requests from '../requests';
-import { RelicStatusEnum,RelicFilterRequest } from '@/src/types/relic';
+import { RelicStatusEnum,RelicFilterRequest,Relic } from '@/src/types/relic';
 
 const RelicAPI = {
-    updateRelicFile: (relicId: number) =>
-        requests.put(`api/relics/file/update/${relicId}`, relicId),
-    editRelic: (relicId: number) =>
-        requests.put(`api/relics/edit/${relicId}`, relicId),
+    updateRelicFile: (relicId: number,file:string) =>
+        requests.put(`api/relics/file/update/${relicId}`, file),
+    editRelic: (relicId: number,relicInfo:Relic) => 
+        requests.put(`api/relics/edit/${relicId}`, relicInfo), 
     filterRelics:(filterRequest: RelicFilterRequest)=>requests.post('api/relics/filter',filterRequest),//created interface for that
     uploadRelicFile: (relicId: number, file: string) =>
         requests.post(`api/relics/edit/${relicId}`, file),

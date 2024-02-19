@@ -15,7 +15,7 @@ const UserAPI = {
     newPassword: (values: { password: string; passwordConfirmation: string }) =>
         requests.patch('api/user/password/change', values),
     banUnban: (userId: number) =>
-        requests.post(`api/user/password/${userId}`, userId),
+        requests.post(`api/user/ban-unban/${userId}`, userId),
     getUserEmail: () => requests.get('api/user/email'),
     getUserProfile: () => requests.get('api/user/current-profile'),
 };
