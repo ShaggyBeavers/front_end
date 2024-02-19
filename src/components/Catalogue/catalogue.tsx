@@ -12,6 +12,7 @@ import FilterExpand from '../icons/filter_expand';
 import SelFilterExpand from '../icons/sel_filter_expand';
 import { FilterCategory } from '../FilterCategory/filter_category';
 import { title } from 'process';
+import CatalogueAPI from '../../app/api/Catalogue/catalogue';
 
 interface Photo {
     id: number;
@@ -42,7 +43,7 @@ const Catalogue = () => {
             const response = await axios.get<Photo[]>(
                 `https://jsonplaceholder.typicode.com/photos?_page=${page}&_limit=${PAGE_SIZE}`
             );
-            // const response = await agent.Catalogue.fetchItems(page, PAGE_SIZE);
+            // const response = await CatalogueAPI.fetchItems(page, PAGE_SIZE);
             setItems(response.data);
             console.log(response.data, 'Items fetched succesfully');
         } catch (error) {

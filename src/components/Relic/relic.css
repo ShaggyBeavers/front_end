@@ -89,7 +89,7 @@
     cursor: pointer;
 }
 
-.disabled {
+.relic_disabled {
     color: lightgrey;
     cursor: unset;
 }

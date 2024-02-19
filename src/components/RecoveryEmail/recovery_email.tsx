@@ -2,7 +2,7 @@ import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import './recovery_email.css';
-import agent from '../../app/api/agent';
+import UserAPI from '../../app/api/Account/User/user';
 
 interface RecoveryEmailForm {
   email: string;
@@ -16,7 +16,7 @@ const RecoveryEmail: React.FC = () => {
 
   const handleFormSubmit: SubmitHandler<RecoveryEmailForm> = async (data) => {
     try {
-      await agent.Account.recoveryRequest(data);
+      await UserAPI.recoveryRequest(data.email);
       reset();
       setShowNotFoundMessage(false);
       navigate('/success_recovery');

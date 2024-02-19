@@ -2,7 +2,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useGoogleLogin } from '@react-oauth/google';
 import React from 'react';
 import './login.css';
-import agent from '../../app/api/agent';
+import AuthAPI from '../../app/api/Account/Auth/auth';
 
 interface LoginForm {
     email: string;
@@ -16,7 +16,7 @@ export default function Login() {
 
     const submitForm: SubmitHandler<LoginForm> = async (data) => {
         try {
-            await agent.Account.login(data);
+            await AuthAPI.login(data);
             reset();
             setShowNotFoundMessage(false);
         } catch (error: any) {

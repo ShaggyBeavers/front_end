@@ -1,8 +1,8 @@
 import { SubmitHandler, useForm, FieldValues } from 'react-hook-form';
 import './report.css';
-import agent from '../../app/api/agent';
 import { useEffect, useState } from 'react';
 import DropZone from '../DropZone/dropzone';
+import ReportAPI from '../../app/api/Report/report';
 
 interface ReportForm {
     name: string;
@@ -27,7 +27,7 @@ export default function Report() {
         data.photos = photos;
         try {
             console.log(data);
-            await agent.Account.report(data);
+            await ReportAPI.createReport(data);
             reset();
         } catch (error: any) {
             if (error && error.response.status === 409) {
