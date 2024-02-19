@@ -25,8 +25,8 @@ export interface Relic {
 }
 
 export interface RelicInfoCreateEditDTO {
-  techniqueId: number; // Assuming int64 is a number
-  historicalPeriodId: number; // Assuming int64 is a number
+  techniqueId: number;
+  historicalPeriodId: number;
   dimensions: string;
   marks: string;
   labels: string;
@@ -41,16 +41,16 @@ export interface RelicInfoCreateEditDTO {
 
 export interface LostRelicInfoCreateEditDTO {
   lossWay: string;
-  lossTime: string; // Assuming date is a string format
-  museumId: number; // Assuming int64 is a number
+  lossTime: string;
+  museumId: number;
   probableLocation: string;
 }
 
 export interface RecoveredRelicInfoCreateEditDTO {
   locationSource: string;
-  previousSearchInfo: string; // Assuming date is a string format
+  previousSearchInfo: string; 
   returnProcess: string;
-  returnDate: string; // Assuming date is a string format
+  returnDate: string; 
   courtDecision: string;
 }
 

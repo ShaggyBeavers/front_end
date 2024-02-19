@@ -29,6 +29,9 @@ const AddReturnedRelic = ({ form }: any) => {
                                 <FormControl>
                                     <Input type="text" {...field} />
                                 </FormControl>
+                                <FormDescription>
+                                Переміщено внаслідок збройного конфлікту, викрадено
+                                </FormDescription>
                                 <FormMessage />
                             </FormItem>
                         )}
@@ -44,6 +47,9 @@ const AddReturnedRelic = ({ form }: any) => {
                                 <FormControl>
                                     <Input type="text" {...field} />
                                 </FormControl>
+                                <FormDescription>
+                                Найменування установи, де можливе місцезнаходження втраченої культурної цінності
+                                </FormDescription>
                                 <FormMessage />
                             </FormItem>
                         )}

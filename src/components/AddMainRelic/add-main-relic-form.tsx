@@ -66,9 +66,6 @@ const AddMainRelic = ({ form }: any) => {
         { id: 3, label: 'Ширина', value: 'width' },
         { id: 4, label: 'Довжина', value: 'length' },
     ];
-    const [propertyFields, setPropertyFields] = useState<any>([
-        { id: properties[0].id, value: '' },
-    ]);
     const region = [
         { label: 'Київ', value: 'Kyiv' },
         { label: 'Харків', value: 'Kharkiv' },
@@ -89,6 +86,7 @@ const AddMainRelic = ({ form }: any) => {
                                     <Input
                                         placeholder="Ім'я реліквії"
                                         {...field}
+                                        required
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -118,7 +116,7 @@ const AddMainRelic = ({ form }: any) => {
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel htmlFor="creationDate">
-                                    Дата створення копії
+                                    Дата створення
                                 </FormLabel>
                                 <FormControl>
                                     <Input
@@ -140,7 +138,7 @@ const AddMainRelic = ({ form }: any) => {
                                     Кількість
                                 </FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Кількість" {...field} />
+                                    <Input placeholder="Введіть кількість" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -186,96 +184,6 @@ const AddMainRelic = ({ form }: any) => {
                             </FormItem>
                         )}
                     />
-
-                    {/* <FormField
-                        control={form.control}
-                        name="properties"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel htmlFor="properties">
-                                    Додаткова характеристика
-                                </FormLabel>
-                                <div className="flex flex-row">
-                                    <Popover>
-                                        <PopoverTrigger asChild>
-                                            <FormControl className="rounded-r-none">
-                                                <Button
-                                                    variant="outline"
-                                                    role="combobox"
-                                                    className={cn(
-                                                        !field.value &&
-                                                            'text-muted-foreground',
-                                                        'w-full justify-between'
-                                                    )}
-                                                >
-                                                    {field.value
-                                                        ? properties.find(
-                                                              (property) =>
-                                                                  property.value ===
-                                                                  field.value
-                                                          )?.label
-                                                        : 'Виберіть характеристику'}
-                                                    <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                                                </Button>
-                                            </FormControl>
-                                        </PopoverTrigger>
-                                        <PopoverContent>
-                                            <Command>
-                                                <CommandInput
-                                                    className="w-full"
-                                                    placeholder="Search property..."
-                                                />
-                                                <CommandEmpty>
-                                                    Жодної характеристики не
-                                                    знайдено
-                                                </CommandEmpty>
-                                                <CommandGroup>
-                                                    {properties.map(
-                                                        (property) => (
-                                                            <CommandItem
-                                                                value={
-                                                                    property.label
-                                                                }
-                                                                key={
-                                                                    property.value
-                                                                }
-                                                                onSelect={() => {
-                                                                    form.setValue(
-                                                                        'properties',
-                                                                        property.value
-                                                                    );
-                                                                }}
-                                                            >
-                                                                <CheckIcon
-                                                                    className={cn(
-                                                                        '',
-                                                                        property.value ===
-                                                                            field.value
-                                                                            ? 'opacity-100'
-                                                                            : 'opacity-0'
-                                                                    )}
-                                                                />
-                                                                {property.label}
-                                                            </CommandItem>
-                                                        )
-                                                    )}
-                                                </CommandGroup>
-                                            </Command>
-                                        </PopoverContent>
-                                    </Popover>
-
-                                    <Input
-                                        type="text"
-                                        className="rounded-l-none"
-                                    />
-                                    <Button className="bg-red-500">
-                                        Trash
-                                    </Button>
-                                </div>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    /> */}
                 </div>
                 {/* Second Column */}
                 <div className="grid grid-rows-5 gap-5">
@@ -361,7 +269,7 @@ const AddMainRelic = ({ form }: any) => {
                                     Колекція
                                 </FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Колекція" {...field} />
+                                    <Input placeholder="Введіть колекцію" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -379,7 +287,7 @@ const AddMainRelic = ({ form }: any) => {
                                     </FormLabel>
                                     <FormControl>
                                         <Textarea
-                                            placeholder="Опис"
+                                            placeholder="Введіть опис реліквії"
                                             {...field}
                                             className="min-h-[6.25rem] max-h-[8.25rem]"
                                         />
@@ -389,6 +297,22 @@ const AddMainRelic = ({ form }: any) => {
                             )}
                         />
                     </div>
+                    <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel htmlFor="name">Історичний період</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        placeholder="Введіть історичний період"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                 </div>
             </div>
             <h4>Додаткові Характеристики</h4>
@@ -402,6 +326,7 @@ const AddMainRelic = ({ form }: any) => {
                                 options={properties}
                                 isMulti
                                 closeMenuOnSelect={false}
+                                placeholder={'Оберіть додаткові характеристики'}
                                 noOptionsMessage={() =>
                                     'Жодної характеристики не знайдено'
                                 }
@@ -430,6 +355,10 @@ const AddMainRelic = ({ form }: any) => {
                                     field.value?.includes(properties.value)
                                 )}
                                 styles={{
+                                    placeholder: (base) => ({
+                                        ...base,
+                                        fontSize: '0.9rem',
+                                      }),
                                     menu: (provided) => ({
                                         ...provided,
                                         maxHeight: 180,
@@ -481,9 +410,9 @@ const AddMainRelic = ({ form }: any) => {
                         name="image"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor="material">
-                                    Матеріал
-                                </FormLabel>
+                                {/* <FormLabel htmlFor="image">
+                                    Фотографії
+                                </FormLabel> */}
                                 <FormControl>
                                     <>
                                         <Dropzone
