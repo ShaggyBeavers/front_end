@@ -7,7 +7,7 @@ const AddRelicModal = () => {
     const [selectedOptions, setSelectedOptions] = useState({
         isReturned: false,
         isLost: false,
-        isMain: true,
+        // isMain: true,
     });
 
     const navigate = useNavigate();
@@ -34,13 +34,16 @@ const AddRelicModal = () => {
                     height={40}
                     width={150}
                     text={'Про основну'}
-                    action={() =>
-                        setSelectedOptions((prevState) => ({
-                            ...prevState,
-                            isMain: !prevState.isMain,
-                        }))
-                    }
-                    selected={selectedOptions.isMain}
+                    action={() => {}}
+                    // action={() =>
+                    //     setSelectedOptions((prevState) => ({
+                    //         ...prevState,
+                    //         isMain: !prevState.isMain,
+                    //     }))
+                    // }
+                    // make it selected by default
+                    selected={true}
+                    // selected={selectedOptions.isMain}
                 />
                 <DefaultButton
                     height={40}
@@ -64,7 +67,7 @@ const AddRelicModal = () => {
                         navigate('/add-relic', {
                             state: {
                                 isReturned: selectedOptions.isReturned,
-                                isMain: selectedOptions.isMain,
+                                // isMain: selectedOptions.isMain,
                                 isLost: selectedOptions.isLost,
                             },
                         })
