@@ -1,54 +1,95 @@
-import './pagination.css';
 import React from 'react';
+import {
+    Pagination as UIPagination,
+    PaginationPrevious,
+    PaginationNext,
+    PaginationEllipsis,
+    PaginationLink,
+    PaginationContent,
+    PaginationItem,
+} from '../ui/pagination';
 
-interface PaginationProps {
-    totalPages: number;
-    currentPage: number;
-    onPageChange: (pageNumber: number) => void;
-}
+type PageNumber = number | 'ellipsis';
 
-const Pagination: React.FC<PaginationProps> = ({
+const Pagination = ({
     totalPages,
     currentPage,
     onPageChange,
+}: {
+    totalPages: number;
+    currentPage: number;
+    onPageChange: (pageNumber: number) => void;
 }) => {
-    const scrollToTop = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    const getPageNumbers = (): PageNumber[] => {
+        const maxVisiblePages = 3;
+        const pages: PageNumber[] = [];
+
+        if (totalPages <= maxVisiblePages) {
+            for (let i = 1; i <= totalPages; i++) {
+                pages.push(i);
+            }
+        } else {
+            const minPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+            const maxPage = Math.min(totalPages, minPage + maxVisiblePages - 1);
+
+            if (minPage > 1) {
+                pages.push(1);
+                if (minPage > 2) {
+                    pages.push('ellipsis');
+                }
+            }
+
+            for (let i = minPage; i <= maxPage; i++) {
+                pages.push(i);
+            }
+
+            if (maxPage < totalPages) {
+                if (maxPage < totalPages - 1) {
+                    pages.push('ellipsis');
+                }
+                pages.push(totalPages);
+            }
+        }
+
+        return pages;
     };
 
     return (
-        <div className="pagination-container">
-            <div>
-                {currentPage !== 1 && (
-                    <button
-                        onClick={() => onPageChange(currentPage - 1)}
-                        disabled={currentPage === 1}
-                    >
-                        &#8592; Назад
-                    </button>
-                )}
-                {Array.from({ length: totalPages }, (_, index) => (
-                    <button
-                        key={index + 1}
-                        onClick={() => onPageChange(index + 1)}
-                        className={currentPage === index + 1 ? 'active' : ''}
-                    >
-                        {index + 1}
-                    </button>
+        <UIPagination>
+            <PaginationContent>
+                <PaginationItem>
+                    {currentPage !== 1 && (
+                        <PaginationPrevious onClick={() => onPageChange(currentPage - 1)}>
+                            Назад
+                        </PaginationPrevious>
+                    )}
+                </PaginationItem>
+
+                {getPageNumbers().map((page, index) => (
+                    <PaginationItem key={index}>
+                        {page === 'ellipsis' ? (
+                            <PaginationEllipsis />
+                        ) : (
+                            <PaginationLink
+                                isActive={currentPage === page}
+                                onClick={() => onPageChange(page)}
+                            >
+                                {page}
+                            </PaginationLink>
+                        )}
+                    </PaginationItem>
                 ))}
-                {currentPage !== totalPages && (
-                    <button
-                        onClick={() => onPageChange(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                    >
-                        Далі &#8594;
-                    </button>
-                )}
-            </div>
-            <div className="to_top" onClick={scrollToTop}>
-                Перейти до гори
-            </div>
-        </div>
+
+                <PaginationItem>
+                    {currentPage !== totalPages && (
+                        <PaginationNext onClick={() => onPageChange(currentPage + 1)}>
+                            Далі
+                        </PaginationNext>
+                    )}
+                </PaginationItem>
+            </PaginationContent>
+        </UIPagination>
     );
 };
 

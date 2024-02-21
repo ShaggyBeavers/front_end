@@ -35,7 +35,7 @@ const Catalogue = () => {
     const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
-    const totalPages = 6; //temporarily hardcoded
+    const totalPages = 9; //temporarily hardcoded
 
     const fetchItems = async (page: number) => {
         //request is under,this is just to display styling
@@ -128,6 +128,12 @@ const Catalogue = () => {
         'opposum1',
         'Drakie',
     ];
+
+    
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
     return (
         <>
             {notFound ? (
@@ -205,6 +211,9 @@ const Catalogue = () => {
                             currentPage={currentPage}
                             onPageChange={paginate}
                         />
+                        <div className="to_top" onClick={scrollToTop}>
+                            Перейти до гори
+                        </div>
                         {isFilterModalOpen && (
                             <div
                                 className={`dimmed-overlay ${isFilterModalOpen ? 'active' : ''}`}
