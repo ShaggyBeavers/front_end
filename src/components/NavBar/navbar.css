@@ -72,7 +72,7 @@ html {
     text-decoration: none;
 }
 
-#nav_log_btn:hover {
+#nav_log_btn.main:hover {
     color: black;
     background: white;
     transition: 0.7s;

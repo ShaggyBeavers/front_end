@@ -40,7 +40,7 @@ const Footer = () => {
                     </div>
                 </div>
                 <div className="footer_right">
-                    <img src="/logo/logo_footer.png" />
+                    {/* here will go something instead of beaver */}
                 </div>
             </div>
         </div>
