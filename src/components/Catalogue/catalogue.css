@@ -165,6 +165,25 @@
     display: block;
 }
 
+.to_top {
+    margin: 0.3rem 0 3rem;
+    font-size: 14px;
+    font-weight: 700;
+    color: black;
+    transition: 0.5s;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.to_top:hover {
+    /* background: linear-gradient(to right, #4b8bfa, #bf98c6);
+    background-clip: text;
+    color: transparent; */
+    color:#4b8bfa;
+    transition: 0.5s;
+}
+
+
 @media (max-width: 900px) {
     .cat_left {
         padding-right: 0px;

@@ -1,4 +1,3 @@
-import React from 'react';
 import {
     Pagination as UIPagination,
     PaginationPrevious,
@@ -60,9 +59,7 @@ const Pagination = ({
             <PaginationContent>
                 <PaginationItem>
                     {currentPage !== 1 && (
-                        <PaginationPrevious onClick={() => onPageChange(currentPage - 1)}>
-                            Назад
-                        </PaginationPrevious>
+                        <PaginationPrevious onClick={() => onPageChange(currentPage - 1)}/>
                     )}
                 </PaginationItem>
 
@@ -83,9 +80,7 @@ const Pagination = ({
 
                 <PaginationItem>
                     {currentPage !== totalPages && (
-                        <PaginationNext onClick={() => onPageChange(currentPage + 1)}>
-                            Далі
-                        </PaginationNext>
+                        <PaginationNext onClick={() => onPageChange(currentPage + 1)}/>
                     )}
                 </PaginationItem>
             </PaginationContent>
