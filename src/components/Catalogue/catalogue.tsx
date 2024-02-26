@@ -20,21 +20,36 @@ interface Photo {
     title: string;
 }
 
+export interface Filters {
+    historicalPeriods: string[];
+    statuses: string[];
+    techniques: string[];
+    collections: string[];
+    categories: string[];
+    [key: string]: string[];
+}
+
 const PAGE_SIZE = 18;
 
 const Catalogue = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+
     const [items, setItems] = useState<Photo[]>([]);
     const [notFound, setNotFound] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(
         null
     );
-    const [selectedFilterOptions, setSelectedFilterOptions] = useState<
-        string[]
-    >([]);
+    const [selectedFilterOptions, setSelectedFilterOptions] = useState<Filters>({
+        historicalPeriods: [],
+        statuses: [],
+        techniques: [],
+        collections: [],
+        categories: [],
+    });
     const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-    const navigate = useNavigate();
-    const location = useLocation();
+    
     const totalPages = 9; //temporarily hardcoded
 
     const fetchItems = async (page: number) => {
@@ -84,13 +99,22 @@ const Catalogue = () => {
         }
     };
 
-    const handleFilterOptionClick = (option: string) => {
-        if (option === 'clear') {
-            setSelectedFilterOptions([]);
-        } else {
-            setSelectedFilterOptions((prevOptions) => [...prevOptions, option]);
-        }
-    };
+    const handleFilterOptionClick = (option:string, category:string) => {
+        setSelectedFilterOptions(prevOptions => ({
+          ...prevOptions,
+          [category]: option === 'clear'
+            ? [] 
+            : prevOptions[category] ? 
+              prevOptions[category].includes(option) ?
+                prevOptions[category].filter(item => item !== option)
+              : [...prevOptions[category], option]
+            : [option] 
+        }));
+      };
+
+    useEffect(()=>{
+        console.log(selectedFilterOptions);
+    },[selectedFilterOptions]);
 
     const filterTitles = [
         'Категорія',
