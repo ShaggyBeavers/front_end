@@ -13,7 +13,7 @@ const RelicAPI = {
     changeFavorite: () => requests.post('api/relics/change-favorite', {}), //accepts no params currently
     fetchDetails: (relicId: number) => requests.get(`api/relics/${relicId}`),
     searchRelics: (relicName: string, page: number, size: number) =>
-        requests.get('api/relics/search'),
+        requests.get(`api/relics/search?relicName=${relicName}&page=${page}&size=${size}`),
     // is redundant relicsPage: (page: number, size: number) => requests.get(`api/relics/page?page=${page}&size=${size}`),
     getRelicFile: (relicId: number) =>
         requests.get(`api/relics/file/download/${relicId}`),
