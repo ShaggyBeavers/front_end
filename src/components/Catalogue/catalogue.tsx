@@ -70,6 +70,7 @@ const Catalogue = () => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
             setCurrentPage(pageNumber);
             navigate(`?page=${pageNumber}`);
+            scrollToTop();
         }
     };
 
@@ -129,7 +130,6 @@ const Catalogue = () => {
         'Drakie',
     ];
 
-    
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
