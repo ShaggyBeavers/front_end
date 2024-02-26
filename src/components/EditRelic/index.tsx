@@ -49,8 +49,8 @@ type RelicForm = z.infer<typeof relicFormSchema>;
 
 export const EditRelic = () => {
     const location = useLocation();
-    const { isReturned, isLost} = location.state;
-    console.log(location.state);
+    const { isReturned, isLost }: { isReturned: boolean; isLost: boolean } =
+        location.state?.data || { isReturned: false, isLost: false };
     const form = useForm<any>({
         // resolver: zodResolver(relicFormSchema),
         // defaultValues: { name: '' },

@@ -3,6 +3,15 @@ import { useGoogleLogin } from '@react-oauth/google';
 import React from 'react';
 import './login.css';
 import AuthAPI from '../../app/api/Account/Auth/auth';
+import {
+    useAuthStore,
+    decodeAccessToken,
+    getActions,
+    getUser,
+    getAccessToken,
+} from '../../stores/AuthStore';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 
 interface LoginForm {
     email: string;
@@ -13,20 +22,42 @@ export default function Login() {
     const { register, handleSubmit, formState, reset } = useForm<LoginForm>();
     const { errors } = formState;
     const [showNotFoundMessage, setShowNotFoundMessage] = React.useState(false);
+    const navigate = useNavigate();
+    const { actions } = useAuthStore();
 
     const submitForm: SubmitHandler<LoginForm> = async (data) => {
         try {
-            await AuthAPI.login(data);
+            const response = await AuthAPI.login(data);
+            // console.log(response.accessToken);
+            const decodedPayload = jwtDecode(response.accessToken);
+            const decode = decodeAccessToken(response.accessToken);
+            // console.log(decode);
+            console.log(decodedPayload);
+            // set token to authstore
+            actions.setAccessToken(response.accessToken);
+            actions.setUser({
+                id: decodedPayload.sub,
+                email: decodedPayload.sub,
+                firstName: null,
+                lastName: null,
+                role: decode.authorities[0],
+                isLoggedIn: true,
+            });
+            console.log(getAccessToken());
+            console.log(getUser());
+            localStorage.setItem('accessToken', response.accessToken);
+
             reset();
             setShowNotFoundMessage(false);
+            navigate('/profile', { replace: true });
+            // return <Navigate to="/profile" replace />;
         } catch (error: any) {
-
-            if (error.response && (error.response.status === 403)) {
+            if (error.response && error.response.status === 403) {
                 reset();
                 setShowNotFoundMessage(true);
             } else {
                 console.log(data);
-                console.log(error)
+                console.log(error);
             }
         }
     };
@@ -80,7 +111,9 @@ export default function Login() {
 
                         <div className="log_recovery">
                             <p>Забув пароль?</p>
-                            <a className="recovery-link" href="/recovery">Відновити</a>
+                            <a className="recovery-link" href="/recovery">
+                                Відновити
+                            </a>
                         </div>
 
                         <div className="login_btns">
