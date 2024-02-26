@@ -34,7 +34,7 @@ export const FilterCategory: React.FC<FilterCategoryProps> = ({
 
     return (
         <li className={selectedCategory === category ? 'selected' : ''}>
-            <FilterRelicsLine />
+            {/* <FilterRelicsLine /> */}
             <div
                 className="filter_inner"
                 onClick={() => handleFilterCategoryClick(category)}
@@ -61,7 +61,7 @@ export const FilterCategory: React.FC<FilterCategoryProps> = ({
                     }
                 />
             )}
-            {category === 'technique' && <FilterRelicsLine />}
+            {category === 'technique'}
         </li>
     );
 };

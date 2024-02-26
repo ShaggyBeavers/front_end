@@ -41,15 +41,17 @@ const Catalogue = () => {
     const [selectedCategory, setSelectedCategory] = useState<string | null>(
         null
     );
-    const [selectedFilterOptions, setSelectedFilterOptions] = useState<Filters>({
-        historicalPeriods: [],
-        statuses: [],
-        techniques: [],
-        collections: [],
-        categories: [],
-    });
+    const [selectedFilterOptions, setSelectedFilterOptions] = useState<Filters>(
+        {
+            historicalPeriods: [],
+            statuses: [],
+            techniques: [],
+            collections: [],
+            categories: [],
+        }
+    );
     const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-    
+
     const totalPages = 9; //temporarily hardcoded
 
     const fetchItems = async (page: number) => {
@@ -57,11 +59,16 @@ const Catalogue = () => {
             //uncomment this to see styles
 
             // const response = await axios.get<Photo[]>(
-            //     `https://jsonplaceholder.typicode.com/photos?_page=${page}&_limit=${PAGE_SIZE}`//request is under,this is just to display styling
+            //     `https://jsonplaceholder.typicode.com/photos?_page=${page}&_limit=${PAGE_SIZE}` //request is under,this is just to display styling
             // );
-            const response = await RelicAPI.filterRelics(page, PAGE_SIZE, selectedFilterOptions); 
-            setItems(response.data);
-            console.log(response.data, 'Items fetched succesfully');
+            const response = await RelicAPI.filterRelics(
+                page - 1,
+                PAGE_SIZE,
+                selectedFilterOptions
+            );
+            setItems(response.content);
+            console.log(response, 'Items fetched succesfully');
+            console.log(response.content);
         } catch (error) {
             console.error('Error fetching items:', error);
         }
@@ -100,22 +107,25 @@ const Catalogue = () => {
         }
     };
 
-    const handleFilterOptionClick = (option:string, category:string) => {
-        setSelectedFilterOptions(prevOptions => ({
-          ...prevOptions,
-          [category]: option === 'clear'
-            ? [] 
-            : prevOptions[category] ? 
-              prevOptions[category].includes(option) ?
-                prevOptions[category].filter(item => item !== option)
-              : [...prevOptions[category], option]
-            : [option] 
+    const handleFilterOptionClick = (option: string, category: string) => {
+        setSelectedFilterOptions((prevOptions) => ({
+            ...prevOptions,
+            [category]:
+                option === 'clear'
+                    ? []
+                    : prevOptions[category]
+                      ? prevOptions[category].includes(option)
+                          ? prevOptions[category].filter(
+                                (item) => item !== option
+                            )
+                          : [...prevOptions[category], option]
+                      : [option],
         }));
-      };
+    };
 
-    useEffect(()=>{
+    useEffect(() => {
         console.log(selectedFilterOptions);
-    },[selectedFilterOptions]);
+    }, [selectedFilterOptions]);
 
     const filterTitles = [
         'Категорія',
@@ -159,10 +169,10 @@ const Catalogue = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    const applyFilters = ()=>{
+    const applyFilters = () => {
         console.log('yes,hell');
         fetchItems(currentPage);
-    }
+    };
 
     return (
         <>

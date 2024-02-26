@@ -73,6 +73,16 @@
     position: relative;
 }
 
+.filter_categories li:nth-child(n)::before {
+    content: '';
+    /* position: absolute; */
+    top: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
 .filter_inner {
     display: flex;
     justify-content: space-between;
@@ -179,10 +189,9 @@
     /* background: linear-gradient(to right, #4b8bfa, #bf98c6);
     background-clip: text;
     color: transparent; */
-    color:#4b8bfa;
+    color: #4b8bfa;
     transition: 0.5s;
 }
-
 
 @media (max-width: 900px) {
     .cat_left {
