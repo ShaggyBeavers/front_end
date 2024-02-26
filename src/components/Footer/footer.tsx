@@ -16,8 +16,8 @@ const Footer = () => {
                     <div className="footer_nav">
                         <ul>
                             <li>
-                                <HashLink smooth to="/#recent-event">
-                                    Останні події
+                                <HashLink smooth to="/#categories">
+                                    Розділи
                                 </HashLink>
                             </li>
                             <li>

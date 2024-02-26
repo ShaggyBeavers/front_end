@@ -6,7 +6,7 @@ const RelicAPI = {
         requests.put(`api/relics/file/update/${relicId}`, file),
     editRelic: (relicId: number,relicInfo:Relic) => 
         requests.put(`api/relics/edit/${relicId}`, relicInfo), 
-    filterRelics:(filterRequest: RelicFilterRequest)=>requests.post('api/relics/filter',filterRequest),//created interface for that
+    filterRelics:(page: number, size: number,filterRequest: RelicFilterRequest)=>requests.post(`api/relics/filter?page=${page}&size=${size}`,filterRequest),
     uploadRelicFile: (relicId: number, file: string) =>
         requests.post(`api/relics/edit/${relicId}`, file),
     createRelic: (values: any) => requests.post('api/relics/create', values),
@@ -14,12 +14,12 @@ const RelicAPI = {
     fetchDetails: (relicId: number) => requests.get(`api/relics/${relicId}`),
     searchRelics: (relicName: string, page: number, size: number) =>
         requests.get('api/relics/search'),
-    relicsPage: (page: number, size: number) => requests.get('api/relics/page'),
+    // is redundant relicsPage: (page: number, size: number) => requests.get(`api/relics/page?page=${page}&size=${size}`),
     getRelicFile: (relicId: number) =>
         requests.get(`api/relics/file/download/${relicId}`),
     favorite: () => requests.get('api/relics/favorite'),
     countRelicsByStatuses: (statuses: RelicStatusEnum[]) =>
-        requests.get('api/relics/count-by-statuses'),
+        requests.get(`api/relics/count-by-statuses?statuses=${statuses}`),
     deleteRelicFile: (relicId: number) =>
         requests.delete(`api/relics/file/delete/${relicId}`),
 };

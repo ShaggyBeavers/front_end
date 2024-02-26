@@ -12,7 +12,7 @@ import FilterExpand from '../icons/filter_expand';
 import SelFilterExpand from '../icons/sel_filter_expand';
 import { FilterCategory } from '../FilterCategory/filter_category';
 import { title } from 'process';
-import CatalogueAPI from '../../app/api/Catalogue/catalogue';
+import RelicAPI from '../../app/api/Relic/relic';
 
 interface Photo {
     id: number;
@@ -53,12 +53,13 @@ const Catalogue = () => {
     const totalPages = 9; //temporarily hardcoded
 
     const fetchItems = async (page: number) => {
-        //request is under,this is just to display styling
         try {
-            const response = await axios.get<Photo[]>(
-                `https://jsonplaceholder.typicode.com/photos?_page=${page}&_limit=${PAGE_SIZE}`
-            );
-            // const response = await CatalogueAPI.fetchItems(page, PAGE_SIZE);
+            //uncomment this to see styles
+
+            // const response = await axios.get<Photo[]>(
+            //     `https://jsonplaceholder.typicode.com/photos?_page=${page}&_limit=${PAGE_SIZE}`//request is under,this is just to display styling
+            // );
+            const response = await RelicAPI.filterRelics(page, PAGE_SIZE, selectedFilterOptions); 
             setItems(response.data);
             console.log(response.data, 'Items fetched succesfully');
         } catch (error) {
@@ -158,6 +159,11 @@ const Catalogue = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
+    const applyFilters = ()=>{
+        console.log('yes,hell');
+        fetchItems(currentPage);
+    }
+
     return (
         <>
             {notFound ? (
@@ -194,6 +200,7 @@ const Catalogue = () => {
                                             setIsFilterModalOpen={
                                                 setIsFilterModalOpen
                                             }
+                                            applyFilters={applyFilters}
                                         />
                                     ))}
                                 </ul>

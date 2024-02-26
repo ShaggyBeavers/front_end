@@ -11,7 +11,7 @@ const Categories = () => {
     ];
 
     return (
-        <div className="categories">
+        <div className="categories" id='categories'>
             <Link to="/catalogue?page=1">Подивитись усі:</Link>
             <div className="categories_con">
                 {categories.map((category) => (
