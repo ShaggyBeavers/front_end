@@ -13,8 +13,10 @@ import SelFilterExpand from '../icons/sel_filter_expand';
 import { FilterCategory } from '../FilterCategory/filter_category';
 import { title } from 'process';
 import RelicAPI from '../../app/api/Relic/relic';
+import { GetAllRelicsResponse } from '@/src/types/relic';
 
 interface Photo {
+    //FOR STYLING
     id: number;
     thumbnailUrl: string;
     title: string;
@@ -35,7 +37,35 @@ const Catalogue = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const [items, setItems] = useState<Photo[]>([]);
+    // const [items, setItems] = useState<Photo[]>([]);   FOR STYLING
+    const [result, setResult] = useState<GetAllRelicsResponse>({
+        totalPages: 0,
+        totalElements: 0,
+        size: 0,
+        content: [],
+        number: 0,
+        sort: {
+            empty: true,
+            sorted: true,
+            unsorted: true,
+        },
+        pageable: {
+            offset: 0,
+            sort: {
+                empty: true,
+                sorted: true,
+                unsorted: true,
+            },
+            pageNumber: 0,
+            pageSize: 0,
+            paged: true,
+            unpaged: true,
+        },
+        first: true,
+        last: true,
+        numberOfElements: 0,
+        empty: true,
+    });
     const [notFound, setNotFound] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(
@@ -56,8 +86,7 @@ const Catalogue = () => {
 
     const fetchItems = async (page: number) => {
         try {
-            //uncomment this to see styles
-
+            //FOR STYLING
             // const response = await axios.get<Photo[]>(
             //     `https://jsonplaceholder.typicode.com/photos?_page=${page}&_limit=${PAGE_SIZE}` //request is under,this is just to display styling
             // );
@@ -66,7 +95,8 @@ const Catalogue = () => {
                 PAGE_SIZE,
                 selectedFilterOptions
             );
-            setItems(response.content);
+            // setItems(response.content);  FOR STYLING
+            setResult(response);
             console.log(response, 'Items fetched succesfully');
             console.log(response.content);
         } catch (error) {
@@ -220,16 +250,16 @@ const Catalogue = () => {
                     <div className="cat_right">
                         <Search />
                         <div className="cat-items-container">
-                            {items &&
-                                items.map((item, index) => (
+                            {result &&
+                                result.content.map((item, index) => (
                                     <Link
                                         key={item.id}
                                         to={`/catalogue/${item.id}`}
                                         className="cat-item"
                                     >
                                         <img
-                                            src={item.thumbnailUrl}
-                                            alt={item.title}
+                                            src={item.imageUrl}
+                                            alt={item.name}
                                         />
                                         {/* <div className='cat-item-title'><p>{item.title}</p></div> */}
                                         <div className="cat-item-title">
@@ -240,7 +270,7 @@ const Catalogue = () => {
                                                     Солунського
                                                 </p>
                                             ) : (
-                                                <p>{item.title}</p>
+                                                <p>{item.name}</p>
                                             )}
                                         </div>
                                     </Link>
