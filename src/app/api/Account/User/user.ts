@@ -1,4 +1,4 @@
-import requests from '../../requests';
+import requests, { authAPi } from '../../requests';
 
 const UserAPI = {
     editUser: (
@@ -17,7 +17,11 @@ const UserAPI = {
     banUnban: (userId: number) =>
         requests.post(`api/user/ban-unban/${userId}`, userId),
     getUserEmail: () => requests.get('api/user/email'),
-    getUserProfile: () => requests.get('api/user/current-profile'),
+    // getUserProfile: () => requests.get('api/user/current-profile'),
+    getUserProfile: (accessToken: string | null) =>
+        authAPi.get('api/user/current-profile', {
+            headers: { Authorization: `Bearer ${accessToken}` },
+        }),
 };
 
 export default UserAPI;

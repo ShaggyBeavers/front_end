@@ -8,7 +8,10 @@ import AddModeratorModal from '../Modals/AddModeratorModal';
 import ModeratorsListModal from '../Modals/ModeratorsListModal';
 import AddTermModal from '../Modals/AddTermModal';
 import Settings from '../Modals/Settings';
-
+import { useQuery } from '@tanstack/react-query';
+import UserAPI from '../../app/api/Account/User/user';
+import { useAuthStore, decodeAccessToken } from '../../stores/AuthStore';
+import { set } from 'react-hook-form';
 Modal.setAppElement('#root');
 
 interface IModal {
@@ -47,6 +50,15 @@ const SideMenu = () => {
             styles: 'add-term-window',
         },
     });
+    //@ts-ignore
+    const email = useAuthStore((state) => state.user.email);
+    const accessToken = useAuthStore((state) => state.accessToken);
+    const { data, isLoading, isError, error } = useQuery({
+        queryKey: ['currentUser', accessToken],
+        queryFn: () => UserAPI.getUserProfile(accessToken),
+    });
+
+    console.log(data);
 
     const handleModal = (modalName: string, isOpen: boolean) => {
         setModals((prevModals) => ({
@@ -96,7 +108,9 @@ const SideMenu = () => {
             <div className="flex-box">
                 <div className="name-banner">
                     <div className="row1">
-                        <h4 className="name">Бобер Грицько</h4>
+                        <h4 className="name">
+                            {data?.data?.firstName} {data?.data?.lastName}
+                        </h4>
                         <DefaultButton
                             height={28}
                             width={180}
@@ -107,9 +121,7 @@ const SideMenu = () => {
                     </div>
                     <div className="row2">
                         <p className="contact">Контакт:</p>
-                        <p className="email">
-                            bober.na.pliazhe.lezhut@bober.ua
-                        </p>
+                        <p className="email">{email}</p>
                     </div>
                 </div>
                 <DefaultButton
@@ -136,7 +148,6 @@ const SideMenu = () => {
                     text="Додати термін"
                     action={() => handleModal('addTerm', true)}
                 />
-                
             </div>
         </>
     );

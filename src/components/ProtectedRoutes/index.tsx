@@ -41,15 +41,7 @@ const ProtectedRoutes = ({
     }
 
     // return <Navigate to="/profile" />;
-    // return <Outlet />;
     return children;
-    // return <Outlet />;
-
-    // return isAuth ? (
-    //     <Outlet />
-    // ) : (
-    //     <Navigate to="/login" replace state={{ from: location }} />
-    // );
 };
 
 export default ProtectedRoutes;

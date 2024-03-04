@@ -1,4 +1,4 @@
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, set, useForm } from 'react-hook-form';
 import { useGoogleLogin } from '@react-oauth/google';
 import React from 'react';
 import './login.css';
@@ -6,12 +6,13 @@ import AuthAPI from '../../app/api/Account/Auth/auth';
 import {
     useAuthStore,
     decodeAccessToken,
-    getActions,
-    getUser,
-    getAccessToken,
+    // getActions,
+    // getUser,
+    // getAccessToken,
 } from '../../stores/AuthStore';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 interface LoginForm {
     email: string;
@@ -23,40 +24,50 @@ export default function Login() {
     const { errors } = formState;
     const [showNotFoundMessage, setShowNotFoundMessage] = React.useState(false);
     const navigate = useNavigate();
-    const { actions } = useAuthStore();
+    const { setAccessToken, setUser } = useAuthStore();
 
-    const submitForm: SubmitHandler<LoginForm> = async (data) => {
+    const { data, isPending, mutate, mutateAsync } = useMutation({
+        mutationFn: AuthAPI.login,
+        onSuccess: (data) => {
+            console.log('Use is done: ', data);
+        },
+        onError: (error) => {
+            alert(error);
+        },
+    });
+
+    const submitForm: SubmitHandler<LoginForm> = async (iData) => {
         try {
-            const response = await AuthAPI.login(data);
-            // console.log(response.accessToken);
-            const decodedPayload = jwtDecode(response.accessToken);
-            const decode = decodeAccessToken(response.accessToken);
-            // console.log(decode);
-            console.log(decodedPayload);
-            // set token to authstore
-            actions.setAccessToken(response.accessToken);
-            actions.setUser({
-                id: decodedPayload.sub,
-                email: decodedPayload.sub,
+            // const response = await AuthAPI.login(iData);
+
+            const data = await AuthAPI.login(iData);
+            // await mutate(iData);
+            const decodedPayload = jwtDecode(data.accessToken);
+            const decode = decodeAccessToken(data.accessToken);
+            console.log(decode);
+
+            localStorage.setItem('ACCESS_TOKEN', data.accessToken);
+            setAccessToken(data.accessToken);
+
+            setUser({
+                //@ts-ignore
+                id: decode.id,
+                email: iData.email,
                 firstName: null,
                 lastName: null,
                 role: decode.authorities[0],
                 isLoggedIn: true,
             });
-            console.log(getAccessToken());
-            console.log(getUser());
-            localStorage.setItem('accessToken', response.accessToken);
 
             reset();
             setShowNotFoundMessage(false);
             navigate('/profile', { replace: true });
-            // return <Navigate to="/profile" replace />;
         } catch (error: any) {
             if (error.response && error.response.status === 403) {
                 reset();
                 setShowNotFoundMessage(true);
             } else {
-                console.log(data);
+                console.log(iData);
                 console.log(error);
             }
         }
