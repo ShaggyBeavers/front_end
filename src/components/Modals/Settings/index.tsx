@@ -3,6 +3,8 @@ import { useForm, useWatch } from 'react-hook-form';
 import './index.css';
 import Arrow from '../../Arrow';
 import EditIcon from '../../EditIcon';
+import { useAuthStore } from '../../../stores/AuthStore';
+import { roleToUkr } from '../../../types/role';
 
 const Settings = () => {
     const {
@@ -13,6 +15,8 @@ const Settings = () => {
     } = useForm();
     const [isCategoryListVisible, setIsCategoryListVisible] =
         React.useState(false);
+
+    const user = useAuthStore((state) => state.user);
 
     const password = watch('oldPassword', '');
 
@@ -66,7 +70,7 @@ const Settings = () => {
                             <input
                                 type="text"
                                 id="firstName"
-                                value={firstName}
+                                placeholder={user.firstName}
                                 {...register('firstName', { required: true })}
                             />
                             <EditIcon />
@@ -82,7 +86,7 @@ const Settings = () => {
                             <input
                                 type="text"
                                 id="lastName"
-                                value={lastName}
+                                value={user.lastName || ''}
                                 {...register('lastName', { required: true })}
                             />
                             <EditIcon />
@@ -91,7 +95,7 @@ const Settings = () => {
                     </div>
 
                     <div className="input-section">
-                        <label htmlFor="region">Ваш регіон:</label>
+                        {/* <label htmlFor="region">Ваш регіон:</label>
                         <div className="input-row">
                             <select
                                 id="region"
@@ -112,7 +116,7 @@ const Settings = () => {
                                     </option>
                                 ))}
                             </select>
-                        </div>
+                        </div> */}
                         {/* {errors.region && <span>Це поле є обов'язковим</span>} */}
                     </div>
 
@@ -220,7 +224,8 @@ const Settings = () => {
 
                 <div className="role-block">
                     <div className="role-label">Ваша роль:</div>
-                    {role}
+                    {/* @ts-ignore */}
+                    {user ? roleToUkr(user.role) : 'Kek'}
                 </div>
             </div>
 

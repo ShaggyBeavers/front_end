@@ -15,9 +15,9 @@ type TokenData = z.infer<typeof TokenDataSchema>;
 interface User {
     id: string;
     email: string;
-    firstName: string | null;
-    lastName: string | null;
-    role?: Role | null;
+    firstName: string;
+    lastName: string;
+    role?: Role;
     isLoggedIn: boolean;
 }
 
@@ -25,7 +25,7 @@ export type AuthStore = {
     accessToken: string | undefined;
     accessTokenData: TokenData | undefined;
     refreshToken: string | undefined;
-    user: User | null;
+    user: User;
 
     setAccessToken: (accessToken: string | undefined) => void;
     setUser: (user: any) => void;
@@ -49,7 +49,7 @@ export const useAuthStore = create(
                 accessToken: '',
                 accessTokenData: undefined,
                 refreshToken: undefined,
-                user: null,
+                user: {} as User,
 
                 setAccessToken: (accessToken: string | undefined) => {
                     const accessTokenData = (() => {

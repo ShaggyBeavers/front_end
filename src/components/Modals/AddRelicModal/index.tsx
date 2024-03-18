@@ -64,10 +64,9 @@ const AddRelicModal = () => {
                     width={114}
                     text={'Зберегти'}
                     action={() =>
-                        navigate('/add-relic', {
+                        navigate('./add-relic', {
                             state: {
                                 isReturned: selectedOptions.isReturned,
-                                // isMain: selectedOptions.isMain,
                                 isLost: selectedOptions.isLost,
                             },
                         })

@@ -1,5 +1,5 @@
 import App from '../app/app';
-import { createBrowserRouter } from 'react-router-dom';
+import { Outlet, createBrowserRouter } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
 import ProfilePage from '../pages/ProfilePage';
 import LoginPage from '../pages/LoginPage';
@@ -24,12 +24,8 @@ export const router = createBrowserRouter([
             { path: 'register', element: <RegisterPage /> },
             { path: 'catalogue', element: <CataloguePage /> },
             { path: 'catalogue/:relicsid', element: <RelicPage /> },
-            { path: 'report', element: <ReportPage /> },
-            { path: 'recovery', element: <RecoveryPage /> },
-            { path: 'success_recovery', element: <SuccessRecovery /> },
-            { path: '*', element: <NotFoundPage /> },
             {
-                path: 'profile',
+                path: 'report',
                 element: (
                     <ProtectedRoutes
                         role={[
@@ -39,10 +35,32 @@ export const router = createBrowserRouter([
                             RoleEnum.USER,
                         ]}
                     >
-                        <ProfilePage />
+                        <ReportPage />
                     </ProtectedRoutes>
                 ),
+            },
+            { path: 'recovery', element: <RecoveryPage /> },
+            { path: 'success_recovery', element: <SuccessRecovery /> },
+            { path: '*', element: <NotFoundPage /> },
+            {
+                path: 'profile',
+                element: <Outlet />,
                 children: [
+                    {
+                        index: true,
+                        element: (
+                            <ProtectedRoutes
+                                role={[
+                                    RoleEnum.MODERATOR,
+                                    RoleEnum.REGIONAL_MODERATOR,
+                                    RoleEnum.ADMIN,
+                                    RoleEnum.USER,
+                                ]}
+                            >
+                                <ProfilePage />
+                            </ProtectedRoutes>
+                        ),
+                    },
                     {
                         path: 'add-relic',
                         element: (

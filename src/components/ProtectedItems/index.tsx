@@ -6,13 +6,11 @@ import { RoleEnum } from '../../enums/roles';
 
 type userType = { user: { loggedIn: boolean } };
 
-const ProtectedRoutes = ({
+const ProtectedItems = ({
     role,
-    redirectPath = '/login',
     children,
 }: {
     role: RoleEnum[];
-    redirectPath?: string;
     children: any;
 }) => {
     const { isLoggedIn, role: userRole } = useAuthStore((state: AuthStore) => ({
@@ -20,19 +18,15 @@ const ProtectedRoutes = ({
         role: state.user?.role,
     }));
 
-    console.log('ProtectedRoutes', isLoggedIn, userRole);
-    if (!isLoggedIn) {
-        return <Navigate to={redirectPath} replace />;
-    }
+    console.log('ProtectedItem', isLoggedIn, userRole, children.props.text);
 
     const isRoleMatch = role.some((r) => r === userRole);
 
-    if (role && !isRoleMatch) {
-        return <Navigate to="/unauthorized" replace />;
+    if (!isLoggedIn || (role && !isRoleMatch)) {
+        return <></>;
     }
 
-    // return <Navigate to="/profile" />;
     return children;
 };
 
-export default ProtectedRoutes;
+export default ProtectedItems;

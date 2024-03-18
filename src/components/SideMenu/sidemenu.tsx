@@ -11,7 +11,9 @@ import Settings from '../Modals/Settings';
 import { useQuery } from '@tanstack/react-query';
 import UserAPI from '../../app/api/Account/User/user';
 import { useAuthStore, decodeAccessToken } from '../../stores/AuthStore';
+import ProtectedItems from '../../components/ProtectedItems';
 import { set } from 'react-hook-form';
+import { RoleEnum } from '../../enums/roles';
 Modal.setAppElement('#root');
 
 interface IModal {
@@ -124,30 +126,50 @@ const SideMenu = () => {
                         <p className="email">{email}</p>
                     </div>
                 </div>
-                <DefaultButton
-                    height={38}
-                    width={300}
-                    text="Додати Реліквію"
-                    action={() => handleModal('addRelic', true)}
-                />
-                <DefaultButton
-                    height={38}
-                    width={300}
-                    text="Додати модератора"
-                    action={() => handleModal('addModerator', true)}
-                />
-                <DefaultButton
-                    height={38}
-                    width={300}
-                    text="Список модераторів"
-                    action={() => handleModal('moderatorsList', true)}
-                />
-                <DefaultButton
-                    height={38}
-                    width={300}
-                    text="Додати термін"
-                    action={() => handleModal('addTerm', true)}
-                />
+                <ProtectedItems
+                    role={[
+                        RoleEnum.ADMIN,
+                        RoleEnum.MODERATOR,
+                        RoleEnum.REGIONAL_MODERATOR,
+                    ]}
+                >
+                    <DefaultButton
+                        height={38}
+                        width={300}
+                        text="Додати Реліквію"
+                        action={() => handleModal('addRelic', true)}
+                    />
+                </ProtectedItems>
+                <ProtectedItems role={[RoleEnum.ADMIN]}>
+                    <DefaultButton
+                        height={38}
+                        width={300}
+                        text="Додати модератора"
+                        action={() => handleModal('addModerator', true)}
+                    />
+                </ProtectedItems>
+                <ProtectedItems role={[RoleEnum.ADMIN]}>
+                    <DefaultButton
+                        height={38}
+                        width={300}
+                        text="Список модераторів"
+                        action={() => handleModal('moderatorsList', true)}
+                    />
+                </ProtectedItems>
+                <ProtectedItems
+                    role={[
+                        RoleEnum.ADMIN,
+                        RoleEnum.REGIONAL_MODERATOR,
+                        RoleEnum.MODERATOR,
+                    ]}
+                >
+                    <DefaultButton
+                        height={38}
+                        width={300}
+                        text="Додати термін"
+                        action={() => handleModal('addTerm', true)}
+                    />
+                </ProtectedItems>
             </div>
         </>
     );
