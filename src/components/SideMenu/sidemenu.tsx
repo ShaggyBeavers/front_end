@@ -25,6 +25,11 @@ interface IModal {
     };
 }
 
+interface SideMenuProps {
+    openAddTermModal: () => void;
+}
+
+//const SideMenu : React.FC<SideMenuProps> = ({ openAddTermModal }) => {
 const SideMenu = () => {
     const navigate = useNavigate();
 
@@ -48,11 +53,6 @@ const SideMenu = () => {
             isOpen: false,
             content: <ModeratorsListModal />,
             styles: 'moderators-list-window',
-        },
-        addTerm: {
-            isOpen: false,
-            content: <AddTermModal />,
-            styles: 'add-term-window',
         },
     });
     //@ts-ignore

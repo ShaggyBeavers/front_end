@@ -1,24 +1,68 @@
-import './index.css';
-import Select from 'react-select';
+import React, { useState } from 'react';
 import DefaultButton from '../../DefaultButton/defaultbutton';
 import { useForm } from 'react-hook-form';
+
+import './index.css';
+import { X } from 'lucide-react';
 import CategoryAPI from '../../../app/api/Category/category';
 import HistoricalPeriodAPI from '../../../app/api/HistoricalPeriod/historicalPeriod';
 import RegionAPI from '../../../app/api/Region/region';
 import TechniqueAPI from '../../../app/api/Technique/technique';
 
-const AddTermModal = () => {
+
+interface AddTermModalProps {
+    onClose: () => void;
+}
+
+const AddTermModal: React.FC<AddTermModalProps> = ({ onClose }) => {
     const { register, handleSubmit } = useForm();
+    const [selectedCategory, setSelectedCategory] = useState<string | null>(
+        null
+    );
 
     const categories = [
-        { value: 'category', label: 'Категорія' },
-        { value: 'technique', label: 'Техніка' },
-        { value: 'historicalPeriod', label: 'Історичний Період' },
-        { value: 'material', label: 'Матеріал' },
-        { value: 'term', label: 'Термін' },
-        { value: 'author', label: 'Автор' },
+        {
+            value: 'category',
+            label: 'Категорія',
+            terms: Array.from(
+                { length: 9 },
+                (_, i) => `Category Term ${i + 1}`
+            ),
+        },
+        {
+            value: 'technique',
+            label: 'Техніка',
+            terms: Array.from(
+                { length: 9 },
+                (_, i) => `Technique Term ${i + 1}`
+            ),
+        },
+        {
+            value: 'historicalPeriod',
+            label: 'Історичний Період',
+            terms: Array.from(
+                { length: 9 },
+                (_, i) => `Historical Period Term ${i + 1}`
+            ),
+        },
+        {
+            value: 'material',
+            label: 'Матеріал',
+            terms: Array.from(
+                { length: 9 },
+                (_, i) => `Material Term ${i + 1}`
+            ),
+        },
+        {
+            value: 'term',
+            label: 'Термін',
+            terms: Array.from({ length: 9 }, (_, i) => `Term Term ${i + 1}`),
+        },
     ];
 
+    const handleTabClick = (category: string) => {
+        setSelectedCategory(category);
+      
     const endpoints: { [key: string]: (name: string) => Promise<any> } = {
         category: CategoryAPI.createCategory,
         technique: TechniqueAPI.createTechnique,
@@ -42,57 +86,56 @@ const AddTermModal = () => {
     };
 
     return (
-        <>
-            <form className="center-term" onSubmit={handleSubmit(onSubmit)}>
-                <div className="row-mod">
-                    <label htmlFor="categories">Категорія:</label>
-                    
-                    <Select
-                        className="select"
-                        options={categories}
-                        placeholder={'Виберіть категорію'}
-                        menuPortalTarget={document.body}
-                        styles={{
-                            menu: (provided) => ({
-                                ...provided,
-                                // maxHeight: 180,
-                                // overflow: 'hidden',
-                            }),
-                        }}
-                        theme={(theme) => ({
-                            ...theme,
-                            border: 'none',
-                            borderRadius: 20,
-                            fontSize: 10,
-                            colors: {
-                                ...theme.colors,
-                                primary25: 'rgba(0, 0, 0, 0.1)',
-                                primary: '#1C1C1C',
-                            },
-                        })}
-                    />
-                </div>
-                <div className="row-mod">
-                    <label htmlFor="term">Введіть новий термін для неї:</label>
-                    <input
-                        className="mod-input"
-                        id="term"
-                        type="term"
-                        {...register('term')}
-                    />
-                </div>
-                <div className="row-mod">
-                    <DefaultButton
-                        height={40}
-                        width={180}
-                        bgcolor="black"
-                        color="white"
-                        text="Додати"
-                        action={() => {}}
-                    />
-                </div>
-            </form>
-        </>
+        <div className="add-term-con">
+            <div className="add-term-categories">
+                {categories.map((category) => (
+                    <div
+                        key={category.value}
+                        className={`category ${selectedCategory === category.value? 'active' : ''}`}
+                        onClick={() => handleTabClick(category.value)}
+                    >
+                        {category.label}
+                    </div>
+                ))}
+            </div>
+            <div className="tab-content">
+                {selectedCategory && (
+                    <form
+                        className="form-term"
+                        onSubmit={handleSubmit(onSubmit)}
+                    >
+                        <div>
+                            <label htmlFor="term">
+                                Додати новий {selectedCategory}:
+                            </label>
+
+                            <div className="term-input-save">
+                                <input
+                                    className="term-input"
+                                    id="term"
+                                    type="term"
+                                    {...register('term')}
+                                />
+                                <button>Зберегти</button>
+                            </div>
+                        </div>
+                        <div className="terms-grid">
+                            {categories
+                                .find(
+                                    (category) =>
+                                        category.value === selectedCategory
+                                )
+                                ?.terms.map((term, index) => (
+                                    <div key={index} className="term-item">
+                                        <X size={16} color="#FA594F" />
+                                        {term}
+                                    </div>
+                                ))}
+                        </div>
+                    </form>
+                )}
+            </div>
+        </div>
     );
 };
 
