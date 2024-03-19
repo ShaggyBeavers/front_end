@@ -1,4 +1,5 @@
 export interface Relic {
+  id:number;
   objectType: string; 
   status: RelicStatusEnum; // Use an enum for the possible statuses
   creationDate: string; // Assuming date is a string format
@@ -69,3 +70,4 @@ interface RelicFilterRequest {
   collections: string[];
   categories: string[];
 }
+

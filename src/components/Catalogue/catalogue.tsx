@@ -12,40 +12,122 @@ import FilterExpand from '../icons/filter_expand';
 import SelFilterExpand from '../icons/sel_filter_expand';
 import { FilterCategory } from '../FilterCategory/filter_category';
 import { title } from 'process';
-import CatalogueAPI from '../../app/api/Catalogue/catalogue';
+import RelicAPI from '../../app/api/Relic/relic';
+import Relic from '../Relic/Relic';
 
 interface Photo {
+    //FOR STYLING
     id: number;
     thumbnailUrl: string;
     title: string;
 }
 
+interface GetAllRelicsResponse {
+    totalPages: number;
+    totalElements: number;
+    size: number;
+    content: Relic[];
+    number: number;
+    sort: {
+        empty: boolean;
+        sorted: boolean;
+        unsorted: boolean;
+    };
+    pageable: {
+        offset: number;
+        sort: {
+            empty: boolean;
+            sorted: boolean;
+            unsorted: boolean;
+        };
+        pageNumber: number;
+        pageSize: number;
+        paged: boolean;
+        unpaged: boolean;
+    };
+    first: boolean;
+    last: boolean;
+    numberOfElements: number;
+    empty: boolean;
+  }
+
+export interface Filters {
+    historicalPeriods: string[];
+    statuses: string[];
+    techniques: string[];
+    collections: string[];
+    categories: string[];
+    [key: string]: string[];
+}
+
 const PAGE_SIZE = 18;
 
 const Catalogue = () => {
-    const [items, setItems] = useState<Photo[]>([]);
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    // const [items, setItems] = useState<Photo[]>([]);   FOR STYLING
+    const [result, setResult] = useState<GetAllRelicsResponse>({
+        totalPages: 0,
+        totalElements: 0,
+        size: 0,
+        content: [],
+        number: 0,
+        sort: {
+            empty: true,
+            sorted: true,
+            unsorted: true,
+        },
+        pageable: {
+            offset: 0,
+            sort: {
+                empty: true,
+                sorted: true,
+                unsorted: true,
+            },
+            pageNumber: 0,
+            pageSize: 0,
+            paged: true,
+            unpaged: true,
+        },
+        first: true,
+        last: true,
+        numberOfElements: 0,
+        empty: true,
+    });
     const [notFound, setNotFound] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(
         null
     );
-    const [selectedFilterOptions, setSelectedFilterOptions] = useState<
-        string[]
-    >([]);
+    const [selectedFilterOptions, setSelectedFilterOptions] = useState<Filters>(
+        {
+            historicalPeriods: [],
+            statuses: [],
+            techniques: [],
+            collections: [],
+            categories: [],
+        }
+    );
     const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-    const navigate = useNavigate();
-    const location = useLocation();
-    const totalPages = 6; //temporarily hardcoded
+
+    const totalPages = 9; //temporarily hardcoded
 
     const fetchItems = async (page: number) => {
-        //request is under,this is just to display styling
         try {
-            const response = await axios.get<Photo[]>(
-                `https://jsonplaceholder.typicode.com/photos?_page=${page}&_limit=${PAGE_SIZE}`
+            //FOR STYLING
+            // const response = await axios.get<Photo[]>(
+            //     `https://jsonplaceholder.typicode.com/photos?_page=${page}&_limit=${PAGE_SIZE}` //request is under,this is just to display styling
+            // );
+            const response = await RelicAPI.filterRelics(
+                page - 1,
+                PAGE_SIZE,
+                selectedFilterOptions
             );
-            // const response = await CatalogueAPI.fetchItems(page, PAGE_SIZE);
-            setItems(response.data);
-            console.log(response.data, 'Items fetched succesfully');
+            // setItems(response.content);  FOR STYLING
+            setResult(response);
+            console.log(response, 'Items fetched succesfully');
+            console.log(response.content);
         } catch (error) {
             console.error('Error fetching items:', error);
         }
@@ -70,6 +152,7 @@ const Catalogue = () => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
             setCurrentPage(pageNumber);
             navigate(`?page=${pageNumber}`);
+            scrollToTop();
         }
     };
 
@@ -83,13 +166,25 @@ const Catalogue = () => {
         }
     };
 
-    const handleFilterOptionClick = (option: string) => {
-        if (option === 'clear') {
-            setSelectedFilterOptions([]);
-        } else {
-            setSelectedFilterOptions((prevOptions) => [...prevOptions, option]);
-        }
+    const handleFilterOptionClick = (option: string, category: string) => {
+        setSelectedFilterOptions((prevOptions) => ({
+            ...prevOptions,
+            [category]:
+                option === 'clear'
+                    ? []
+                    : prevOptions[category]
+                      ? prevOptions[category].includes(option)
+                          ? prevOptions[category].filter(
+                                (item) => item !== option
+                            )
+                          : [...prevOptions[category], option]
+                      : [option],
+        }));
     };
+
+    useEffect(() => {
+        console.log(selectedFilterOptions);
+    }, [selectedFilterOptions]);
 
     const filterTitles = [
         'Категорія',
@@ -128,6 +223,16 @@ const Catalogue = () => {
         'opposum1',
         'Drakie',
     ];
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const applyFilters = () => {
+        console.log('yes,hell');
+        fetchItems(currentPage);
+    };
+
     return (
         <>
             {notFound ? (
@@ -164,6 +269,7 @@ const Catalogue = () => {
                                             setIsFilterModalOpen={
                                                 setIsFilterModalOpen
                                             }
+                                            applyFilters={applyFilters}
                                         />
                                     ))}
                                 </ul>
@@ -173,16 +279,16 @@ const Catalogue = () => {
                     <div className="cat_right">
                         <Search />
                         <div className="cat-items-container">
-                            {items &&
-                                items.map((item, index) => (
+                            {result &&
+                                result.content.map((item, index) => (
                                     <Link
                                         key={item.id}
                                         to={`/catalogue/${item.id}`}
                                         className="cat-item"
                                     >
                                         <img
-                                            src={item.thumbnailUrl}
-                                            alt={item.title}
+                                            src={item.imageUrl}
+                                            alt={item.name}
                                         />
                                         {/* <div className='cat-item-title'><p>{item.title}</p></div> */}
                                         <div className="cat-item-title">
@@ -193,7 +299,7 @@ const Catalogue = () => {
                                                     Солунського
                                                 </p>
                                             ) : (
-                                                <p>{item.title}</p>
+                                                <p>{item.name}</p>
                                             )}
                                         </div>
                                     </Link>
@@ -205,6 +311,9 @@ const Catalogue = () => {
                             currentPage={currentPage}
                             onPageChange={paginate}
                         />
+                        <div className="to_top" onClick={scrollToTop}>
+                            Перейти до гори
+                        </div>
                         {isFilterModalOpen && (
                             <div
                                 className={`dimmed-overlay ${isFilterModalOpen ? 'active' : ''}`}
