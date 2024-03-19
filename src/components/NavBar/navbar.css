@@ -29,7 +29,7 @@ html {
 
 .navbar_con a {
     font-size: 0.8125rem;
-    color: black;
+    /* color: black; */
     text-decoration: underline;
     transition: 0.5s;
     cursor: pointer;
@@ -52,12 +52,15 @@ html {
     transform: translateX(-50%);
 }
 
-#nav_log_btn {
-    text-align: center;
-    width: 6.5rem;
+.nav_log_btn {
     color: white;
-    border-radius: 2.5rem;
-    padding: 0.8125rem 0;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 6.5rem;
+    border-radius: 1.5rem;
+    padding: 0.7125rem 1.5rem;
     background: black;
     text-decoration: none;
     transition: 0.7s ease;
@@ -72,7 +75,8 @@ html {
     text-decoration: none;
 }
 
-#nav_log_btn.main:hover {
+
+.nav_log_btn:hover {
     color: black;
     background: white;
     transition: 0.7s;

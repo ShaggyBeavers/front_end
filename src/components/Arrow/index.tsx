@@ -14,9 +14,9 @@ const Arrow = (props: any) => {
             <path
                 d="M1.90332 1.49829L7.90332 7.49829L13.9033 1.49829"
                 // stroke="black"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
             />
         </svg>
     );

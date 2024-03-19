@@ -9,7 +9,7 @@ interface TableInfoProps {
     status: string;
 }
 
-const TableInfo = () => {
+const RelicTableInfo = () => {
     const props: any = [
         {
             title: 'Казан',
@@ -39,7 +39,7 @@ const TableInfo = () => {
                 {
                     id: 1,
                     categoryName: 'Inscriptions',
-                }
+                },
             ],
             status: 'APPROVED',
         },
@@ -64,4 +64,4 @@ const TableInfo = () => {
     );
 };
 
-export default TableInfo;
+export default RelicTableInfo;
