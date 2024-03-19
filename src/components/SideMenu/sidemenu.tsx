@@ -14,6 +14,7 @@ import { useAuthStore, decodeAccessToken } from '../../stores/AuthStore';
 import ProtectedItems from '../../components/ProtectedItems';
 import { set } from 'react-hook-form';
 import { RoleEnum } from '../../enums/roles';
+import { useNavigate } from 'react-router-dom';
 Modal.setAppElement('#root');
 
 interface IModal {
@@ -25,6 +26,8 @@ interface IModal {
 }
 
 const SideMenu = () => {
+    const navigate = useNavigate();
+
     const [modals, setModals] = useState<IModal>({
         settings: {
             isOpen: false,
@@ -61,6 +64,16 @@ const SideMenu = () => {
     });
 
     console.log(data);
+
+    const handleModeratorList = () => {
+        const currentPath = window.location.pathname;
+        if (currentPath.endsWith('moderator-list')) {
+            window.location.reload();
+        } else {
+            console.log(currentPath);
+            navigate('./moderator-list');
+        }
+    };
 
     const handleModal = (modalName: string, isOpen: boolean) => {
         setModals((prevModals) => ({
@@ -153,7 +166,7 @@ const SideMenu = () => {
                         height={38}
                         width={300}
                         text="Список модераторів"
-                        action={() => handleModal('moderatorsList', true)}
+                        action={() => handleModeratorList()}
                     />
                 </ProtectedItems>
                 <ProtectedItems

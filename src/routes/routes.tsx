@@ -75,6 +75,16 @@ export const router = createBrowserRouter([
                             </ProtectedRoutes>
                         ),
                     },
+                    {
+                        path: 'moderator-list',
+                        element: (
+                            <ProtectedRoutes
+                                role={[RoleEnum.ADMIN, RoleEnum.MODERATOR]}
+                            >
+                                <ProfilePage />
+                            </ProtectedRoutes>
+                        ),
+                    },
                 ],
             },
         ],
