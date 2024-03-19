@@ -39,7 +39,7 @@ const NavBar: React.FC<NavBarProps> = ({ styles }) => {
                             location.pathname === '/register' ||
                             location.pathname === '/login'
                         ) && (
-                            <Link to="/login" id="nav_log_btn">
+                            <Link to="/login" id="nav_log_btn" className={`${location.pathname === '/' ? 'main' : ''}`}>
                                 <li>Увійти</li>
                             </Link>
                         )}

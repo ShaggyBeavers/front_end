@@ -7,7 +7,7 @@
 }
 
 .relic_left {
-    max-width: 33%;
+    max-width: 36%;
     margin-right: 5rem;
     display: flex;
     flex-direction: column;
@@ -29,12 +29,13 @@
     font-size: 0.85rem;
 }
 
-.relic_left h4 {
+.relic_left h3 {
     font-family: 'eUkraine-Thin';
     font-weight: 700;
     background: linear-gradient(286deg, #f4a815 48.72%, #4e3421 89.82%);
     background-clip: text;
     color: transparent;
+    line-height: 1.2;
 }
 
 .relic_left h6 {
@@ -42,11 +43,19 @@
     font-weight: 700;
 }
 
-.relic_dates,
-.relic_am_status {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
+.relic_left h4 {
+    font-weight: 700;
+    background: linear-gradient(to right, #bf98c6, #4b8bfa) border-box;
+    background-clip: text;
+    color: transparent;
+    line-height: 1.2;
+}
+
+.relic_divider {
+    height: 2px;
+    background-color: #dadada;
+    width: 100%;
+    margin: 0.5rem 0;
 }
 
 .relic_source,

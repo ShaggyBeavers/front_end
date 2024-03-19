@@ -11,7 +11,7 @@ interface FilterModalProps {
 
 const FilterModal: React.FC<FilterModalProps> = ({
     options,
-    selectedOptions,
+    selectedOptions = [],
     onClose,
     onOptionClick,
 }) => {

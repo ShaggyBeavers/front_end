@@ -3,6 +3,7 @@ import FilterModal from '../FilterModal/filter_modal';
 import FilterExpand from '../icons/filter_expand';
 import SelFilterExpand from '../icons/sel_filter_expand';
 import FilterRelicsLine from '../icons/filter_relics_line';
+import { Filters } from '../Catalogue/catalogue';
 
 interface FilterCategoryProps {
     category: string;
@@ -11,9 +12,10 @@ interface FilterCategoryProps {
     handleFilterCategoryClick: (category: string) => void;
     isFilterModalOpen: boolean;
     options: string[];
-    selectedFilterOptions: string[];
-    handleFilterOptionClick: (option: string) => void;
+    selectedFilterOptions: Filters;
+    handleFilterOptionClick: (option: string, category: string) => void;
     setIsFilterModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    applyFilters: () => void;
 }
 
 export const FilterCategory: React.FC<FilterCategoryProps> = ({
@@ -26,10 +28,13 @@ export const FilterCategory: React.FC<FilterCategoryProps> = ({
     selectedFilterOptions,
     handleFilterOptionClick,
     setIsFilterModalOpen,
+    applyFilters,
 }) => {
+    const selectedOptionsForCategory = selectedFilterOptions[category];
+
     return (
         <li className={selectedCategory === category ? 'selected' : ''}>
-            <FilterRelicsLine />
+            {/* <FilterRelicsLine /> */}
             <div
                 className="filter_inner"
                 onClick={() => handleFilterCategoryClick(category)}
@@ -45,15 +50,18 @@ export const FilterCategory: React.FC<FilterCategoryProps> = ({
             {isFilterModalOpen && selectedCategory === category && (
                 <FilterModal
                     options={options} // here will be the result from the endpoint
-                    selectedOptions={selectedFilterOptions}
+                    selectedOptions={selectedOptionsForCategory}
                     onClose={() => {
+                        applyFilters();
                         setIsFilterModalOpen(false);
                         handleFilterCategoryClick(category);
                     }}
-                    onOptionClick={(option) => handleFilterOptionClick(option)}
+                    onOptionClick={(option) =>
+                        handleFilterOptionClick(option, category)
+                    }
                 />
             )}
-            {category === 'technique' && <FilterRelicsLine />}
+            {category === 'technique'}
         </li>
     );
 };
