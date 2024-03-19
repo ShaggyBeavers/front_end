@@ -22,13 +22,13 @@ export const router = createBrowserRouter([
             { path: 'register', element: <RegisterPage /> },
             { path: 'catalogue', element: <CataloguePage /> },
             { path: 'catalogue/:relicsid', element: <RelicPage /> },
+            { path: 'add-relic', element: <AddRelicPage/>},
             { path: 'profile', element: <ProfilePage/> },
             { path: 'report', element: <ReportPage/> },
             { path: 'recovery', element: <RecoveryPage/> },
             { path: 'success_recovery' ,element: <SuccessRecovery/>},
             { path: '*', element: <NotFoundPage /> },
-            { path: 'profile', element: <ProfilePage /> },
-            { path: 'add-relic', element: <AddRelicPage/>},
+           
         ],
     },
 ]);

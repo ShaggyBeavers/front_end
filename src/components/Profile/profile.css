@@ -6,4 +6,5 @@
     display: flex;
     flex-direction: row;
     margin: 150px 86px 40px 86px;
+    justify-content: space-between;
 }

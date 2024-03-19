@@ -19,7 +19,11 @@ interface IModal {
     };
 }
 
-const SideMenu = () => {
+interface SideMenuProps {
+    openAddTermModal: () => void;
+}
+
+const SideMenu : React.FC<SideMenuProps> = ({ openAddTermModal }) => {
     const [modals, setModals] = useState<IModal>({
         settings: {
             isOpen: false,
@@ -40,11 +44,6 @@ const SideMenu = () => {
             isOpen: false,
             content: <ModeratorsListModal />,
             styles: 'moderators-list-window',
-        },
-        addTerm: {
-            isOpen: false,
-            content: <AddTermModal />,
-            styles: 'add-term-window',
         },
     });
 
@@ -134,7 +133,7 @@ const SideMenu = () => {
                     height={38}
                     width={300}
                     text="Додати термін"
-                    action={() => handleModal('addTerm', true)}
+                    action={openAddTermModal}
                 />
                 
             </div>
