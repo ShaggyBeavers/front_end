@@ -8,7 +8,7 @@ import { DataTableViewOptions } from './DataTableViewOptions';
 import { statuses, categories } from './data/reportData';
 import { DataTableFacetedFilter } from './DataTableFacetedFilter';
 
-import { options } from '../../types/filters';
+import { options } from '../../types/filters'
 
 interface DataTableToolbarProps<TData> {
     table: Table<TData>;
@@ -29,7 +29,7 @@ export function DataTableToolbar<TData>({
         <div className="flex items-center justify-between">
             <div className="flex flex-1 items-center space-x-2">
                 <Input
-                    placeholder="Пошук по назві..."
+                    placeholder="Пошук по імені..."
                     value={
                         (table
                             .getColumn('title')
@@ -42,10 +42,10 @@ export function DataTableToolbar<TData>({
                     }
                     className="h-8 w-[150px] lg:w-[250px]"
                 />
-                {table.getColumn('status') && (
+                {table.getColumn('region') && (
                     <DataTableFacetedFilter
-                        column={table.getColumn('status')}
-                        title="Статус"
+                        column={table.getColumn('region')}
+                        title="Регіон"
                         options={statuses}
                     />
                 )}

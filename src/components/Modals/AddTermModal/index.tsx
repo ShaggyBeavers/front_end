@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import DefaultButton from '../../DefaultButton/defaultbutton';
 import { useForm } from 'react-hook-form';
+
 import './index.css';
 import { X } from 'lucide-react';
+import CategoryAPI from '../../../app/api/Category/category';
+import HistoricalPeriodAPI from '../../../app/api/HistoricalPeriod/historicalPeriod';
+import RegionAPI from '../../../app/api/Region/region';
+import TechniqueAPI from '../../../app/api/Technique/technique';
+
 
 interface AddTermModalProps {
     onClose: () => void;
@@ -56,10 +62,27 @@ const AddTermModal: React.FC<AddTermModalProps> = ({ onClose }) => {
 
     const handleTabClick = (category: string) => {
         setSelectedCategory(category);
+      
+    const endpoints: { [key: string]: (name: string) => Promise<any> } = {
+        category: CategoryAPI.createCategory,
+        technique: TechniqueAPI.createTechnique,
+        historicalPeriod: HistoricalPeriodAPI.createHistoricalPeriod,
+        region: RegionAPI.createRegion,
     };
 
     const onSubmit = (data: any) => {
         console.log(data);
+        categories.forEach((category) => {
+            if (category.value in data) {
+                const check = 'technique'
+                console.log(
+                    `Adding ${data[category.value]} to ${category.value}`
+                );
+                console.log(
+                    `Using endpoint: ${endpoints['${check}']}`
+                );
+            }
+        });
     };
 
     return (

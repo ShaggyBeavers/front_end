@@ -8,7 +8,13 @@ import AddModeratorModal from '../Modals/AddModeratorModal';
 import ModeratorsListModal from '../Modals/ModeratorsListModal';
 import AddTermModal from '../Modals/AddTermModal';
 import Settings from '../Modals/Settings';
-
+import { useQuery } from '@tanstack/react-query';
+import UserAPI from '../../app/api/Account/User/user';
+import { useAuthStore, decodeAccessToken } from '../../stores/AuthStore';
+import ProtectedItems from '../../components/ProtectedItems';
+import { set } from 'react-hook-form';
+import { RoleEnum } from '../../enums/roles';
+import { useNavigate } from 'react-router-dom';
 Modal.setAppElement('#root');
 
 interface IModal {
@@ -23,7 +29,10 @@ interface SideMenuProps {
     openAddTermModal: () => void;
 }
 
-const SideMenu : React.FC<SideMenuProps> = ({ openAddTermModal }) => {
+//const SideMenu : React.FC<SideMenuProps> = ({ openAddTermModal }) => {
+const SideMenu = () => {
+    const navigate = useNavigate();
+
     const [modals, setModals] = useState<IModal>({
         settings: {
             isOpen: false,
@@ -46,6 +55,25 @@ const SideMenu : React.FC<SideMenuProps> = ({ openAddTermModal }) => {
             styles: 'moderators-list-window',
         },
     });
+    //@ts-ignore
+    const email = useAuthStore((state) => state.user.email);
+    const accessToken = useAuthStore((state) => state.accessToken);
+    const { data, isLoading, isError, error } = useQuery({
+        queryKey: ['currentUser', accessToken],
+        queryFn: () => UserAPI.getUserProfile(accessToken),
+    });
+
+    console.log(data);
+
+    const handleModeratorList = () => {
+        const currentPath = window.location.pathname;
+        if (currentPath.endsWith('moderator-list')) {
+            window.location.reload();
+        } else {
+            console.log(currentPath);
+            navigate('./moderator-list');
+        }
+    };
 
     const handleModal = (modalName: string, isOpen: boolean) => {
         setModals((prevModals) => ({
@@ -95,7 +123,9 @@ const SideMenu : React.FC<SideMenuProps> = ({ openAddTermModal }) => {
             <div className="flex-box">
                 <div className="name-banner">
                     <div className="row1">
-                        <h4 className="name">Бобер Грицько</h4>
+                        <h4 className="name">
+                            {data?.data?.firstName} {data?.data?.lastName}
+                        </h4>
                         <DefaultButton
                             height={28}
                             width={180}
@@ -106,36 +136,53 @@ const SideMenu : React.FC<SideMenuProps> = ({ openAddTermModal }) => {
                     </div>
                     <div className="row2">
                         <p className="contact">Контакт:</p>
-                        <p className="email">
-                            bober.na.pliazhe.lezhut@bober.ua
-                        </p>
+                        <p className="email">{email}</p>
                     </div>
                 </div>
-                <DefaultButton
-                    height={38}
-                    width={300}
-                    text="Додати Реліквію"
-                    action={() => handleModal('addRelic', true)}
-                />
-                <DefaultButton
-                    height={38}
-                    width={300}
-                    text="Додати модератора"
-                    action={() => handleModal('addModerator', true)}
-                />
-                <DefaultButton
-                    height={38}
-                    width={300}
-                    text="Список модераторів"
-                    action={() => handleModal('moderatorsList', true)}
-                />
-                <DefaultButton
-                    height={38}
-                    width={300}
-                    text="Додати термін"
-                    action={openAddTermModal}
-                />
-                
+                <ProtectedItems
+                    role={[
+                        RoleEnum.ADMIN,
+                        RoleEnum.MODERATOR,
+                        RoleEnum.REGIONAL_MODERATOR,
+                    ]}
+                >
+                    <DefaultButton
+                        height={38}
+                        width={300}
+                        text="Додати Реліквію"
+                        action={() => handleModal('addRelic', true)}
+                    />
+                </ProtectedItems>
+                <ProtectedItems role={[RoleEnum.ADMIN]}>
+                    <DefaultButton
+                        height={38}
+                        width={300}
+                        text="Додати модератора"
+                        action={() => handleModal('addModerator', true)}
+                    />
+                </ProtectedItems>
+                <ProtectedItems role={[RoleEnum.ADMIN]}>
+                    <DefaultButton
+                        height={38}
+                        width={300}
+                        text="Список модераторів"
+                        action={() => handleModeratorList()}
+                    />
+                </ProtectedItems>
+                <ProtectedItems
+                    role={[
+                        RoleEnum.ADMIN,
+                        RoleEnum.REGIONAL_MODERATOR,
+                        RoleEnum.MODERATOR,
+                    ]}
+                >
+                    <DefaultButton
+                        height={38}
+                        width={300}
+                        text="Додати термін"
+                        action={() => handleModal('addTerm', true)}
+                    />
+                </ProtectedItems>
             </div>
         </>
     );

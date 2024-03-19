@@ -1,8 +1,9 @@
 import requests from '../requests';
+import { authAPi } from '../requests';
 
 const CategoryAPI = {
     createCategory: (categoryName: string) =>
-        requests.post('api/categories/create', categoryName),
+        authAPi.post('api/categories/create', categoryName),
     getAllCategories: () => requests.get('api/categories'),
 };
 

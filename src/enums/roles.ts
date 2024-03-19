@@ -1,0 +1,6 @@
+export enum RoleEnum {
+    ADMIN = 'ADMIN',
+    REGIONAL_MODERATOR = 'REGIONAL_MODERATOR',
+    MODERATOR = 'MODERATOR',
+    USER = 'USER',
+}
