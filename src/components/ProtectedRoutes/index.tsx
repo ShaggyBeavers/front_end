@@ -20,7 +20,6 @@ const ProtectedRoutes = ({
         role: state.user?.role,
     }));
 
-    console.log('ProtectedRoutes', isLoggedIn, userRole);
     if (!isLoggedIn) {
         return <Navigate to={redirectPath} replace />;
     }

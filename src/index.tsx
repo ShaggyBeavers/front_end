@@ -4,6 +4,7 @@ import { RouterProvider } from 'react-router-dom';
 import { router } from './routes/routes';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import './index.css';
 import './fonts/fonts.css';
 
@@ -19,6 +20,7 @@ root.render(
                     <RouterProvider router={router} />
                 </React.StrictMode>
             </GoogleOAuthProvider>
+            <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
     </div>
 );
