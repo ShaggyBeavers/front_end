@@ -161,7 +161,9 @@ const SideMenu = () => {
                         action={() => handleModal('addModerator', true)}
                     />
                 </ProtectedItems>
-                <ProtectedItems role={[RoleEnum.ADMIN]}>
+                <ProtectedItems
+                    role={[RoleEnum.ADMIN, RoleEnum.REGIONAL_MODERATOR]}
+                >
                     <DefaultButton
                         height={38}
                         width={300}
