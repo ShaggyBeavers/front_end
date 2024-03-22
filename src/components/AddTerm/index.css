@@ -1,7 +1,7 @@
 .add-term-con {
     display: flex;
     flex-direction: column;
-    width: 65%;
+    width: 70%;
 }
 
 .add-term-categories {
@@ -23,29 +23,42 @@
     color: transparent;
 }
 
+.category.active.initial {
+    transition: none;
+}
+
 .tab-content {
     margin-top: 20px;
 }
 
 .form-term label {
-   font-size: 0.9rem;
+    font-size: 0.9rem;
 }
 
 .row-mod {
     margin-top: 10px;
 }
 
-.term-input-save{
+.term-input-save {
     display: flex;
     gap: 2rem;
 }
 
-.term-input-save button{
+.term-input-save button {
     padding: 0 1.5rem;
-    background-color: #DADADA;
+    background-color: #c5c5c5;
     color: white;
     border-radius: 20px;
     font-size: 0.8125rem;
+    transition: 0.5s;
+    cursor: not-allowed;
+}
+
+.term-input-save button.active {
+    background-color: black;
+    color: white;
+    transition: 0.5s;
+    cursor: pointer;
 }
 
 .term-input {
@@ -66,7 +79,11 @@
 .term-item {
     display: flex;
     align-items: center;
-    gap:0.2rem;
+    gap: 0.2rem;
     padding: 10px;
     font-size: 0.9rem;
+}
+
+.delete_term{
+    cursor: pointer;
 }

@@ -1,24 +1,22 @@
-import React, { useState } from 'react';
-import DefaultButton from '../../DefaultButton/defaultbutton';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-
 import './index.css';
 import { X } from 'lucide-react';
-import CategoryAPI from '../../../app/api/Category/category';
-import HistoricalPeriodAPI from '../../../app/api/HistoricalPeriod/historicalPeriod';
-import RegionAPI from '../../../app/api/Region/region';
-import TechniqueAPI from '../../../app/api/Technique/technique';
+import CategoryAPI from '../../app/api/Category/category';
+import HistoricalPeriodAPI from '../../app/api/HistoricalPeriod/historicalPeriod';
+import RegionAPI from '../../app/api/Region/region';
+import TechniqueAPI from '../../app/api/Technique/technique';
 
-
-interface AddTermModalProps {
-    onClose: () => void;
-}
-
-const AddTermModal: React.FC<AddTermModalProps> = ({ onClose }) => {
+const AddTerm = () => {
     const { register, handleSubmit } = useForm();
-    const [selectedCategory, setSelectedCategory] = useState<string | null>(
-        null
-    );
+    const [selectedCategory, setSelectedCategory] =
+        useState<string>('category');
+    const [initialRender, setInitialRender] = useState(true);
+    const [inputValue, setInputValue] = useState<string>('');
+
+    useEffect(() => {
+        setInitialRender(false);
+    }, []);
 
     const categories = [
         {
@@ -62,7 +60,12 @@ const AddTermModal: React.FC<AddTermModalProps> = ({ onClose }) => {
 
     const handleTabClick = (category: string) => {
         setSelectedCategory(category);
-      
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInputValue(e.target.value);
+    };
+
     const endpoints: { [key: string]: (name: string) => Promise<any> } = {
         category: CategoryAPI.createCategory,
         technique: TechniqueAPI.createTechnique,
@@ -74,15 +77,16 @@ const AddTermModal: React.FC<AddTermModalProps> = ({ onClose }) => {
         console.log(data);
         categories.forEach((category) => {
             if (category.value in data) {
-                const check = 'technique'
                 console.log(
                     `Adding ${data[category.value]} to ${category.value}`
                 );
-                console.log(
-                    `Using endpoint: ${endpoints['${check}']}`
-                );
+                console.log(`Using endpoint: ${endpoints[category.value]}`);
             }
         });
+    };
+
+    const handleDelete = () => {
+        //here will be api call
     };
 
     return (
@@ -91,7 +95,7 @@ const AddTermModal: React.FC<AddTermModalProps> = ({ onClose }) => {
                 {categories.map((category) => (
                     <div
                         key={category.value}
-                        className={`category ${selectedCategory === category.value? 'active' : ''}`}
+                        className={`category ${selectedCategory === category.value ? 'active' : ''} ${initialRender ? 'initial' : ''}`}
                         onClick={() => handleTabClick(category.value)}
                     >
                         {category.label}
@@ -115,8 +119,11 @@ const AddTermModal: React.FC<AddTermModalProps> = ({ onClose }) => {
                                     id="term"
                                     type="term"
                                     {...register('term')}
+                                    onChange={handleInputChange}
                                 />
-                                <button>Зберегти</button>
+                                <button className={inputValue ? 'active' : ''}>
+                                    Зберегти
+                                </button>
                             </div>
                         </div>
                         <div className="terms-grid">
@@ -127,7 +134,12 @@ const AddTermModal: React.FC<AddTermModalProps> = ({ onClose }) => {
                                 )
                                 ?.terms.map((term, index) => (
                                     <div key={index} className="term-item">
-                                        <X size={16} color="#FA594F" />
+                                        <X
+                                            size={16}
+                                            color="#FA594F"
+                                            onClick={handleDelete}
+                                            className='delete_term'
+                                        />
                                         {term}
                                     </div>
                                 ))}
@@ -139,4 +151,4 @@ const AddTermModal: React.FC<AddTermModalProps> = ({ onClose }) => {
     );
 };
 
-export default AddTermModal;
+export default AddTerm;

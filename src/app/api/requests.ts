@@ -5,7 +5,7 @@ import { config } from 'process';
 import { useAuthStore } from '../../stores/AuthStore';
 import { useNavigate } from 'react-router-dom';
 
-const BASE_URL = 'http://localhost:8081/';
+const BASE_URL = 'http://localhost:8080/';
 // axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.defaults.baseURL = BASE_URL;
 export const authAPi = axios.create({
