@@ -35,6 +35,8 @@ authAPi.interceptors.request.use(
     },
     (error) => {
         console.log('Interceptor triggered request error');
+        window.location.reload();
+        window.location = window.location;
         return Promise.reject(error);
     }
 );

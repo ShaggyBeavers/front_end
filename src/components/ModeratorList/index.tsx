@@ -51,17 +51,6 @@ const ModeratorList = () => {
         queryFn: () => AdminAPI.getRegionalModerators(),
     });
 
-    // const regions = useQuery({
-    //     queryKey: ['getRegions'],
-    //     queryFn: () => RegionAPI.getRegions(),
-    // });
-
-    // const categories = useQuery({
-    //     queryKey: ['getCategories'],
-    //     queryFn: () => CategoryAPI.getCategories(),
-    // });
-
-    // const [regMod, setRegMod] = useState(false);
     const urlParams = new URLSearchParams(window.location.search);
     const regMod = urlParams.get('regMod') === 'true';
 
@@ -136,7 +125,7 @@ const ModeratorList = () => {
 
     return (
         <>
-            <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">
+            <div className="hidden h-full w-full flex-1 flex-col space-y-8 pr-8 md:flex">
                 <DataTable
                     columns={columns}
                     data={props}
