@@ -66,8 +66,7 @@
 .settings-window,
 .add-relic-window,
 .add-moderator-window,
-.moderators-list-window,
-.add-term-window {
+.moderators-list-window {
     position: absolute;
     /* width: 700px;
     height: 500px; */
