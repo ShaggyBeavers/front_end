@@ -15,6 +15,8 @@ import {
 } from '../ui/dropdown-menu';
 import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
 import { MixerHorizontalIcon } from '@radix-ui/react-icons';
+import UserAPI from '../../app/api/Account/User/user';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface DataTableRowActionsProps<TData> {
     row: Row<TData>;
@@ -23,7 +25,20 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
     row,
 }: DataTableRowActionsProps<TData>) {
+    const queryClient = useQueryClient();
+
+    const banUnban = useMutation({
+        mutationFn: (userId: number) => UserAPI.banUnban(userId),
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ['getMod'] });
+            queryClient.invalidateQueries({ queryKey: ['getRegMod'] });
+        },
+    });
+
     // const task = taskSchema.parse(row.original);
+    const handleBan = async (userId: number) => {
+        await UserAPI.banUnban(userId);
+    };
 
     return (
         <DropdownMenu>
@@ -39,16 +54,19 @@ export function DataTableRowActions<TData>({
             <DropdownMenuContent align="end" className="w-[160px]">
                 <DropdownMenuItem
                     onClick={() => {
-                        console.log('Ban ', row.id);
+                        // handleBan(row.getValue('id'));
+                        banUnban.mutate(row.getValue('id'));
+
+                        console.log('Ban ', row.getValue('id'));
                     }}
                 >
                     <Ban className="mr-1 max-w-4" />
-                    Блок автора
+                    {row.getValue('ban') ? 'Розблокувати' : 'Заблокувати'}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator className="bg-gray-200" />
                 <DropdownMenuItem
                     onClick={() => {
-                        console.log('Delete ', row.id);
+                        console.log('Delete ', row.getValue('id'));
                     }}
                 >
                     <Trash2 className="mr-1 max-w-4" />
