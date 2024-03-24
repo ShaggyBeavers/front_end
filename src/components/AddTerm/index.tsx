@@ -6,13 +6,16 @@ import CategoryAPI from '../../app/api/Category/category';
 import HistoricalPeriodAPI from '../../app/api/HistoricalPeriod/historicalPeriod';
 import RegionAPI from '../../app/api/Region/region';
 import TechniqueAPI from '../../app/api/Technique/technique';
+import PropertyAPI from '../../app/api/Property/property';
+import MuseumAPI from '../../app/api/Museum/museum';
 
 const AddTerm = () => {
     const { register, handleSubmit } = useForm();
     const [selectedCategory, setSelectedCategory] =
-        useState<string>('category');
+        useState<string>('Category');
     const [initialRender, setInitialRender] = useState(true);
     const [inputValue, setInputValue] = useState<string>('');
+    const [isDestroyed, setIsDestroyed] = useState<boolean>(false);
 
     useEffect(() => {
         setInitialRender(false);
@@ -20,7 +23,7 @@ const AddTerm = () => {
 
     const categories = [
         {
-            value: 'category',
+            value: 'Category',
             label: 'Категорія',
             terms: Array.from(
                 { length: 9 },
@@ -28,7 +31,7 @@ const AddTerm = () => {
             ),
         },
         {
-            value: 'technique',
+            value: 'Technique',
             label: 'Техніка',
             terms: Array.from(
                 { length: 9 },
@@ -36,7 +39,7 @@ const AddTerm = () => {
             ),
         },
         {
-            value: 'historicalPeriod',
+            value: 'HistoricalPeriod',
             label: 'Історичний Період',
             terms: Array.from(
                 { length: 9 },
@@ -44,49 +47,100 @@ const AddTerm = () => {
             ),
         },
         {
-            value: 'material',
-            label: 'Матеріал',
-            terms: Array.from(
-                { length: 9 },
-                (_, i) => `Material Term ${i + 1}`
-            ),
+            value: 'Museum',
+            label: 'Музей',
+            terms: Array.from({ length: 9 }, (_, i) => `Museum Term ${i + 1}`),
         },
         {
-            value: 'term',
-            label: 'Термін',
-            terms: Array.from({ length: 9 }, (_, i) => `Term Term ${i + 1}`),
+            value: 'Region',
+            label: 'Регіон',
+            terms: Array.from({ length: 9 }, (_, i) => `Region Term ${i + 1}`),
+        },
+        {
+            value: 'Property',
+            label: 'Властивість',
+            terms: Array.from(
+                { length: 9 },
+                (_, i) => `Property Term ${i + 1}`
+            ),
         },
     ];
 
     const handleTabClick = (category: string) => {
         setSelectedCategory(category);
+        setInputValue('');
+        setIsDestroyed(false);
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInputValue(e.target.value);
     };
 
-    const endpoints: { [key: string]: (name: string) => Promise<any> } = {
-        category: CategoryAPI.createCategory,
-        technique: TechniqueAPI.createTechnique,
-        historicalPeriod: HistoricalPeriodAPI.createHistoricalPeriod,
-        region: RegionAPI.createRegion,
+    const handleDestroyedChange = () => {
+        setIsDestroyed(!isDestroyed);
     };
 
-    const onSubmit = (data: any) => {
+    const onDeleteEndpoints: { [key: string]: (id: number) => Promise<any> } = {
+        Category: CategoryAPI.deleteCategory,
+        Technique: TechniqueAPI.deleteTechnique,
+        HistoricalPeriod: HistoricalPeriodAPI.deleteHistoricalPeriod,
+        Region: RegionAPI.deleteRegion,
+        Museum: MuseumAPI.deleteMuseum,
+        Property: PropertyAPI.deleteProperty,
+    };
+
+    const onSubmit = async (data: any) => {
         console.log(data);
-        categories.forEach((category) => {
-            if (category.value in data) {
+        const selectedTerm = data.term;
+        if (selectedCategory === 'Museum') {
+            try {
+                const response = await MuseumAPI.createMuseum({
+                    name: selectedTerm,
+                    nameOld: 'dsds',
+                    isDestroyed: true,
+                });
                 console.log(
-                    `Adding ${data[category.value]} to ${category.value}`
+                    `Successfully added ${selectedTerm} to ${selectedCategory}`
                 );
-                console.log(`Using endpoint: ${endpoints[category.value]}`);
+                console.log(response);
+            } catch (error) {
+                console.error(
+                    `Error adding ${selectedTerm} to ${selectedCategory}:`,
+                    error
+                );
             }
-        });
+        } else {
+            try {
+                console.log(`${selectedCategory}API.create${selectedCategory}`);
+                const response = await eval(
+                    `${selectedCategory}API.create${selectedCategory}({name:${selectedTerm}})`
+                );
+                console.log(response);
+            } catch (error) {
+                console.error(
+                    `Error adding ${selectedTerm} to ${selectedCategory}:`,
+                    error
+                );
+            }
+        }
     };
 
-    const handleDelete = () => {
-        //here will be api call
+    const onDelete = async (id: number) => {
+        try {
+            if (selectedCategory in onDeleteEndpoints) {
+                const response = await onDeleteEndpoints[selectedCategory](id);
+                console.log(response);
+            } else {
+                console.error(
+                    `Delete function not found for category: ${selectedCategory}`
+                );
+            }
+        } catch (error) {
+            console.error(
+                `Error deleting ${selectedCategory} with ID ${id}:`,
+                error
+            );
+        }
     };
 
     return (
@@ -120,11 +174,26 @@ const AddTerm = () => {
                                     type="term"
                                     {...register('term')}
                                     onChange={handleInputChange}
+                                    value={inputValue}
                                 />
+
                                 <button className={inputValue ? 'active' : ''}>
                                     Зберегти
                                 </button>
                             </div>
+                            {selectedCategory === 'Museum' && (
+                                <div className='museum_checkbox'>
+                                    <label htmlFor="destroyed">
+                                        Зруйнований :
+                                    </label>
+                                    <input
+                                        type="checkbox"
+                                        id="destroyed"
+                                        checked={isDestroyed}
+                                        onChange={handleDestroyedChange}
+                                    />
+                                </div>
+                            )}
                         </div>
                         <div className="terms-grid">
                             {categories
@@ -137,8 +206,8 @@ const AddTerm = () => {
                                         <X
                                             size={16}
                                             color="#FA594F"
-                                            onClick={handleDelete}
-                                            className='delete_term'
+                                            // onClick={onDelete} that should be redone
+                                            className="delete_term"
                                         />
                                         {term}
                                     </div>

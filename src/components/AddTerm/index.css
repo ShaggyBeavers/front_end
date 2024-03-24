@@ -7,13 +7,12 @@
 .add-term-categories {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 2rem;
 }
 
 .category {
     cursor: pointer;
     text-decoration: underline;
+    margin: 0 2.3rem 1rem 0;
 }
 
 .category.active {
@@ -86,4 +85,16 @@
 
 .delete_term{
     cursor: pointer;
+}
+
+.museum_checkbox{
+    margin-top: 0.5rem;
+    display: flex;
+    align-items:center;
+    gap:1rem;
+}
+
+.museum_checkbox input{
+   height: 1rem;
+   width: 1rem;
 }
