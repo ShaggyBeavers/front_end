@@ -63,14 +63,12 @@ const SideMenu = () => {
         queryFn: () => UserAPI.getUserProfile(accessToken),
     });
 
-    console.log(data);
 
     const handleModeratorList = () => {
         const currentPath = window.location.pathname;
         if (currentPath.endsWith('moderator-list')) {
             window.location.reload();
         } else {
-            console.log(currentPath);
             navigate('./moderator-list');
         }
     };

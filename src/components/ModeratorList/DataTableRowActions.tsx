@@ -56,8 +56,6 @@ export function DataTableRowActions<TData>({
                     onClick={() => {
                         // handleBan(row.getValue('id'));
                         banUnban.mutate(row.getValue('id'));
-
-                        console.log('Ban ', row.getValue('id'));
                     }}
                 >
                     <Ban className="mr-1 max-w-4" />

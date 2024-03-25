@@ -9,12 +9,11 @@ import HistoricalPeriodAPI from '../../../app/api/HistoricalPeriod/historicalPer
 import RegionAPI from '../../../app/api/Region/region';
 import TechniqueAPI from '../../../app/api/Technique/technique';
 
-
 interface AddTermModalProps {
     onClose: () => void;
 }
 
-const AddTermModal: React.FC<AddTermModalProps> = ({ onClose }) => {
+const AddTermModal: any = () => {
     const { register, handleSubmit } = useForm();
     const [selectedCategory, setSelectedCategory] = useState<string | null>(
         null
@@ -62,81 +61,80 @@ const AddTermModal: React.FC<AddTermModalProps> = ({ onClose }) => {
 
     const handleTabClick = (category: string) => {
         setSelectedCategory(category);
-      
-    const endpoints: { [key: string]: (name: string) => Promise<any> } = {
-        category: CategoryAPI.createCategory,
-        technique: TechniqueAPI.createTechnique,
-        historicalPeriod: HistoricalPeriodAPI.createHistoricalPeriod,
-        region: RegionAPI.createRegion,
-    };
 
-    const onSubmit = (data: any) => {
-        console.log(data);
-        categories.forEach((category) => {
-            if (category.value in data) {
-                const check = 'technique'
-                console.log(
-                    `Adding ${data[category.value]} to ${category.value}`
-                );
-                console.log(
-                    `Using endpoint: ${endpoints['${check}']}`
-                );
-            }
-        });
-    };
+        const endpoints: { [key: string]: (name: string) => Promise<any> } = {
+            category: CategoryAPI.createCategory,
+            technique: TechniqueAPI.createTechnique,
+            historicalPeriod: HistoricalPeriodAPI.createHistoricalPeriod,
+            region: RegionAPI.createRegion,
+        };
 
-    return (
-        <div className="add-term-con">
-            <div className="add-term-categories">
-                {categories.map((category) => (
-                    <div
-                        key={category.value}
-                        className={`category ${selectedCategory === category.value? 'active' : ''}`}
-                        onClick={() => handleTabClick(category.value)}
-                    >
-                        {category.label}
-                    </div>
-                ))}
-            </div>
-            <div className="tab-content">
-                {selectedCategory && (
-                    <form
-                        className="form-term"
-                        onSubmit={handleSubmit(onSubmit)}
-                    >
-                        <div>
-                            <label htmlFor="term">
-                                Додати новий {selectedCategory}:
-                            </label>
+        const onSubmit = (data: any) => {
+            console.log(data);
+            categories.forEach((category) => {
+                if (category.value in data) {
+                    const check = 'technique';
+                    console.log(
+                        `Adding ${data[category.value]} to ${category.value}`
+                    );
+                    console.log(`Using endpoint: ${endpoints['${check}']}`);
+                }
+            });
+        };
 
-                            <div className="term-input-save">
-                                <input
-                                    className="term-input"
-                                    id="term"
-                                    type="term"
-                                    {...register('term')}
-                                />
-                                <button>Зберегти</button>
+        return (
+            <div className="add-term-con">
+                <div className="add-term-categories">
+                    {categories.map((category) => (
+                        <div
+                            key={category.value}
+                            className={`category ${selectedCategory === category.value ? 'active' : ''}`}
+                            onClick={() => handleTabClick(category.value)}
+                        >
+                            {category.label}
+                        </div>
+                    ))}
+                </div>
+                <div className="tab-content">
+                    {selectedCategory && (
+                        <form
+                            className="form-term"
+                            onSubmit={handleSubmit(onSubmit)}
+                        >
+                            <div>
+                                <label htmlFor="term">
+                                    Додати новий {selectedCategory}:
+                                </label>
+
+                                <div className="term-input-save">
+                                    <input
+                                        className="term-input"
+                                        id="term"
+                                        type="term"
+                                        {...register('term')}
+                                    />
+                                    <button>Зберегти</button>
+                                </div>
                             </div>
-                        </div>
-                        <div className="terms-grid">
-                            {categories
-                                .find(
-                                    (category) =>
-                                        category.value === selectedCategory
-                                )
-                                ?.terms.map((term, index) => (
-                                    <div key={index} className="term-item">
-                                        <X size={16} color="#FA594F" />
-                                        {term}
-                                    </div>
-                                ))}
-                        </div>
-                    </form>
-                )}
+                            <div className="terms-grid">
+                                {categories
+                                    .find(
+                                        (category) =>
+                                            category.value === selectedCategory
+                                    )
+                                    ?.terms.map((term, index) => (
+                                        <div key={index} className="term-item">
+                                            <X size={16} color="#FA594F" />
+                                            {term}
+                                        </div>
+                                    ))}
+                            </div>
+                        </form>
+                    )}
+                </div>
             </div>
-        </div>
-    );
+        );
+    };
 };
 
 export default AddTermModal;

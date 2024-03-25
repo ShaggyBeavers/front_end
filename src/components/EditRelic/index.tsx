@@ -31,30 +31,63 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from '../ui/alert-dialog';
-import { ConfirmButton } from '../ConfirmButton';
+import {
+    Relic,
+    RelicInfoCreateEditDTO,
+    LostRelicInfoCreateEditDTO,
+    RecoveredRelicInfoCreateEditDTO,
+    RelicStatusEnum,
+} from '../../types/relic';
+import { useAtom } from 'jotai';
+import { filesAtom, selectedPropertiesAtom } from '../../stores/atoms';
 
-const relicFormSchema = z.object({
-    name: z
-        .string({ required_error: 'Вкажіть назву реліквії' })
-        .min(3, { message: 'Назва повинна бути більше 3 символів.' }),
-    //     .max(255),
-    // region: z.string({ required_error: 'Вкажіть регіон' }),
-    // status: z.string({ required_error: 'Вкажіть статус' }),
-    // description: z.string({ required_error: 'Вкажіть опис' }),
-    // // date: z.date({ required_error: 'Вкажіть дату' }),
-    // quantity: z.string({ required_error: 'Вкажіть кількість' }),
-});
+const relicFormSchema = z
+    .object({
+        name: z
+            .string({ required_error: 'Вкажіть назву реліквії' })
+            .min(3, { message: 'Назва повинна бути більше 3 символів.' }),
+        //     .max(255),
+        // region: z.string({ required_error: 'Вкажіть регіон' }),
+        // status: z.string({ required_error: 'Вкажіть статус' }),
+        // description: z.string({ required_error: 'Вкажіть опис' }),
+        // creationDate: z.string({ required_error: 'Вкажіть дату' }),
+        // creationDate: z.coerce.date({
+        //     required_error: 'Вкажіть дату',
+        //     invalid_type_error: 'Невірний формат дати',
+        // }),
+        // quantity: z.string({ required_error: 'Вкажіть кількість' }),
+        // categories: z.array(z.any()),
+        // collection: z.string({ required_error: 'Вкажіть колекцію' }).optional(),
+        // image: z.any().optional(),
+        image: z.array(z.any()).optional(),
+    })
+    .passthrough();
 
 type RelicForm = z.infer<typeof relicFormSchema>;
 
 export const EditRelic = () => {
+    const [files, setFiles] = useAtom(filesAtom);
+    const [selectedProperties, setSelectedProperties] = useAtom(
+        selectedPropertiesAtom
+    );
+
     const location = useLocation();
     const { isReturned, isLost }: { isReturned: boolean; isLost: boolean } =
-        location.state?.data || { isReturned: false, isLost: false };
+        location.state || { isReturned: false, isLost: false };
     const form = useForm<any>({
-        // resolver: zodResolver(relicFormSchema),
-        // defaultValues: { name: '' },
-        // mode: 'onChange',
+        resolver: zodResolver(relicFormSchema),
+        defaultValues: {
+            // name: '',
+            // region: '',
+            // status: '',
+            // description: '',
+            // creationDate: '',
+            // quantity: '',
+            // collection: '',
+            // categories: [],
+            // image: [],
+        },
+        mode: 'onChange',
     });
 
     // useEffect(() => {
@@ -85,14 +118,61 @@ export const EditRelic = () => {
                 </pre>
             ),
         });
+
+        if (isLost) {
+            const { lossWay, probableLocation, lossTime } = data;
+            const relicInfo: LostRelicInfoCreateEditDTO = {
+                lossWay,
+                probableLocation,
+                lossTime,
+            };
+            console.log(relicInfo);
+        }
+
         form.reset({
             name: '',
+            collection: '',
+            images: '',
+            categories: '',
+            author: '',
+            creationDate: '',
+            quantity: '',
+            status: '',
+            region: '',
+            description: '',
+            historicalPeriod: '',
+            primaryInventoryNumber: '',
+            copyCreationDate: '',
+            insuranceValue: '',
+            inventoryNumber: '',
+            copyInformation: '',
+            appraisedValue: '',
+            dimensions: '',
+            signatures: '',
+            restoration: '',
+            marks: '',
+            labels: '',
+            annotations: '',
+            ...(isReturned && {
+                lossWay: '',
+                probableLocation: '',
+                lossTime: '',
+            }),
+            ...(isLost && {
+                locationSource: '',
+                returnProcess: '',
+                previousSearchInfo: '',
+                courtDecision: '',
+            }),
         });
+        setFiles([]);
+        setSelectedProperties([]);
         console.log('submitted');
         // formRef.current?.dispatchEvent(
         //     new Event('submit', { bubbles: true })
         // );
     };
+    console.log(isLost, isReturned, location.state);
 
     return (
         <>
@@ -106,7 +186,6 @@ export const EditRelic = () => {
                     <AddMainRelic form={form} />
                     {isReturned && <AddReturnedRelic form={form} />}
                     {isLost && <AddLostRelic form={form} />}
-
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
                             <Button variant="outline">Підтвердити</Button>
@@ -132,7 +211,6 @@ export const EditRelic = () => {
                             </AlertDialogFooter>
                         </AlertDialogContent>
                     </AlertDialog>
-
                     {/* <ConfirmButton
                         buttonMessage="Підтвердити"
                         dialogTitle="Зберегти зміни"
@@ -141,7 +219,7 @@ export const EditRelic = () => {
                     /> */}
                 </form>
             </Form>
-            <Toaster />
+            {/* <Toaster /> */}
         </>
     );
 };

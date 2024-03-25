@@ -44,7 +44,6 @@ export default function Login() {
             // await mutate(iData);
             const decodedPayload = jwtDecode(data.accessToken);
             const decode = decodeAccessToken(data.accessToken);
-            console.log(decode);
 
             localStorage.setItem('ACCESS_TOKEN', data.accessToken);
             setAccessToken(data.accessToken);
@@ -67,7 +66,6 @@ export default function Login() {
                 reset();
                 setShowNotFoundMessage(true);
             } else {
-                console.log(iData);
                 console.log(error);
             }
         }

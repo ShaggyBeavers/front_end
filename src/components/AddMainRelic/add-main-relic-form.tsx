@@ -43,11 +43,48 @@ import {
 } from '@dropzone-ui/react';
 import { Badge } from 'lucide-react';
 import { optionCSS } from 'react-select/dist/declarations/src/components/Option';
+import { useQuery } from '@tanstack/react-query';
+import CategoriesAPI from '../../app/api/Category/category';
+import RegionAPI from '../../app/api/Region/region';
+import { useAtom } from 'jotai';
+import { filesAtom, selectedPropertiesAtom } from '../../stores/atoms';
+
+interface Options {
+    label: string;
+    value: string;
+}
+
+interface category {
+    id: number;
+    categoryName: string;
+}
+
+const convertCategoriesToOptions = (categories: category[]) => {
+    return categories.map((category) => ({
+        label: category.categoryName,
+        value: category.id,
+    }));
+};
 
 const AddMainRelic = ({ form }: any) => {
-    const [files, setFiles] = useState<any>([]);
+    const categories = useQuery({
+        queryKey: ['getCategories'],
+        queryFn: async () => await CategoriesAPI.getCategories(),
+    });
+    const regions = useQuery({
+        queryKey: ['getRegions'],
+        queryFn: async () => await RegionAPI.getRegions(),
+    });
+
+    let categoriesOptions: any[] = [];
+    if (categories.isFetched)
+        categoriesOptions = convertCategoriesToOptions(categories.data || []);
+
+    const [files, setFiles] = useAtom(filesAtom);
     const [imgSrc, setImgSrc] = useState<any>(undefined);
-    const [selectedProperties, setSelectedProperties] = useState<string[]>([]);
+    const [selectedProperties, setSelectedProperties] = useAtom(
+        selectedPropertiesAtom
+    );
 
     const handleSeeImage = (imageSource: any) => {
         setImgSrc(imageSource);
@@ -71,11 +108,20 @@ const AddMainRelic = ({ form }: any) => {
         { label: 'Харків', value: 'Kharkiv' },
     ];
 
+    if (categories.isError) {
+        return <p>Помилка завантаження категорій</p>;
+    }
+
+    if (categories.isLoading) {
+        return <p>Loading...</p>;
+    }
+
     return (
         <>
             <h2 className="text-4xl">Основна інформація про реліквію</h2>
             <div className="grid grid-cols-2 gap-10">
-                <div className="grid grid-rows-5 gap-5">
+                {/* First column */}
+                <div className="grid grid-rows-6 gap-5">
                     <FormField
                         control={form.control}
                         name="name"
@@ -86,13 +132,75 @@ const AddMainRelic = ({ form }: any) => {
                                     <Input
                                         placeholder="Ім'я реліквії"
                                         {...field}
-                                        required
+                                        // required
                                     />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
+                    <FormField
+                        control={form.control}
+                        name="categories"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel htmlFor="categories">
+                                    Категорії
+                                </FormLabel>
+                                <ReactSelect
+                                    {...field}
+                                    isMulti
+                                    id="categories"
+                                    className="select"
+                                    options={categoriesOptions}
+                                    placeholder={'Виберіть категорію'}
+                                    onChange={(selectedOptions, actionMeta) => {
+                                        if (
+                                            actionMeta.action === 'remove-value'
+                                        ) {
+                                            form.resetField(
+                                                actionMeta.removedValue.value
+                                            );
+                                        }
+                                        const selectedValues = selectedOptions
+                                            ? selectedOptions.map(
+                                                  (option) => option.value
+                                              )
+                                            : [];
+                                        field.onChange(selectedValues);
+                                    }}
+                                    onBlur={field.onBlur}
+                                    value={categoriesOptions.filter(
+                                        (category) =>
+                                            field.value?.includes(
+                                                category.value
+                                            )
+                                    )}
+                                    menuPortalTarget={document.body}
+                                    styles={{
+                                        menu: (provided) => ({
+                                            ...provided,
+                                            maxHeight: 180,
+                                            overflow: 'hidden',
+                                        }),
+                                    }}
+                                    theme={(theme) => ({
+                                        ...theme,
+                                        border: 'none',
+                                        borderRadius: 20,
+                                        fontSize: 10,
+                                        colors: {
+                                            ...theme.colors,
+                                            primary25: 'rgba(0, 0, 0, 0.1)',
+                                            primary: '#1C1C1C',
+                                        },
+                                    })}
+                                />
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
                     <FormField
                         control={form.control}
                         name="author"
@@ -120,7 +228,7 @@ const AddMainRelic = ({ form }: any) => {
                                 </FormLabel>
                                 <FormControl>
                                     <Input
-                                        type="date"
+                                        // type="date"
                                         placeholder="Дата створення"
                                         {...field}
                                     />
@@ -138,7 +246,10 @@ const AddMainRelic = ({ form }: any) => {
                                     Кількість
                                 </FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Введіть кількість" {...field} />
+                                    <Input
+                                        placeholder="Введіть кількість"
+                                        {...field}
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -186,7 +297,7 @@ const AddMainRelic = ({ form }: any) => {
                     />
                 </div>
                 {/* Second Column */}
-                <div className="grid grid-rows-5 gap-5">
+                <div className="grid grid-rows-6 gap-5">
                     <FormField
                         control={form.control}
                         name="region"
@@ -269,7 +380,10 @@ const AddMainRelic = ({ form }: any) => {
                                     Колекція
                                 </FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Введіть колекцію" {...field} />
+                                    <Input
+                                        placeholder="Введіть колекцію"
+                                        {...field}
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -297,22 +411,26 @@ const AddMainRelic = ({ form }: any) => {
                             )}
                         />
                     </div>
-                    <FormField
-                        control={form.control}
-                        name="name"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel htmlFor="name">Історичний період</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        placeholder="Введіть історичний період"
-                                        {...field}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                    <div className="row-span-2">
+                        <FormField
+                            control={form.control}
+                            name="historicalPeriod"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel htmlFor="historicalPeriod">
+                                        Історичний період
+                                    </FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            placeholder="Введіть історичний період"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
                 </div>
             </div>
             <h4>Додаткові Характеристики</h4>
@@ -336,10 +454,6 @@ const AddMainRelic = ({ form }: any) => {
                                         form.resetField(
                                             actionMeta.removedValue.value
                                         );
-                                        console.log(
-                                            'Removed:',
-                                            actionMeta.removedValue
-                                        );
                                     }
                                     const selectedValues = selectedOptions
                                         ? selectedOptions.map(
@@ -358,7 +472,7 @@ const AddMainRelic = ({ form }: any) => {
                                     placeholder: (base) => ({
                                         ...base,
                                         fontSize: '0.9rem',
-                                      }),
+                                    }),
                                     menu: (provided) => ({
                                         ...provided,
                                         maxHeight: 180,
@@ -410,12 +524,10 @@ const AddMainRelic = ({ form }: any) => {
                         name="image"
                         render={({ field }) => (
                             <FormItem>
-                                {/* <FormLabel htmlFor="image">
-                                    Фотографії
-                                </FormLabel> */}
                                 <FormControl>
                                     <>
                                         <Dropzone
+                                            {...field}
                                             onChange={(files) => {
                                                 field.onChange(files);
                                                 updateFile(files);

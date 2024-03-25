@@ -21,12 +21,6 @@ const headers = [
         path: 'moderator-list?regMod=true',
     },
 ];
-//    const [showAddTermModal, setShowAddTermModal] = useState(false);  
-//    return (
-//        <div className="profile-container">
-//            {showAddTermModal ? <AddTermModal onClose={() => setShowAddTermModal(false)} /> : <TableInfo />}
-//            <SideMenu openAddTermModal={() => setShowAddTermModal(true)} />
-
 
 const Profile = () => {
     const location = useLocation();
