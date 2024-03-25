@@ -9,6 +9,16 @@ import TechniqueAPI from '../../app/api/Technique/technique';
 import PropertyAPI from '../../app/api/Property/property';
 import MuseumAPI from '../../app/api/Museum/museum';
 
+interface Term {
+    id: number;
+    name: string;
+}
+
+interface MuseumTerm extends Term {
+    isDestroyed: boolean;
+    OldName: string;
+}
+
 const AddTerm = () => {
     const { register, handleSubmit } = useForm();
     const [selectedCategory, setSelectedCategory] =
@@ -16,55 +26,146 @@ const AddTerm = () => {
     const [initialRender, setInitialRender] = useState(true);
     const [inputValue, setInputValue] = useState<string>('');
     const [isDestroyed, setIsDestroyed] = useState<boolean>(false);
+    const [terms, setTerms] = useState<(Term | MuseumTerm)[]>([]);
 
     useEffect(() => {
-        setInitialRender(false);
+        fetchTerms(selectedCategory);
     }, []);
+
+    useEffect(() => {
+        if (!initialRender) {
+            fetchTerms(selectedCategory);
+        } else {
+            setInitialRender(false);
+        }
+    }, [selectedCategory]);
 
     const categories = [
         {
             value: 'Category',
             label: 'Категорія',
-            terms: Array.from(
-                { length: 9 },
-                (_, i) => `Category Term ${i + 1}`
-            ),
         },
         {
             value: 'Technique',
             label: 'Техніка',
-            terms: Array.from(
-                { length: 9 },
-                (_, i) => `Technique Term ${i + 1}`
-            ),
         },
         {
             value: 'HistoricalPeriod',
             label: 'Історичний Період',
-            terms: Array.from(
-                { length: 9 },
-                (_, i) => `Historical Period Term ${i + 1}`
-            ),
         },
         {
             value: 'Museum',
             label: 'Музей',
-            terms: Array.from({ length: 9 }, (_, i) => `Museum Term ${i + 1}`),
         },
         {
             value: 'Region',
             label: 'Регіон',
-            terms: Array.from({ length: 9 }, (_, i) => `Region Term ${i + 1}`),
         },
         {
             value: 'Property',
             label: 'Властивість',
-            terms: Array.from(
-                { length: 9 },
-                (_, i) => `Property Term ${i + 1}`
-            ),
         },
     ];
+
+    const onGetEndpoints: { [key: string]: () => Promise<any> } = {
+        Category: CategoryAPI.getCategories,
+        Technique: TechniqueAPI.getTechniques,
+        HistoricalPeriod: HistoricalPeriodAPI.getHistoricalPeriods,
+        Region: RegionAPI.getRegions,
+        Museum: MuseumAPI.getMuseums,
+        Property: PropertyAPI.getProperties,
+    };
+
+    const onDeleteEndpoints: { [key: string]: (id: number) => Promise<any> } = {
+        Category: CategoryAPI.deleteCategory,
+        Technique: TechniqueAPI.deleteTechnique,
+        HistoricalPeriod: HistoricalPeriodAPI.deleteHistoricalPeriod,
+        Region: RegionAPI.deleteRegion,
+        Museum: MuseumAPI.deleteMuseum,
+        Property: PropertyAPI.deleteProperty,
+    };
+
+    const onCreateEndpoints: { [key: string]: (name: string) => Promise<any> } = {
+        Category: CategoryAPI.createCategory,
+        Technique: TechniqueAPI.createTechnique,
+        HistoricalPeriod: HistoricalPeriodAPI.createHistoricalPeriod,
+        Region: RegionAPI.createRegion,
+        Property: PropertyAPI.createProperty,
+    };
+
+    const fetchTerms = async (category: string) => {
+        try {
+            const response = await onGetEndpoints[category]();
+            if (category === 'Museum') {
+                setTerms(
+                    response.map((item: any) => ({
+                        id: item.id,
+                        name: item.name,
+                        isDestroyed: item.isDestroyed,
+                        OldName: item.OldName,
+                    }))
+                );
+            } else {
+                setTerms(
+                    response.map((item: any) => ({
+                        id: item.id,
+                        name: item.name,
+                    }))
+                );
+            }
+        } catch (error) {
+            console.error(`Error fetching terms for ${category}:`, error);
+        }
+    };
+
+    const onSubmit = async (data: any) => {
+        const selectedTerm = data.term;
+        if (selectedCategory === 'Museum') {
+            try {
+                await MuseumAPI.createMuseum({
+                    name: selectedTerm,
+                    nameOld: 'we dont have design :)))',
+                    isDestroyed: isDestroyed,
+                });
+                fetchTerms(selectedCategory);
+                setInputValue('');
+            } catch (error) {
+                console.error(
+                    `Error adding ${selectedTerm} to ${selectedCategory}:`,
+                    error
+                );
+            }
+        } else {
+            try {
+                await onCreateEndpoints[selectedCategory](selectedTerm);
+                fetchTerms(selectedCategory);
+                setInputValue('');
+            } catch (error) {
+                console.error(
+                    `Error adding ${selectedTerm} to ${selectedCategory}:`,
+                    error
+                );
+            }
+        }
+    };
+
+    const onDelete = async (id: number) => {
+        try {
+            if (selectedCategory in onDeleteEndpoints) {
+                await onDeleteEndpoints[selectedCategory](id);
+                fetchTerms(selectedCategory);
+            } else {
+                console.error(
+                    `Delete function not found for category: ${selectedCategory}`
+                );
+            }
+        } catch (error) {
+            console.error(
+                `Error deleting ${selectedCategory} with ID ${id}:`,
+                error
+            );
+        }
+    };
 
     const handleTabClick = (category: string) => {
         setSelectedCategory(category);
@@ -78,69 +179,6 @@ const AddTerm = () => {
 
     const handleDestroyedChange = () => {
         setIsDestroyed(!isDestroyed);
-    };
-
-    const onDeleteEndpoints: { [key: string]: (id: number) => Promise<any> } = {
-        Category: CategoryAPI.deleteCategory,
-        Technique: TechniqueAPI.deleteTechnique,
-        HistoricalPeriod: HistoricalPeriodAPI.deleteHistoricalPeriod,
-        Region: RegionAPI.deleteRegion,
-        Museum: MuseumAPI.deleteMuseum,
-        Property: PropertyAPI.deleteProperty,
-    };
-
-    const onSubmit = async (data: any) => {
-        console.log(data);
-        const selectedTerm = data.term;
-        if (selectedCategory === 'Museum') {
-            try {
-                const response = await MuseumAPI.createMuseum({
-                    name: selectedTerm,
-                    nameOld: 'dsds',
-                    isDestroyed: true,
-                });
-                console.log(
-                    `Successfully added ${selectedTerm} to ${selectedCategory}`
-                );
-                console.log(response);
-            } catch (error) {
-                console.error(
-                    `Error adding ${selectedTerm} to ${selectedCategory}:`,
-                    error
-                );
-            }
-        } else {
-            try {
-                console.log(`${selectedCategory}API.create${selectedCategory}`);
-                const response = await eval(
-                    `${selectedCategory}API.create${selectedCategory}({name:${selectedTerm}})`
-                );
-                console.log(response);
-            } catch (error) {
-                console.error(
-                    `Error adding ${selectedTerm} to ${selectedCategory}:`,
-                    error
-                );
-            }
-        }
-    };
-
-    const onDelete = async (id: number) => {
-        try {
-            if (selectedCategory in onDeleteEndpoints) {
-                const response = await onDeleteEndpoints[selectedCategory](id);
-                console.log(response);
-            } else {
-                console.error(
-                    `Delete function not found for category: ${selectedCategory}`
-                );
-            }
-        } catch (error) {
-            console.error(
-                `Error deleting ${selectedCategory} with ID ${id}:`,
-                error
-            );
-        }
     };
 
     return (
@@ -163,9 +201,7 @@ const AddTerm = () => {
                         onSubmit={handleSubmit(onSubmit)}
                     >
                         <div>
-                            <label htmlFor="term">
-                                Додати новий {selectedCategory}:
-                            </label>
+                            <label htmlFor="term">Додати новий термін:</label>
 
                             <div className="term-input-save">
                                 <input
@@ -182,7 +218,7 @@ const AddTerm = () => {
                                 </button>
                             </div>
                             {selectedCategory === 'Museum' && (
-                                <div className='museum_checkbox'>
+                                <div className="museum_checkbox">
                                     <label htmlFor="destroyed">
                                         Зруйнований :
                                     </label>
@@ -196,22 +232,17 @@ const AddTerm = () => {
                             )}
                         </div>
                         <div className="terms-grid">
-                            {categories
-                                .find(
-                                    (category) =>
-                                        category.value === selectedCategory
-                                )
-                                ?.terms.map((term, index) => (
-                                    <div key={index} className="term-item">
-                                        <X
-                                            size={16}
-                                            color="#FA594F"
-                                            // onClick={onDelete} that should be redone
-                                            className="delete_term"
-                                        />
-                                        {term}
-                                    </div>
-                                ))}
+                            {terms.map((term) => (
+                                <div key={term.id} className="term-item">
+                                    <X
+                                        size={16}
+                                        color="#FA594F"
+                                        onClick={() => onDelete(term.id)}
+                                        className="delete_term"
+                                    />
+                                    {term.name}
+                                </div>
+                            ))}
                         </div>
                     </form>
                 )}

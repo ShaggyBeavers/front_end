@@ -1,10 +1,10 @@
-import requests from '../requests';
+import requests, { authAPi } from '../requests';
 
 const PropertyAPI = {
     createProperty: (property: string) =>
-        requests.post('api/properties/create', property),
+        authAPi.post('api/properties/create', property),
     deleteProperty: (propertyId: number) =>
-        requests.delete(`api/properties/${propertyId}`),
+        authAPi.delete(`api/properties/${propertyId}`),
     getProperties: () => requests.get('api/properties/'),
 };
 

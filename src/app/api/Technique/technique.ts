@@ -1,10 +1,10 @@
-import requests from '../requests';
+import requests, { authAPi } from '../requests';
 
 const TechniqueAPI = {
     createTechnique: (name: string) =>
-        requests.post('api/techniques/create', name),
+        authAPi.post('api/techniques/create', name),
     deleteTechnique: (techniqueId: number) =>
-        requests.delete(`api/techniques/${techniqueId}`),
+        authAPi.delete(`api/techniques/${techniqueId}`),
     getTechniques: () => requests.get('api/techniques/'),
 };
 

@@ -1,13 +1,13 @@
-import requests from '../requests';
+import requests, { authAPi } from '../requests';
 
 const MuseumAPI = {
     createMuseum: (values: {
         name: string;
         nameOld?: string;
         isDestroyed?: boolean;
-    }) => requests.post('api/museums/create', values),
+    }) => authAPi.post('api/museums/create', values),
     deleteMuseum: (museumId: number) =>
-        requests.delete(`api/museums/${museumId}`),
+        authAPi.delete(`api/museums/${museumId}`),
     getMuseums: () => requests.get('api/museums/'),
 };
 
