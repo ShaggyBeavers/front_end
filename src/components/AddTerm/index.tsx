@@ -85,7 +85,7 @@ const AddTerm = () => {
         Property: PropertyAPI.deleteProperty,
     };
 
-    const onCreateEndpoints: { [key: string]: (name: string) => Promise<any> } = {
+    const onCreateEndpoints: { [key: string]: (value:{ name: string }) => Promise<any> } = {
         Category: CategoryAPI.createCategory,
         Technique: TechniqueAPI.createTechnique,
         HistoricalPeriod: HistoricalPeriodAPI.createHistoricalPeriod,
@@ -137,7 +137,7 @@ const AddTerm = () => {
             }
         } else {
             try {
-                await onCreateEndpoints[selectedCategory](selectedTerm);
+                await onCreateEndpoints[selectedCategory]({ name: selectedTerm });
                 fetchTerms(selectedCategory);
                 setInputValue('');
             } catch (error) {
