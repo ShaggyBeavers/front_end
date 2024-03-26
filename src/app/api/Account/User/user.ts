@@ -22,6 +22,7 @@ const UserAPI = {
         authAPi.get('api/user/current-profile', {
             headers: { Authorization: `Bearer ${accessToken}` },
         }),
+    getUsers: () => authAPi.get('api/user/'),
 };
 
 export default UserAPI;

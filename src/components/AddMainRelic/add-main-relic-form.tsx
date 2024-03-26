@@ -48,23 +48,8 @@ import CategoriesAPI from '../../app/api/Category/category';
 import RegionAPI from '../../app/api/Region/region';
 import { useAtom } from 'jotai';
 import { filesAtom, selectedPropertiesAtom } from '../../stores/atoms';
-
-interface Options {
-    label: string;
-    value: string;
-}
-
-interface category {
-    id: number;
-    categoryName: string;
-}
-
-const convertCategoriesToOptions = (categories: category[]) => {
-    return categories.map((category) => ({
-        label: category.categoryName,
-        value: category.id,
-    }));
-};
+import HistoricalPeriodAPI from '@/src/app/api/HistoricalPeriod/historicalPeriod';
+import { convertTermToOptions } from '../../lib/utils';
 
 const AddMainRelic = ({ form }: any) => {
     const categories = useQuery({
@@ -76,9 +61,18 @@ const AddMainRelic = ({ form }: any) => {
         queryFn: async () => await RegionAPI.getRegions(),
     });
 
+    // const historicalPeriods = useQuery({
+    //     queryKey: ['getHistoricalPeriods'],
+    //     queryFn: async () => await HistoricalPeriodAPI.getHistoricalPeriods(),
+    // });
+    // const museums = useQuery({
+    //     queryKey: ['getMuseums'],
+    //     queryFn: async () => await MuseumAPI.getMuseums(),
+    // });
+
     let categoriesOptions: any[] = [];
     if (categories.isFetched)
-        categoriesOptions = convertCategoriesToOptions(categories.data || []);
+        categoriesOptions = convertTermToOptions(categories.data || []);
 
     const [files, setFiles] = useAtom(filesAtom);
     const [imgSrc, setImgSrc] = useState<any>(undefined);
@@ -177,13 +171,6 @@ const AddMainRelic = ({ form }: any) => {
                                             )
                                     )}
                                     menuPortalTarget={document.body}
-                                    styles={{
-                                        menu: (provided) => ({
-                                            ...provided,
-                                            maxHeight: 180,
-                                            overflow: 'hidden',
-                                        }),
-                                    }}
                                     theme={(theme) => ({
                                         ...theme,
                                         border: 'none',
@@ -195,6 +182,19 @@ const AddMainRelic = ({ form }: any) => {
                                             primary: '#1C1C1C',
                                         },
                                     })}
+                                    styles={{
+                                        menu: (provided) => ({
+                                            ...provided,
+                                            maxHeight: 180,
+                                            overflow: 'hidden',
+                                        }),
+                                        // control: (provided, state) => ({
+                                        //     ...provided,
+                                        //     borderColor: state.isFocused
+                                        //         ? '#587cc0'
+                                        //         : '#587cc0',
+                                        // }),
+                                    }}
                                 />
                                 <FormMessage />
                             </FormItem>
@@ -411,27 +411,128 @@ const AddMainRelic = ({ form }: any) => {
                             )}
                         />
                     </div>
-                    <div className="row-span-2">
-                        <FormField
-                            control={form.control}
-                            name="historicalPeriod"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor="historicalPeriod">
-                                        Історичний період
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Введіть історичний період"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
+                    {/* <div className="row-span-"> */}
+                    <FormField
+                        control={form.control}
+                        name="historicalPeriod"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel htmlFor="historicalPeriod">
+                                    Історичний період
+                                </FormLabel>
+                                <ReactSelect
+                                    {...field}
+                                    // isMulti
+                                    id="historicalPeriod"
+                                    className="select"
+                                    options={categoriesOptions}
+                                    placeholder={'Виберіть історичний період'}
+                                    onBlur={field.onBlur}
+                                    value={categoriesOptions.filter(
+                                        (category) =>
+                                            field.value?.value ===
+                                            category.value
+                                    )}
+                                    menuPortalTarget={document.body}
+                                    theme={(theme) => ({
+                                        ...theme,
+                                        border: 'none',
+                                        borderRadius: 20,
+                                        fontSize: 10,
+                                        colors: {
+                                            ...theme.colors,
+                                            primary25: 'rgba(0, 0, 0, 0.1)',
+                                            primary: '#1C1C1C',
+                                        },
+                                    })}
+                                    styles={{
+                                        menu: (provided) => ({
+                                            ...provided,
+                                            maxHeight: 180,
+                                            overflow: 'hidden',
+                                        }),
+                                        // control: (provided, state) => ({
+                                        //     ...provided,
+                                        //     borderColor: state.isFocused
+                                        //         ? '#587cc0'
+                                        //         : '#587cc0',
+                                        // }),
+                                    }}
+                                />
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    {/* <FormField
+                        control={form.control}
+                        name="historicalPeriod"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel htmlFor="historicalPeriod">
+                                    Історичний період
+                                </FormLabel>
+                                <FormControl>
+                                    <Input
+                                        placeholder="Введіть історичний період"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    /> */}
+                    {/* </div> */}
+                    <FormField
+                        control={form.control}
+                        name="museum"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel htmlFor="museum">Музей</FormLabel>
+                                <ReactSelect
+                                    {...field}
+                                    // isMulti
+                                    id="museum"
+                                    className="select"
+                                    options={categoriesOptions}
+                                    placeholder={'Виберіть музей'}
+                                    onBlur={field.onBlur}
+                                    value={categoriesOptions.filter(
+                                        (category) =>
+                                            field.value?.value ===
+                                            category.value
+                                    )}
+                                    menuPortalTarget={document.body}
+                                    theme={(theme) => ({
+                                        ...theme,
+                                        border: 'none',
+                                        borderRadius: 20,
+                                        fontSize: 10,
+                                        colors: {
+                                            ...theme.colors,
+                                            primary25: 'rgba(0, 0, 0, 0.1)',
+                                            primary: '#1C1C1C',
+                                        },
+                                    })}
+                                    styles={{
+                                        menu: (provided) => ({
+                                            ...provided,
+                                            maxHeight: 180,
+                                            overflow: 'hidden',
+                                        }),
+                                        // control: (provided, state) => ({
+                                        //     ...provided,
+                                        //     borderColor: state.isFocused
+                                        //         ? '#587cc0'
+                                        //         : '#587cc0',
+                                        // }),
+                                    }}
+                                />
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                 </div>
+                {/* ADDITIONAL PROPS */}
             </div>
             <h4>Додаткові Характеристики</h4>
             <div className="grid grid-cols-2 gap-10">

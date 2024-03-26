@@ -25,9 +25,10 @@ export const AddSecondaryRelicForm = ({ form }: any) => {
                                     Первинний інвентарний номер
                                 </FormLabel>
                                 <FormControl>
-                                    <Input 
-                                    placeholder="Введіть інвентарний номер реліквії"
-                                    {...field} />
+                                    <Input
+                                        placeholder="Введіть інвентарний номер реліквії"
+                                        {...field}
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -43,7 +44,7 @@ export const AddSecondaryRelicForm = ({ form }: any) => {
                                     Дата створення копії
                                 </FormLabel>
                                 <FormControl>
-                                    <Input type="date" {...field} />
+                                    <Input {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -106,9 +107,7 @@ export const AddSecondaryRelicForm = ({ form }: any) => {
                                         {...field}
                                     />
                                 </FormControl>
-                                <FormDescription>
-                                За наявності
-                                </FormDescription>
+                                <FormDescription>За наявності</FormDescription>
                                 <FormMessage />
                             </FormItem>
                         )}

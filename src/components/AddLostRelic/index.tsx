@@ -68,7 +68,7 @@ const AddLostdRelic = ({ form }: any) => {
                                     Дата втрачання
                                 </FormLabel>
                                 <FormControl>
-                                    <Input type="date" {...field} />
+                                    <Input {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
