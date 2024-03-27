@@ -16,7 +16,7 @@ interface Term {
 
 interface MuseumTerm extends Term {
     isDestroyed: boolean;
-    OldName: string;
+    nameOld: string;
 }
 
 const AddTerm = () => {
@@ -25,6 +25,7 @@ const AddTerm = () => {
         useState<string>('Category');
     const [initialRender, setInitialRender] = useState(true);
     const [inputValue, setInputValue] = useState<string>('');
+    const [nameOld, setNameOld] = useState<string>('');
     const [isDestroyed, setIsDestroyed] = useState<boolean>(false);
     const [terms, setTerms] = useState<(Term | MuseumTerm)[]>([]);
 
@@ -85,7 +86,9 @@ const AddTerm = () => {
         Property: PropertyAPI.deleteProperty,
     };
 
-    const onCreateEndpoints: { [key: string]: (value:{ name: string }) => Promise<any> } = {
+    const onCreateEndpoints: {
+        [key: string]: (value: { name: string }) => Promise<any>;
+    } = {
         Category: CategoryAPI.createCategory,
         Technique: TechniqueAPI.createTechnique,
         HistoricalPeriod: HistoricalPeriodAPI.createHistoricalPeriod,
@@ -102,7 +105,7 @@ const AddTerm = () => {
                         id: item.id,
                         name: item.name,
                         isDestroyed: item.isDestroyed,
-                        OldName: item.OldName,
+                        nameOld: item.nameOld,
                     }))
                 );
             } else {
@@ -124,11 +127,12 @@ const AddTerm = () => {
             try {
                 await MuseumAPI.createMuseum({
                     name: selectedTerm,
-                    nameOld: 'we dont have design :)))',
+                    nameOld: nameOld,
                     isDestroyed: isDestroyed,
                 });
                 fetchTerms(selectedCategory);
                 setInputValue('');
+                setNameOld('');
             } catch (error) {
                 console.error(
                     `Error adding ${selectedTerm} to ${selectedCategory}:`,
@@ -137,9 +141,12 @@ const AddTerm = () => {
             }
         } else {
             try {
-                await onCreateEndpoints[selectedCategory]({ name: selectedTerm });
+                await onCreateEndpoints[selectedCategory]({
+                    name: selectedTerm,
+                });
                 fetchTerms(selectedCategory);
                 setInputValue('');
+                setNameOld('');
             } catch (error) {
                 console.error(
                     `Error adding ${selectedTerm} to ${selectedCategory}:`,
@@ -171,10 +178,15 @@ const AddTerm = () => {
         setSelectedCategory(category);
         setInputValue('');
         setIsDestroyed(false);
+        setNameOld('');
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInputValue(e.target.value);
+    };
+
+    const handleOldNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setNameOld(e.target.value);
     };
 
     const handleDestroyedChange = () => {
@@ -200,10 +212,11 @@ const AddTerm = () => {
                         className="form-term"
                         onSubmit={handleSubmit(onSubmit)}
                     >
-                        <div>
-                            <label htmlFor="term">Додати новий термін:</label>
-
-                            <div className="term-input-save">
+                        <div className="add-term-inputs">
+                            <div className="add-term-i">
+                                <label htmlFor="term">
+                                    Додати новий термін:
+                                </label>{' '}
                                 <input
                                     className="term-input"
                                     id="term"
@@ -212,37 +225,117 @@ const AddTerm = () => {
                                     onChange={handleInputChange}
                                     value={inputValue}
                                 />
-
-                                <button className={inputValue ? 'active' : ''}>
-                                    Зберегти
-                                </button>
+                                {selectedCategory === 'Museum' && (
+                                    <div className="museum_checkbox">
+                                        <label htmlFor="destroyed">
+                                            Зруйнований :
+                                        </label>
+                                        <input
+                                            type="checkbox"
+                                            id="destroyed"
+                                            checked={isDestroyed}
+                                            onChange={handleDestroyedChange}
+                                        />
+                                    </div>
+                                )}
                             </div>
                             {selectedCategory === 'Museum' && (
-                                <div className="museum_checkbox">
-                                    <label htmlFor="destroyed">
-                                        Зруйнований :
+                                <div className="add-term-i">
+                                    <label htmlFor="oldName">
+                                        Стара назва (опціонально):
                                     </label>
                                     <input
-                                        type="checkbox"
-                                        id="destroyed"
-                                        checked={isDestroyed}
-                                        onChange={handleDestroyedChange}
+                                        className="term-input"
+                                        id="oldName"
+                                        type="term"
+                                        value={nameOld}
+                                        onChange={handleOldNameChange}
                                     />
                                 </div>
                             )}
+
+                            <div className="term-input-save">
+                                <button
+                                    className={`${inputValue ? 'active' : ''} ${selectedCategory == 'Museum' ? 'museum' : ''}`}
+                                >
+                                    Зберегти
+                                </button>
+                            </div>
                         </div>
-                        <div className="terms-grid">
-                            {terms.map((term) => (
-                                <div key={term.id} className="term-item">
-                                    <X
-                                        size={16}
-                                        color="#FA594F"
-                                        onClick={() => onDelete(term.id)}
-                                        className="delete_term"
-                                    />
-                                    {term.name}
+                        <div
+                            className={
+                                selectedCategory === 'Museum'
+                                    ? ''
+                                    : 'terms-grid'
+                            }
+                        >
+                            {selectedCategory === 'Museum' ? (
+                                <div className="museum-items-container">
+                                    <div className="museum-item">
+                                        <div className="label">Назва музею</div>
+                                        <div>
+                                            {terms.map((term) => (
+                                                <div
+                                                    key={term.id}
+                                                    className="values delete"
+                                                >
+                                                    <X
+                                                        size={16}
+                                                        color="#FA594F"
+                                                        onClick={() =>
+                                                            onDelete(term.id)
+                                                        }
+                                                        className="delete_term"
+                                                    />
+                                                    <div>{term.name}</div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div className="museum-item">
+                                        <div className="label">
+                                            Стара назва музею
+                                        </div>
+                                        <div>
+                                            {terms.map((term) => (
+                                                <div
+                                                    key={term.id}
+                                                    className="values"
+                                                >
+                                                    {(term as MuseumTerm).nameOld}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div className="museum-item last">
+                                        <div className="label">
+                                            Чи зруйновано?
+                                        </div>
+                                        <div>
+                                            {terms.map((term) => (
+                                                <div
+                                                    key={term.id}
+                                                    className="values"
+                                                >
+                                                      {(term as MuseumTerm).isDestroyed ? 'Так' : 'Ні'}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </div>
-                            ))}
+                            ) : (
+                                terms.map((term) => (
+                                    <div key={term.id} className="term-item">
+                                        <X
+                                            size={16}
+                                            color="#FA594F"
+                                            onClick={() => onDelete(term.id)}
+                                            className="delete_term"
+                                        />
+                                        {term.name}
+                                    </div>
+                                ))
+                            )}
                         </div>
                     </form>
                 )}
