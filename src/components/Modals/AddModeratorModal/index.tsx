@@ -57,13 +57,20 @@ const AddModeratorModal = () => {
     const onSubmit = (data: any) => {
         const { regModerator, ...formData } = data;
 
-        if (regModerator) AdminAPI.addRegionalModerator(formData);
-        else addModerator.mutate(formData);
+        const nFormData = {
+            userId: formData.userId,
+            regionIds: formData.regionIds || [],
+            categoryIds: formData.categoryIds || [],
+        };
+
+        // addModerator.mutate(nFormData);
+        if (regModerator) AdminAPI.addRegionalModerator(nFormData);
+        else addModerator.mutate(nFormData);
 
         toast('Успішно додано модератора', {
             description: (
                 <pre className="mt-2 w-[340px] rounded-md">
-                    <code>{JSON.stringify(formData, null, 4)}</code>
+                    <code>{JSON.stringify(nFormData, null, 4)}</code>
                     {regModerator
                         ? 'Регіональний модератор'
                         : 'Звичайний модератор'}
@@ -103,16 +110,16 @@ const AddModeratorModal = () => {
         <>
             <form className="center-mod" onSubmit={handleSubmit(onSubmit)}>
                 <div className="row-mod">
-                    <label htmlFor="id">
+                    <label htmlFor="userId">
                         Виберіть нового модератора зі списку:
                     </label>
                     <Controller
-                        name="id"
+                        name="userId"
                         control={control}
                         render={({ field }) => (
                             <Select
                                 // {...field}
-                                id="id"
+                                id="userId"
                                 className="select"
                                 options={usersOptions}
                                 getOptionLabel={(option) =>
@@ -171,14 +178,14 @@ const AddModeratorModal = () => {
                     /> */}
                 </div>
                 <div className="row-mod">
-                    <label htmlFor="region">Регіон модератора:</label>
+                    <label htmlFor="regionIds">Регіон модератора:</label>
                     <Controller
-                        name="region"
+                        name="regionIds"
                         control={control}
                         render={({ field }) => (
                             <Select
                                 // {...field}
-                                id="region"
+                                id="regionIds"
                                 className="select"
                                 isMulti
                                 options={regionOptions}
@@ -262,14 +269,14 @@ const AddModeratorModal = () => {
                     /> */}
                 </div>
                 <div className="row-mod">
-                    <label htmlFor="categories">Категорії модератора:</label>
+                    <label htmlFor="categoryIds">Категорії модератора:</label>
                     <Controller
-                        name="categories"
+                        name="categoryIds"
                         control={control}
                         render={({ field }) => (
                             <Select
                                 // {...field}
-                                id="categories"
+                                id="categoryIds"
                                 className="select"
                                 isMulti
                                 options={categoryOptions}

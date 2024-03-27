@@ -59,10 +59,9 @@ const SideMenu = () => {
     const email = useAuthStore((state) => state.user.email);
     const accessToken = useAuthStore((state) => state.accessToken);
     const { data, isLoading, isError, error } = useQuery({
-        queryKey: ['currentUser', accessToken],
-        queryFn: () => UserAPI.getUserProfile(accessToken),
+        queryKey: ['currentUser'],
+        queryFn: () => UserAPI.getUserProfile(),
     });
-
 
     const handleModeratorList = () => {
         const currentPath = window.location.pathname;
