@@ -34,6 +34,10 @@ const AddTerm = () => {
     }, []);
 
     useEffect(() => {
+        console.log('Terms after update:', terms);
+    }, [terms]);
+
+    useEffect(() => {
         if (!initialRender) {
             fetchTerms(selectedCategory);
         } else {
@@ -141,6 +145,7 @@ const AddTerm = () => {
             }
         } else {
             try {
+                console.log('Input:',selectedTerm)
                 await onCreateEndpoints[selectedCategory]({
                     name: selectedTerm,
                 });
@@ -257,6 +262,7 @@ const AddTerm = () => {
                             <div className="term-input-save">
                                 <button
                                     className={`${inputValue ? 'active' : ''} ${selectedCategory == 'Museum' ? 'museum' : ''}`}
+                                    disabled={!inputValue}
                                 >
                                     Зберегти
                                 </button>
@@ -302,7 +308,7 @@ const AddTerm = () => {
                                                     key={term.id}
                                                     className="values"
                                                 >
-                                                    {(term as MuseumTerm).nameOld}
+                                                     {(term as MuseumTerm).nameOld || '-'}
                                                 </div>
                                             ))}
                                         </div>
