@@ -1,0 +1,147 @@
+.add-term-con {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+}
+
+.add-term-categories {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.category {
+    cursor: pointer;
+    text-decoration: underline;
+    margin: 0 2.3rem 1rem 0;
+}
+
+.category.active {
+    transition: 0.3s;
+    background: linear-gradient(135deg, #bf98c6 0%, #4b8bfa 100%);
+    background-clip: text;
+    color: transparent;
+}
+
+.category.active.initial {
+    transition: none;
+}
+
+.tab-content {
+    margin-top: 20px;
+}
+
+.form-term label {
+    font-size: 0.9rem;
+}
+
+.row-mod {
+    margin-top: 10px;
+}
+
+.term-input-save {
+    display: flex;
+    gap: 2rem;
+}
+
+.term-input-save button {
+    padding: 0 1.5rem;
+    height: 2.5rem;
+    background-color: #c5c5c5;
+    color: white;
+    border-radius: 20px;
+    font-size: 0.8125rem;
+    transition: 0.5s;
+    cursor: not-allowed;
+    align-self: last baseline;
+}
+
+.term-input-save button.museum {
+    align-self: center;
+}
+
+.term-input-save button.active {
+    background-color: black;
+    color: white;
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+.term-input {
+    width: 90%;
+    padding: 5px;
+    border: 1.5px solid #ccc;
+    border-radius: 15px;
+    margin: 0.3rem 2rem 0 0;
+}
+
+.terms-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.term-item {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    padding: 10px;
+    font-size: 0.9rem;
+}
+
+.delete_term {
+    cursor: pointer;
+}
+
+.museum_checkbox {
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.museum_checkbox input {
+    height: 1rem;
+    width: 1rem;
+}
+
+.add-term-inputs {
+    display: flex;
+    margin-bottom: 1.75rem;
+}
+
+.add-term-i {
+    display: flex;
+    flex-direction: column;
+}
+
+.museum-items-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.museum-item {
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px; 
+    font-size: 0.9rem;
+}
+
+.museum-item.last{
+    text-align: center;
+}
+
+.label{
+    font-size: large;
+}
+
+.values{
+    margin-top: 0.5rem;
+}
+
+.values.delete{
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}

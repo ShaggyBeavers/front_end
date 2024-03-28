@@ -1,8 +1,11 @@
-import requests from "../requests";
+import requests,{authAPi} from '../requests';
 
 const HistoricalPeriodAPI = {
-    createHistoricalPeriod: (name:string) =>
-        requests.post("api/historical-periods/create",name),
+    createHistoricalPeriod: (value:{name: string}) =>
+        authAPi.post('api/historical-periods/create', value),
+    deleteHistoricalPeriod: (historicalPeriodId: number) =>
+        authAPi.delete(`api/historical-periods/${historicalPeriodId}`),
+    getHistoricalPeriods: () => requests.get('api/historical-periods/'),
 };
 
 export default HistoricalPeriodAPI;

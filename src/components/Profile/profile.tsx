@@ -4,7 +4,7 @@ import RelicTableInfo from '../TableInfo/tableinfo';
 import TableInfo from '../TableInfo/tableinfo';
 import SideMenu from '../SideMenu/sidemenu';
 import { Outlet, Route, Routes, useLocation } from 'react-router-dom';
-import AddTermModal from '../Modals/AddTermModal';
+import AddTerm from '../AddTerm';
 import ModeratorList from '../ModeratorList';
 
 const headers = [
@@ -27,6 +27,7 @@ const Profile = () => {
     const path = location.pathname;
     const isModeratorList = path.endsWith('moderator-list');
     const isProfile = path.endsWith('profile');
+    const isAddTerm = path.endsWith('add-term');
 
     const lastPath = path.split('/').pop();
     const header = headers.find((h) => h.path === lastPath);
@@ -34,12 +35,10 @@ const Profile = () => {
 
     return (
         <div className="profile-container">
-            <div className="content-container w-full">
-                {/* <h2>{displayName}</h2> */}
-                {isModeratorList && <ModeratorList />}
-                {isProfile && <RelicTableInfo />}
-            </div>
-            <SideMenu />
+            {isModeratorList && <ModeratorList />}
+            {isProfile && <RelicTableInfo />}
+            {isAddTerm && <AddTerm />}
+            <SideMenu currentPage={path}/>
         </div>
     );
 };

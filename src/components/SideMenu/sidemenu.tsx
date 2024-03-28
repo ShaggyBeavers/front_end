@@ -6,7 +6,6 @@ import ReactDOM from 'react-dom';
 import AddRelicModal from '../Modals/AddRelicModal';
 import AddModeratorModal from '../Modals/AddModeratorModal';
 import ModeratorsListModal from '../Modals/ModeratorsListModal';
-import AddTermModal from '../Modals/AddTermModal';
 import Settings from '../Modals/Settings';
 import { useQuery } from '@tanstack/react-query';
 import UserAPI from '../../app/api/Account/User/user';
@@ -24,13 +23,11 @@ interface IModal {
         styles: string;
     };
 }
-
 interface SideMenuProps {
-    openAddTermModal: () => void;
+    currentPage: string;
 }
 
-//const SideMenu : React.FC<SideMenuProps> = ({ openAddTermModal }) => {
-const SideMenu = () => {
+const SideMenu: React.FC<SideMenuProps> = ({ currentPage }) => {
     const navigate = useNavigate();
 
     const [modals, setModals] = useState<IModal>({
@@ -175,12 +172,21 @@ const SideMenu = () => {
                         RoleEnum.MODERATOR,
                     ]}
                 >
-                    <DefaultButton
-                        height={38}
-                        width={300}
-                        text="Додати термін"
-                        action={() => handleModal('addTerm', true)}
-                    />
+                    {currentPage.endsWith('add-term') ? (
+                        <DefaultButton
+                            height={38}
+                            width={300}
+                            text="Список репортів"
+                            action={() => navigate('/profile')}
+                        />
+                    ) : (
+                        <DefaultButton
+                            height={38}
+                            width={300}
+                            text="Додати термін"
+                            action={() => navigate('./add-term')}
+                        />
+                    )}
                 </ProtectedItems>
             </div>
         </>
