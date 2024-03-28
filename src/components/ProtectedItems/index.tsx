@@ -18,8 +18,6 @@ const ProtectedItems = ({
         role: state.user?.role,
     }));
 
-    // console.log('ProtectedItem', isLoggedIn, userRole, children.props.text);
-
     const isRoleMatch = role.some((r) => r === userRole);
 
     if (!isLoggedIn || (role && !isRoleMatch)) {

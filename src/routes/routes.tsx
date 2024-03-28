@@ -76,7 +76,7 @@ export const router = createBrowserRouter([
                         ),
                     },
                     {
-                        path: 'moderator-list',
+                        path: 'moderator-list/:regMod?',
                         element: (
                             <ProtectedRoutes
                                 role={[RoleEnum.ADMIN, RoleEnum.MODERATOR]}

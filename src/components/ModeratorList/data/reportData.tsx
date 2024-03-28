@@ -6,34 +6,12 @@
 // } from '@radix-ui/react-icons';
 
 import { Timer, CircleIcon, XCircle, CheckCircle2 } from 'lucide-react';
+
 export const statuses = [
     {
-        value: 'NEW',
-        label: 'Нове',
-        icon: CircleIcon,
-        color: 'text-zinc-300',
+        name: 'Активний',
     },
-    {
-        value: 'BEING_PROCESSED',
-        label: 'Опрацьовується',
-        // icon: StopwatchIcon,
-        icon: Timer,
-        color: 'text-yellow-400',
-    },
-    {
-        value: 'APPROVED',
-        label: 'Cхвалено',
-        // icon: CheckCircledIcon,
-        icon: CheckCircle2,
-        color: 'text-green-500',
-    },
-    {
-        value: 'REJECTED',
-        label: 'Відхилено',
-        // icon: CrossCircledIcon,
-        icon: XCircle,
-        color: 'text-red-500 ',
-    },
+    { name: 'Заблокований' },
 ];
 
 export const categories = [
