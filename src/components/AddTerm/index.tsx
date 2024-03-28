@@ -33,9 +33,6 @@ const AddTerm = () => {
         fetchTerms(selectedCategory);
     }, []);
 
-    useEffect(() => {
-        console.log('Terms after update:', terms);
-    }, [terms]);
 
     useEffect(() => {
         if (!initialRender) {
@@ -145,7 +142,6 @@ const AddTerm = () => {
             }
         } else {
             try {
-                console.log('Input:',selectedTerm)
                 await onCreateEndpoints[selectedCategory]({
                     name: selectedTerm,
                 });
