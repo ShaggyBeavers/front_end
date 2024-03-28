@@ -1,25 +1,25 @@
 export interface Relic {
   id:number;
   objectType: string; 
-  status: RelicStatusEnum; // Use an enum for the possible statuses
-  creationDate: string; // Assuming date is a string format
+  status: RelicStatusEnum;
+  creationDate: string;
   author: string;
-  regionId: number; // Assuming int64 is a number
+  regionId: number; 
   name: string;
-  creationPlaceId: number; // Assuming int64 is a number
-  reportIds: number[]; // Array of numbers (int64)
-  relicCategoryIds: number[]; // Array of numbers (int64)
-  museumId: number; // Assuming int64 is a number
-  quantity: number; // Assuming int32 is a number
+  creationPlaceId: number;
+  reportIds: number[];
+  relicCategoryIds: number[];
+  museumId: number;
+  quantity: number;
   collection: string;
   comment: string;
   copyInformation: string;
-  copyCreationTime: string; // Assuming date is a string format
+  copyCreationTime: string;
   entryBookNumber: string;
-  inventoryNumber: number; // Assuming int32 is a number
-  formerInventoryNumber: number; // Assuming int32 is a number
-  relicPropertyIds: number[]; // Array of numbers (int64)
-  propertyValues: string[]; // Array of strings
+  inventoryNumber: number;
+  formerInventoryNumber: number;
+  relicPropertyIds: number[];
+  propertyValues: string[]; 
   imageUrl: string;
   relicInfo: RelicInfoCreateEditDTO;
   // Includes nested interfaces for relicInfo, lostRelicInfo, and recoveredRelicInfo
@@ -41,10 +41,10 @@ export interface RelicInfoCreateEditDTO {
 }
 
 export interface LostRelicInfoCreateEditDTO {
-  lossWay: string;
-  lossTime: string;
-  museumId: number;
-  probableLocation: string;
+  lossWay?: string;
+  lossTime?: string;
+  museumId?: number;
+  probableLocation?: string;
 }
 
 export interface RecoveredRelicInfoCreateEditDTO {
@@ -55,7 +55,6 @@ export interface RecoveredRelicInfoCreateEditDTO {
   courtDecision: string;
 }
 
-// Define the RelicStatusEnum enum
 export enum RelicStatusEnum {
   DESTROYED = 'DESTROYED',
   STOLEN = 'STOLEN',

@@ -10,18 +10,16 @@ const UserAPI = {
         password: string;
         passwordConfirmation: string;
     }) => requests.post('api/user/password/reset', values),
-    recoveryRequest: (email: string) =>
-        requests.post('api/user/password/request-reset', email),
+    recoveryRequest: (values: {email: string}) =>
+        requests.post('api/user/password/request-reset', values),
     newPassword: (values: { password: string; passwordConfirmation: string }) =>
         requests.patch('api/user/password/change', values),
     banUnban: (userId: number) =>
         authAPi.post(`api/user/ban-unban/${userId}`, userId),
     getUserEmail: () => requests.get('api/user/email'),
     // getUserProfile: () => requests.get('api/user/current-profile'),
-    getUserProfile: (accessToken: string | null) =>
-        authAPi.get('api/user/current-profile', {
-            headers: { Authorization: `Bearer ${accessToken}` },
-        }),
+    getUserProfile: () => authAPi.get('api/user/current-profile'),
+    getUsers: () => authAPi.get('api/user/'),
 };
 
 export default UserAPI;

@@ -52,16 +52,6 @@ export function DataTable<TData, TValue>({
             )
         );
 
-        // console.log(
-        //     'Value: ',
-        //     value,
-        //     '\nIncluded',
-        //     included,
-        //     '\nValues',
-        //     values,
-        //     '\nSelected',
-        //     selectedValues
-        // );
         return included;
     };
 

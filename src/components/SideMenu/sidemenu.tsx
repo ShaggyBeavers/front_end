@@ -56,18 +56,15 @@ const SideMenu: React.FC<SideMenuProps> = ({ currentPage }) => {
     const email = useAuthStore((state) => state.user.email);
     const accessToken = useAuthStore((state) => state.accessToken);
     const { data, isLoading, isError, error } = useQuery({
-        queryKey: ['currentUser', accessToken],
-        queryFn: () => UserAPI.getUserProfile(accessToken),
+        queryKey: ['currentUser'],
+        queryFn: () => UserAPI.getUserProfile(),
     });
-
-    console.log(data);
 
     const handleModeratorList = () => {
         const currentPath = window.location.pathname;
         if (currentPath.endsWith('moderator-list')) {
             window.location.reload();
         } else {
-            console.log(currentPath);
             navigate('./moderator-list');
         }
     };

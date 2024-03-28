@@ -51,6 +51,17 @@ const ModeratorList = () => {
         queryFn: () => AdminAPI.getRegionalModerators(),
     });
 
+    // const regions = useQuery({
+    //     queryKey: ['getRegions'],
+    //     queryFn: () => RegionAPI.getRegions(),
+    // });
+
+    // const categories = useQuery({
+    //     queryKey: ['getCategories'],
+    //     queryFn: () => CategoryAPI.getCategories(),
+    // });
+
+    // const [regMod, setRegMod] = useState(false);
     const urlParams = new URLSearchParams(window.location.search);
     const regMod = urlParams.get('regMod') === 'true';
 
