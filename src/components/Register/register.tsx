@@ -24,7 +24,7 @@ export default function Register() {
             reset();
             setShowExistsMessage(false);
         } catch (error: any) {
-            if (error.response.status === 409) {
+            if (error.response.status && error.response.status=== 409) {
                 reset();
                 setShowExistsMessage(true);
             } else {

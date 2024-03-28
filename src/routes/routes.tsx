@@ -85,6 +85,20 @@ export const router = createBrowserRouter([
                             </ProtectedRoutes>
                         ),
                     },
+                    {
+                        path: 'add-term',
+                        element: (
+                            <ProtectedRoutes
+                                role={[
+                                    RoleEnum.MODERATOR,
+                                    RoleEnum.REGIONAL_MODERATOR,
+                                    RoleEnum.ADMIN,
+                                ]}
+                            >
+                                <ProfilePage />
+                            </ProtectedRoutes>
+                        ),
+                    },
                 ],
             },
         ],
