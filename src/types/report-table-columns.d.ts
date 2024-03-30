@@ -2,7 +2,7 @@ import { statusType } from '@/src/types/status-type';
 
 export interface categoryType {
     id: number;
-    categoryName: string;
+    name: string;
 }
 
 export type ReportTableProps = {

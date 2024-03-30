@@ -52,6 +52,7 @@ authAPi.interceptors.response.use(
         const originalRequest = error.config;
         if (error.response.status === 401 && !originalRequest._retry) {
             localStorage.removeItem('auth-store');
+            
             window.location.reload();
             // useAuthStore.setState({ user: null });
             // originalRequest._retry = true;

@@ -43,9 +43,8 @@ export const columns: any = [
             const labels = categories.map((category: categoryType) => {
                 return (
                     categories.find(
-                        (t: categoryType) =>
-                            t.categoryName === category.categoryName
-                    )?.categoryName || category.categoryName
+                        (t: categoryType) => t.name === category.name
+                    )?.name || category.name
                 );
             });
 

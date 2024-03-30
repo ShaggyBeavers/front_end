@@ -42,14 +42,23 @@ import {
     ImagePreview,
 } from '@dropzone-ui/react';
 import { Badge } from 'lucide-react';
-import { optionCSS } from 'react-select/dist/declarations/src/components/Option';
 import { useQuery } from '@tanstack/react-query';
 import CategoriesAPI from '../../app/api/Category/category';
 import RegionAPI from '../../app/api/Region/region';
 import { useAtom } from 'jotai';
 import { filesAtom, selectedPropertiesAtom } from '../../stores/atoms';
-import HistoricalPeriodAPI from '@/src/app/api/HistoricalPeriod/historicalPeriod';
+import HistoricalPeriodAPI from '../../../src/app/api/HistoricalPeriod/historicalPeriod';
+import MuseumAPI from '../../../src/app/api/Museum/museum';
+import PropertyAPI from '../../../src/app/api/Property/property';
 import { convertTermToOptions } from '../../lib/utils';
+import TechniqueAPI from '../../../src/app/api/Technique/technique';
+
+interface Museum {
+    id: number;
+    name: string;
+    nameOld?: string;
+    isDestroyed: boolean;
+}
 
 const AddMainRelic = ({ form }: any) => {
     const categories = useQuery({
@@ -60,19 +69,48 @@ const AddMainRelic = ({ form }: any) => {
         queryKey: ['getRegions'],
         queryFn: async () => await RegionAPI.getRegions(),
     });
-
-    // const historicalPeriods = useQuery({
-    //     queryKey: ['getHistoricalPeriods'],
-    //     queryFn: async () => await HistoricalPeriodAPI.getHistoricalPeriods(),
-    // });
-    // const museums = useQuery({
-    //     queryKey: ['getMuseums'],
-    //     queryFn: async () => await MuseumAPI.getMuseums(),
-    // });
+    const historicalPeriods = useQuery({
+        queryKey: ['getHistoricalPeriods'],
+        queryFn: async () => await HistoricalPeriodAPI.getHistoricalPeriods(),
+    });
+    const museums = useQuery({
+        queryKey: ['getMuseums'],
+        queryFn: async () => await MuseumAPI.getMuseums(),
+    });
+    const properties = useQuery({
+        queryKey: ['getProperties'],
+        queryFn: async () => await PropertyAPI.getProperties(),
+    });
+    const technique = useQuery({
+        queryKey: ['getTechniques'],
+        queryFn: async () => await TechniqueAPI.getTechniques(),
+    });
 
     let categoriesOptions: any[] = [];
     if (categories.isFetched)
         categoriesOptions = convertTermToOptions(categories.data || []);
+
+    let museumOptions: any[] = [];
+    if (museums.isFetched)
+        museumOptions = convertTermToOptions(museums.data || []);
+
+    let historicalPeriodOptions: any[] = [];
+    if (historicalPeriods.isFetched)
+        historicalPeriodOptions = convertTermToOptions(
+            historicalPeriods.data || []
+        );
+
+    let propertiesOptions: any[] = [];
+    if (properties.isFetched)
+        propertiesOptions = convertTermToOptions(properties.data || []);
+
+    let regionOptions: any[] = [];
+    if (regions.isFetched)
+        regionOptions = convertTermToOptions(regions.data || []);
+
+    let techniqueOptions: any[] = [];
+    if (technique.isFetched)
+        techniqueOptions = convertTermToOptions(technique.data || []);
 
     const [files, setFiles] = useAtom(filesAtom);
     const [imgSrc, setImgSrc] = useState<any>(undefined);
@@ -91,22 +129,23 @@ const AddMainRelic = ({ form }: any) => {
         setFiles(files.filter((x: ExtFile) => x.id !== id));
     };
 
-    const properties = [
-        { id: 1, label: 'Вага', value: 'weight' },
-        { id: 2, label: 'Висота', value: 'height' },
-        { id: 3, label: 'Ширина', value: 'width' },
-        { id: 4, label: 'Довжина', value: 'length' },
-    ];
-    const region = [
-        { label: 'Київ', value: 'Kyiv' },
-        { label: 'Харків', value: 'Kharkiv' },
-    ];
-
-    if (categories.isError) {
+    if (
+        categories.isError ||
+        regions.isError ||
+        historicalPeriods.isError ||
+        museums.isError
+    ) {
         return <p>Помилка завантаження категорій</p>;
     }
 
-    if (categories.isLoading) {
+    if (
+        categories.isLoading ||
+        regions.isLoading ||
+        historicalPeriods.isLoading ||
+        museums.isLoading ||
+        properties.isLoading ||
+        technique.isLoading
+    ) {
         return <p>Loading...</p>;
     }
 
@@ -115,7 +154,7 @@ const AddMainRelic = ({ form }: any) => {
             <h2 className="text-4xl">Основна інформація про реліквію</h2>
             <div className="grid grid-cols-2 gap-10">
                 {/* First column */}
-                <div className="grid grid-rows-6 gap-5">
+                <div className="grid grid-rows-7 gap-5">
                     <FormField
                         control={form.control}
                         name="name"
@@ -135,34 +174,29 @@ const AddMainRelic = ({ form }: any) => {
                     />
                     <FormField
                         control={form.control}
-                        name="categories"
+                        name="relicCategoryIds"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor="categories">
+                                <FormLabel htmlFor="relicCategoryIds">
                                     Категорії
                                 </FormLabel>
                                 <ReactSelect
                                     {...field}
                                     isMulti
-                                    id="categories"
+                                    id="relicCategoryIds"
                                     className="select"
                                     options={categoriesOptions}
+                                    closeMenuOnSelect={false}
                                     placeholder={'Виберіть категорію'}
-                                    onChange={(selectedOptions, actionMeta) => {
-                                        if (
-                                            actionMeta.action === 'remove-value'
-                                        ) {
-                                            form.resetField(
-                                                actionMeta.removedValue.value
-                                            );
-                                        }
-                                        const selectedValues = selectedOptions
-                                            ? selectedOptions.map(
-                                                  (option) => option.value
-                                              )
-                                            : [];
-                                        field.onChange(selectedValues);
-                                    }}
+                                    onChange={(options) =>
+                                        field.onChange(
+                                            options
+                                                ? options.map(
+                                                      (option) => option.value
+                                                  )
+                                                : []
+                                        )
+                                    }
                                     onBlur={field.onBlur}
                                     value={categoriesOptions.filter(
                                         (category) =>
@@ -239,6 +273,57 @@ const AddMainRelic = ({ form }: any) => {
                     />
                     <FormField
                         control={form.control}
+                        name="historicalPeriodId"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel htmlFor="historicalPeriodId">
+                                    Історичний період
+                                </FormLabel>
+                                <ReactSelect
+                                    {...field}
+                                    // isMulti
+                                    id="historicalPeriodId"
+                                    className="select"
+                                    options={historicalPeriodOptions}
+                                    placeholder={'Виберіть історичний період'}
+                                    onBlur={field.onBlur}
+                                    value={historicalPeriodOptions.filter(
+                                        (category) =>
+                                            field.value?.value ===
+                                            category.value
+                                    )}
+                                    menuPortalTarget={document.body}
+                                    theme={(theme) => ({
+                                        ...theme,
+                                        border: 'none',
+                                        borderRadius: 20,
+                                        fontSize: 10,
+                                        colors: {
+                                            ...theme.colors,
+                                            primary25: 'rgba(0, 0, 0, 0.1)',
+                                            primary: '#1C1C1C',
+                                        },
+                                    })}
+                                    styles={{
+                                        menu: (provided) => ({
+                                            ...provided,
+                                            maxHeight: 180,
+                                            overflow: 'hidden',
+                                        }),
+                                        // control: (provided, state) => ({
+                                        //     ...provided,
+                                        //     borderColor: state.isFocused
+                                        //         ? '#587cc0'
+                                        //         : '#587cc0',
+                                        // }),
+                                    }}
+                                />
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
                         name="quantity"
                         render={({ field }) => (
                             <FormItem>
@@ -297,76 +382,119 @@ const AddMainRelic = ({ form }: any) => {
                     />
                 </div>
                 {/* Second Column */}
-                <div className="grid grid-rows-6 gap-5">
+                <div className="grid grid-rows-7 gap-5">
                     <FormField
                         control={form.control}
-                        name="region"
+                        name="regionId"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor="region">Регіон</FormLabel>
-                                <Popover>
-                                    <PopoverTrigger asChild>
-                                        <FormControl>
-                                            <Button
-                                                variant="outline"
-                                                role="combobox"
-                                                className={cn(
-                                                    !field.value &&
-                                                        'text-muted-foreground',
-                                                    'w-full justify-between'
-                                                )}
-                                            >
-                                                {field.value
-                                                    ? region.find(
-                                                          (region) =>
-                                                              region.value ===
-                                                              field.value
-                                                      )?.label
-                                                    : 'Виберіть регіон'}
-                                                <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                                            </Button>
-                                        </FormControl>
-                                    </PopoverTrigger>
-                                    <PopoverContent
-                                        className="relative min-w-[12rem] w-full"
-                                        align="start"
-                                    >
-                                        <Command>
-                                            <CommandInput
-                                                className="w-full"
-                                                placeholder="Search region..."
-                                            />
-                                            <CommandEmpty>
-                                                Жодного регіону не знайдено
-                                            </CommandEmpty>
-                                            <CommandGroup>
-                                                {region.map((region) => (
-                                                    <CommandItem
-                                                        value={region.label}
-                                                        key={region.value}
-                                                        onSelect={() => {
-                                                            form.setValue(
-                                                                'region',
-                                                                region.value
-                                                            );
-                                                        }}
-                                                    >
-                                                        <CheckIcon
-                                                            className={cn(
-                                                                '',
-                                                                region.value ===
-                                                                    field.value
-                                                                    ? 'opacity-100'
-                                                                    : 'opacity-0'
-                                                            )}
-                                                        />
-                                                        {region.label}
-                                                    </CommandItem>
-                                                ))}
-                                            </CommandGroup>
-                                        </Command>
-                                    </PopoverContent>
-                                </Popover>
+                                <FormLabel htmlFor="regionId">Регіон</FormLabel>
+                                <ReactSelect
+                                    {...field}
+                                    // isMulti
+                                    id="regionId"
+                                    className="select"
+                                    options={regionOptions}
+                                    // closeMenuOnSelect={false}
+                                    placeholder={'Виберіть регіон'}
+                                    // onChange={(options) =>
+                                    //     field.onChange(
+                                    //         options
+                                    //             ? options.map(
+                                    //                   (option) => option.value
+                                    //               )
+                                    //             : []
+                                    //     )
+                                    // }
+                                    onBlur={field.onBlur}
+                                    // value={regionOptions.filter((category) =>
+                                    //     field.value?.includes(category.value)
+                                    // )}
+                                    menuPortalTarget={document.body}
+                                    theme={(theme) => ({
+                                        ...theme,
+                                        border: 'none',
+                                        borderRadius: 20,
+                                        fontSize: 10,
+                                        colors: {
+                                            ...theme.colors,
+                                            primary25: 'rgba(0, 0, 0, 0.1)',
+                                            primary: '#1C1C1C',
+                                        },
+                                    })}
+                                    styles={{
+                                        menu: (provided) => ({
+                                            ...provided,
+                                            maxHeight: 180,
+                                            overflow: 'hidden',
+                                        }),
+                                        // control: (provided, state) => ({
+                                        //     ...provided,
+                                        //     borderColor: state.isFocused
+                                        //         ? '#587cc0'
+                                        //         : '#587cc0',
+                                        // }),
+                                    }}
+                                />
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="creationPlaceId"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel htmlFor="creationPlaceId">
+                                   Місце створення 
+                                </FormLabel>
+                                <ReactSelect
+                                    {...field}
+                                    // isMulti
+                                    id="creationPlaceId"
+                                    className="select"
+                                    options={regionOptions}
+                                    // closeMenuOnSelect={false}
+                                    placeholder={'Виберіть регіон'}
+                                    // onChange={(options) =>
+                                    //     field.onChange(
+                                    //         options
+                                    //             ? options.map(
+                                    //                   (option) => option.value
+                                    //               )
+                                    //             : []
+                                    //     )
+                                    // }
+                                    onBlur={field.onBlur}
+                                    // value={regionOptions.filter((category) =>
+                                    //     field.value?.includes(category.value)
+                                    // )}
+                                    menuPortalTarget={document.body}
+                                    theme={(theme) => ({
+                                        ...theme,
+                                        border: 'none',
+                                        borderRadius: 20,
+                                        fontSize: 10,
+                                        colors: {
+                                            ...theme.colors,
+                                            primary25: 'rgba(0, 0, 0, 0.1)',
+                                            primary: '#1C1C1C',
+                                        },
+                                    })}
+                                    styles={{
+                                        menu: (provided) => ({
+                                            ...provided,
+                                            maxHeight: 180,
+                                            overflow: 'hidden',
+                                        }),
+                                        // control: (provided, state) => ({
+                                        //     ...provided,
+                                        //     borderColor: state.isFocused
+                                        //         ? '#587cc0'
+                                        //         : '#587cc0',
+                                        // }),
+                                    }}
+                                />
                                 <FormMessage />
                             </FormItem>
                         )}
@@ -389,50 +517,55 @@ const AddMainRelic = ({ form }: any) => {
                             </FormItem>
                         )}
                     />
-                    {/* Description */}
-                    <div className="row-span-2">
-                        <FormField
-                            control={form.control}
-                            name="description"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor="description">
-                                        Опис
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Textarea
-                                            placeholder="Введіть опис реліквії"
-                                            {...field}
-                                            className="min-h-[6.25rem] max-h-[8.25rem]"
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
-                    {/* <div className="row-span-"> */}
                     <FormField
                         control={form.control}
-                        name="historicalPeriod"
+                        name="techniqueId"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor="historicalPeriod">
-                                    Історичний період
+                                <FormLabel htmlFor="techniqueId">
+                                    Техніка Створення
                                 </FormLabel>
                                 <ReactSelect
                                     {...field}
-                                    // isMulti
-                                    id="historicalPeriod"
+                                    id="techniqueId"
                                     className="select"
-                                    options={categoriesOptions}
-                                    placeholder={'Виберіть історичний період'}
+                                    options={techniqueOptions}
+                                    placeholder={'Виберіть техніку'}
+                                    // onChange={(option, actionMeta) => {
+                                    //     console.log(
+                                    //         'technique',
+                                    //         option,
+                                    //         actionMeta
+                                    //     );
+                                    //     if (
+                                    //         actionMeta.action ===
+                                    //             'remove-value' ||
+                                    //         actionMeta.action === 'clear' ||
+                                    //         actionMeta.action === 'pop-value' ||
+                                    //         actionMeta.action ===
+                                    //             'deselect-option'
+                                    //     ) {
+                                    //         form.resetField(
+                                    //             actionMeta.removedValue.value
+                                    //         );
+                                    //     }
+                                    //     field.onChange(option.value);
+                                    //     (selectedOption, actionMeta) => {
+                                    //     if (
+                                    //         actionMeta.action === 'remove-value'
+                                    //     ) {
+                                    //         form.resetField(
+                                    //             actionMeta.removedValue.value
+                                    //         );
+                                    //     }
+                                    //     field.onChange(selectedOption.value);
+                                    // }
+                                    // }}
                                     onBlur={field.onBlur}
-                                    value={categoriesOptions.filter(
-                                        (category) =>
-                                            field.value?.value ===
-                                            category.value
-                                    )}
+                                    // value={regionOptions.find(
+                                    //     (category) =>
+                                    //         field.value === category.value
+                                    // )}
                                     menuPortalTarget={document.body}
                                     theme={(theme) => ({
                                         ...theme,
@@ -463,6 +596,9 @@ const AddMainRelic = ({ form }: any) => {
                             </FormItem>
                         )}
                     />
+
+                    {/* <div className="row-span-"> */}
+
                     {/* <FormField
                         control={form.control}
                         name="historicalPeriod"
@@ -481,22 +617,37 @@ const AddMainRelic = ({ form }: any) => {
                             </FormItem>
                         )}
                     /> */}
-                    {/* </div> */}
+                    {/* Museum */}
                     <FormField
                         control={form.control}
-                        name="museum"
+                        name="museumId"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor="museum">Музей</FormLabel>
+                                <FormLabel htmlFor="museumId">Музей</FormLabel>
                                 <ReactSelect
                                     {...field}
                                     // isMulti
-                                    id="museum"
+                                    id="museumId"
                                     className="select"
-                                    options={categoriesOptions}
+                                    options={museumOptions}
+                                    getOptionLabel={(option) =>
+                                        `
+                                        ${
+                                            museums.data.find(
+                                                (museum: Museum) =>
+                                                    museum.id === option.value
+                                            )?.name
+                                        } :
+                                        ${
+                                            museums.data.find(
+                                                (museum: Museum) =>
+                                                    museum.id === option.value
+                                            )?.nameOld
+                                        }`
+                                    }
                                     placeholder={'Виберіть музей'}
                                     onBlur={field.onBlur}
-                                    value={categoriesOptions.filter(
+                                    value={museumOptions.filter(
                                         (category) =>
                                             field.value?.value ===
                                             category.value
@@ -531,6 +682,29 @@ const AddMainRelic = ({ form }: any) => {
                             </FormItem>
                         )}
                     />
+                    {/* Description */}
+                    <div className="row-span-2">
+                        <FormField
+                            control={form.control}
+                            name="comment"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel htmlFor="comment">
+                                        Опис
+                                    </FormLabel>
+                                    <FormControl>
+                                        <Textarea
+                                            placeholder="Введіть опис реліквії"
+                                            id="comment"
+                                            {...field}
+                                            className="min-h-[6.25rem] max-h-[8.25rem]"
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
                 </div>
                 {/* ADDITIONAL PROPS */}
             </div>
@@ -539,36 +713,43 @@ const AddMainRelic = ({ form }: any) => {
                 <div className="grid grid-rows-1 gap-5 self-start">
                     <FormField
                         control={form.control}
-                        name="categories"
+                        name="property"
                         render={({ field }) => (
                             <ReactSelect
-                                options={properties}
+                                {...field}
                                 isMulti
+                                id="property"
+                                className="select"
+                                options={propertiesOptions}
                                 closeMenuOnSelect={false}
                                 placeholder={'Оберіть додаткові характеристики'}
                                 noOptionsMessage={() =>
                                     'Жодної характеристики не знайдено'
                                 }
-                                menuPortalTarget={document.body}
-                                onChange={(selectedOptions, actionMeta) => {
-                                    if (actionMeta.action === 'remove-value') {
-                                        form.resetField(
-                                            actionMeta.removedValue.value
-                                        );
-                                    }
-                                    const selectedValues = selectedOptions
-                                        ? selectedOptions.map(
-                                              (option) => option.value
-                                          )
-                                        : [];
-                                    field.onChange(selectedValues);
+                                onChange={(options) => {
+                                    // field.onChange(
+                                    //     options
+                                    //         ? options.map(
+                                    //               (option) => option.value
+                                    //           )
+                                    //         : []
+                                    // );
+                                    field.onChange(options);
 
-                                    setSelectedProperties(selectedValues);
+                                    setSelectedProperties(
+                                        options
+                                            ? options.map((option) => ({
+                                                  value: option.value,
+                                                  label: option.label,
+                                              }))
+                                            : []
+                                    );
                                 }}
                                 onBlur={field.onBlur}
-                                value={properties.filter((properties) =>
-                                    field.value?.includes(properties.value)
-                                )}
+                                // value={propertiesOptions.filter((properties) =>
+                                //     field.value?.includes(properties.value)
+                                // )}
+                                menuPortalTarget={document.body}
                                 styles={{
                                     placeholder: (base) => ({
                                         ...base,
@@ -595,27 +776,31 @@ const AddMainRelic = ({ form }: any) => {
                         )}
                     />
                     <div>
-                        {selectedProperties.map((option, index) => (
-                            <FormField
-                                control={form.control}
-                                name={option}
-                                key={index}
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel htmlFor={option}>
-                                            {option}
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                type="text"
-                                                placeholder=""
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                    </FormItem>
-                                )}
-                            />
-                        ))}
+                        {selectedProperties
+                            // .filter((option) =>
+                            //     selectedProperties.includes(option.value)
+                            // )
+                            .map((option: any) => (
+                                <FormField
+                                    control={form.control}
+                                    name={option.label}
+                                    key={option.value}
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel htmlFor={option.label}>
+                                                {option.label}
+                                            </FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    type="text"
+                                                    placeholder=""
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                        </FormItem>
+                                    )}
+                                />
+                            ))}
                     </div>
                 </div>
                 <div className="grid grid-rows-1 gap-5">

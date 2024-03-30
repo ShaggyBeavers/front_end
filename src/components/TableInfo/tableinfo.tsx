@@ -26,19 +26,19 @@ const RelicTableInfo = () => {
             categoryList: [
                 {
                     id: 10,
-                    categoryName: 'Ancient Artifacts',
+                    name: 'Ancient Artifacts',
                 },
                 {
                     id: 7,
-                    categoryName: 'Золото',
+                    name: 'Золото',
                 },
                 {
                     id: 5,
-                    categoryName: 'Ware',
+                    name: 'Ware',
                 },
                 {
                     id: 1,
-                    categoryName: 'Inscriptions',
+                    name: 'Inscriptions',
                 },
             ],
             status: 'APPROVED',
@@ -48,7 +48,7 @@ const RelicTableInfo = () => {
             categoryList: [
                 {
                     id: 7,
-                    categoryName: 'Золото',
+                    name: 'Золото',
                 },
             ],
             status: 'REJECTED',

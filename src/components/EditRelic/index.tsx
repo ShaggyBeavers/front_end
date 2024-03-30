@@ -32,7 +32,7 @@ import {
     AlertDialogTrigger,
 } from '../ui/alert-dialog';
 import {
-    Relic,
+    RelicDTO,
     RelicInfoCreateEditDTO,
     LostRelicInfoCreateEditDTO,
     RecoveredRelicInfoCreateEditDTO,
@@ -40,6 +40,8 @@ import {
 } from '../../types/relic';
 import { useAtom } from 'jotai';
 import { filesAtom, selectedPropertiesAtom } from '../../stores/atoms';
+import { useMutation } from '@tanstack/react-query';
+import RelicAPI from '../../../src/app/api/Relic/relic';
 
 const relicFormSchema = z
     .object({
@@ -55,17 +57,33 @@ const relicFormSchema = z
         //     required_error: 'Вкажіть дату',
         //     invalid_type_error: 'Невірний формат дати',
         // }),
-        // quantity: z.string({ required_error: 'Вкажіть кількість' }),
+        quantity: z.string({ required_error: 'Вкажіть кількість' }),
         // categories: z.array(z.any()),
         // collection: z.string({ required_error: 'Вкажіть колекцію' }).optional(),
         // image: z.any().optional(),
-        image: z.array(z.any()).optional(),
+        // image: z.array(z.any()).optional(),
     })
     .passthrough();
 
 type RelicForm = z.infer<typeof relicFormSchema>;
 
+const cleanUpData = (data: any) => {
+    return Object.fromEntries(
+        Object.entries(data).filter(([key, value]) => value !== '')
+    );
+};
+
 export const EditRelic = () => {
+    const addRelic = useMutation({
+        mutationFn: RelicAPI.createRelic,
+        onSuccess: () => {
+            console.log('Relic added. Now we can start adding photos');
+        },
+        onError: (error) => {
+            console.log(error);
+        },
+    });
+
     const [files, setFiles] = useAtom(filesAtom);
     const [selectedProperties, setSelectedProperties] = useAtom(
         selectedPropertiesAtom
@@ -99,36 +117,142 @@ export const EditRelic = () => {
 
     const formRef = useRef<HTMLFormElement>(null);
 
-    const formClick = () => {
-        if (formRef.current) {
-            formRef.current?.dispatchEvent(
-                new Event('submit', { bubbles: true })
-            );
-        }
-    };
+    // const formClick = () => {
+    //     if (formRef.current) {
+    //         formRef.current?.dispatchEvent(
+    //             new Event('submit', { bubbles: true })
+    //         );
+    //     }
+    // };
 
     const onSubmit = (data: any) => {
+        data = cleanUpData(data);
         // if (formRef.current?.checkValidity()) {
+        // toast('You submitted the following values:', {
+        //     description: (
+        //         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+        //             <code className="text-white">
+        //                 {JSON.stringify(data, null, 2)}
+        //             </code>
+        //         </pre>
+        //     ),
+        // });
+
+        let lostRelicInfo: LostRelicInfoCreateEditDTO | undefined = {};
+        if (isLost) {
+            const {
+                lossWay = '',
+                probableLocation = '',
+                lossTime = '',
+                lossMuseumId = '',
+            } = data;
+            lostRelicInfo = {
+                lossWay,
+                probableLocation,
+                lossTime,
+                museumId: lossMuseumId,
+            };
+            console.log('Lost Relic Info', lostRelicInfo);
+        }
+
+        let recoveredRelicInfo: RecoveredRelicInfoCreateEditDTO | undefined =
+            {};
+        if (isReturned) {
+            const {
+                locationSource = '',
+                returnProcess = '',
+                returnDate = '',
+                previousSearchInfo = '',
+                courtDecision = '',
+            } = data;
+            recoveredRelicInfo = {
+                locationSource,
+                returnProcess,
+                returnDate,
+                previousSearchInfo,
+                courtDecision,
+            };
+        }
+
+        const relicInfo: RelicInfoCreateEditDTO = {
+            ...(data.techniqueId && { techniqueId: data.techniqueId.value }),
+            ...(data.historicalPeriodId && {
+                historicalPeriodId: data.historicalPeriodId.value,
+            }),
+            ...(data.dimensions && { dimensions: data.dimensions }),
+            ...(data.marks && { marks: data.marks }),
+            ...(data.labels && { labels: data.labels }),
+            ...(data.signatures && { signatures: data.signatures }),
+            ...(data.restoration && { restoration: data.restoration }),
+            ...(data.appraisedValue && { appraisedValue: data.appraisedValue }),
+            ...(data.insuranceValue && { insuranceValue: data.insuranceValue }),
+            ...(data.annotations && { annotation: data.annotations }),
+            ...(isLost && { lostRelicInfo: lostRelicInfo }),
+            ...(isReturned && { recoveredRelicInfo: recoveredRelicInfo }),
+        };
+
+        let propertyValues: string[] = [];
+        let propertyIds: number[] = [];
+        if (selectedProperties.length > 0) {
+            propertyValues = selectedProperties.map((property: any) => {
+                return data[property.label];
+            });
+            propertyIds = selectedProperties.map(
+                (property: any) => property.value
+            );
+        }
+
+        const relic: RelicDTO = {
+            ...(data.status && { status: data.status }),
+            ...(data.creationDate && { creationDate: data.creationDate }),
+            ...(data.author && { author: data.author }),
+            ...(data.regionId && { regionId: data.regionId.value }),
+            ...(data.name && { name: data.name }),
+            ...(data.creationPlaceId && {
+                creationPlaceId: data.creationPlaceId.data,
+            }),
+            ...(data.reportIds && { reportIds: data.reportIds }),
+            ...(data.relicCategoryIds && {
+                relicCategoryIds: data.relicCategoryIds,
+            }),
+            ...(data.museumId && { museumId: data.museumId.value }),
+            ...(data.quantity && { quantity: data.quantity }),
+            ...(data.collection && { collection: data.collection }),
+            ...(data.comment && { comment: data.comment }),
+            ...(data.copyInformation && {
+                copyInformation: data.copyInformation,
+            }),
+            ...(data.copyCreationTime && {
+                copyCreationTime: data.copyCreationTime,
+            }),
+            ...(data.entryBookNumber && {
+                entryBookNumber: data.entryBookNumber,
+            }),
+            ...(data.inventoryNumber && {
+                inventoryNumber: data.inventoryNumber,
+            }),
+            ...(data.formerInventoryNumber && {
+                formerInventoryNumber: data.formerInventoryNumber,
+            }),
+            ...(data.relicPropertyIds && {
+                relicPropertyIds: data.relicPropertyIds,
+            }),
+            ...(propertyIds && { relicPropertyIds: propertyIds }),
+            ...(propertyValues && { propertyValues: propertyValues }),
+            ...(relicInfo && { relicInfo: relicInfo }),
+        };
+
+        addRelic.mutate(relic);
+
         toast('You submitted the following values:', {
             description: (
                 <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
                     <code className="text-white">
-                        {JSON.stringify(data, null, 2)}
+                        {JSON.stringify(relic, null, 2)}
                     </code>
                 </pre>
             ),
         });
-
-        if (isLost) {
-            const { lossWay, probableLocation, lossTime } = data;
-            const relicInfo: LostRelicInfoCreateEditDTO = {
-                lossWay,
-                probableLocation,
-                lossTime,
-            };
-            console.log(relicInfo);
-        }
-
         form.reset({
             name: '',
             collection: '',
@@ -138,13 +262,15 @@ export const EditRelic = () => {
             creationDate: '',
             quantity: '',
             status: '',
-            region: '',
-            description: '',
-            historicalPeriod: '',
+            regionId: '',
+            comment: '',
+            historicalPeriodId: '',
             primaryInventoryNumber: '',
             copyCreationDate: '',
+            techniqueId: '',
             insuranceValue: '',
             inventoryNumber: '',
+            creationPlaceId: '',
             copyInformation: '',
             appraisedValue: '',
             dimensions: '',
@@ -153,26 +279,28 @@ export const EditRelic = () => {
             marks: '',
             labels: '',
             annotations: '',
-            ...(isReturned && {
+            museumId: '',
+            ...(isLost && {
                 lossWay: '',
                 probableLocation: '',
                 lossTime: '',
+                lossMuseumId: '',
             }),
-            ...(isLost && {
+            ...(isReturned && {
                 locationSource: '',
                 returnProcess: '',
+                returnDate: '',
                 previousSearchInfo: '',
                 courtDecision: '',
             }),
         });
+
         setFiles([]);
         setSelectedProperties([]);
-        console.log('submitted');
         // formRef.current?.dispatchEvent(
         //     new Event('submit', { bubbles: true })
         // );
     };
-    console.log(isLost, isReturned, location.state);
 
     return (
         <>
@@ -184,8 +312,8 @@ export const EditRelic = () => {
                     className="space-y-8 py-20 px-28"
                 >
                     <AddMainRelic form={form} />
-                    {isReturned && <AddReturnedRelic form={form} />}
                     {isLost && <AddLostRelic form={form} />}
+                    {isReturned && <AddReturnedRelic form={form} />}
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
                             <Button variant="outline">Підтвердити</Button>
@@ -204,7 +332,7 @@ export const EditRelic = () => {
                                 <AlertDialogAction
                                     type="submit"
                                     form="relic-form"
-                                    onClick={formClick}
+                                    // onClick={formClick}
                                 >
                                     Прийняти
                                 </AlertDialogAction>

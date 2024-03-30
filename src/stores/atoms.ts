@@ -4,6 +4,6 @@ import { atom } from 'jotai';
 const filesAtom = atom<ExtFile[]>([]);
 export { filesAtom };
 
-const selectedPropertiesAtom = atom<string[]>([]);
+const selectedPropertiesAtom = atom<any[]>([]);
 
 export { selectedPropertiesAtom };

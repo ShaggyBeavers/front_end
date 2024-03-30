@@ -6,17 +6,16 @@ export function cn(...inputs: ClassValue[]) {
 }
 export interface Term {
     id: number;
-    categoryName: string;
     name: string;
 }
 export interface Option {
-  label: string;
-  value: string | number;
+    label: string;
+    value: string | number;
 }
 
 export const convertTermToOptions = (terms: Term[]): Option[] => {
-  return terms.map((term) => ({
-    label: term.categoryName || term.name,
-    value: term.id,
-  }));
+    return terms.map((term) => ({
+        label: term.name || term.name,
+        value: term.id,
+    }));
 };
