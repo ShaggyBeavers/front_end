@@ -60,14 +60,9 @@
     color: #dadada;
 }
 
-.report_input.error p {
+.report_input.error p,.cat_error {
     color: red;
     font-size: 11px;
-}
-
-.report_input.error input,
-.report_input.error select {
-    border: 2px solid red;
 }
 
 .report_input select {
@@ -128,8 +123,9 @@ select::-webkit-scrollbar-thumb {
     color: #dadada;
 }
 
-@media (max-width: 990px) {
-    .report_group.drop {
-        align-items: center;
-    }
+.region_photo{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
+

@@ -3,69 +3,89 @@ import './report.css';
 import { useEffect, useState } from 'react';
 import DropZone from '../DropZone/dropzone';
 import ReportAPI from '../../app/api/Report/report';
-
-interface ReportForm {
-    name: string;
-    category: string;
-    location: string;
-    sources: string[];
-    description: string;
-    photos: File[];
-    abduction: string;
-}
+import ReactSelect from 'react-select';
+import { reportData } from '../../app/api/Report/report';
+import RegionAPI from '../../app/api/Region/region';
+import CategoryAPI from '../../app/api/Category/category';
 
 export default function Report() {
     const { register, handleSubmit, formState, reset, setValue } =
-        useForm<ReportForm>();
+        useForm<reportData>();
     const { errors } = formState;
     const [remainingChars, setRemainingChars] = useState(3);
     const [isTyping, setIsTyping] = useState(false);
-    const [urlInput, setUrlInput] = useState('');
-    const [photos, setPhotos] = useState<File[]>([]);
-    const submitForm: SubmitHandler<ReportForm> = async (data) => {
-        data.sources = urlInput.split(' ').filter((url) => url.trim() !== '');
-        data.photos = photos;
+    const [selectedCategories, setSelectedCategories] = useState<
+        { value: string; id: number }[]
+    >([]);
+    const [selectedRegion, setSelectedRegion] = useState<{
+        value: string;
+        id: number;
+    } | null>(null);
+    const [regions, setRegions] = useState<{ value: string; id: number }[]>([]);
+    const [categories, setCategories] = useState<
+        { value: string; id: number }[]
+    >([]);
+
+    const submitForm: SubmitHandler<reportData> = async (data) => {
         try {
-            console.log(data);
-            await ReportAPI.createReport(data);
+            const formData = {
+                ...data,
+                categoryIds: selectedCategories.map((category) => category.id),
+                regionId: selectedRegion ? selectedRegion.id : null,
+            };
+            console.log(formData);
+            await ReportAPI.createReport(formData);
             reset();
+            setSelectedCategories([]);
+            setSelectedRegion(null);
         } catch (error: any) {
-            if (error && error.response.status === 409) {
-                reset();
-                // setShowExistsMessage(true);
-            } else {
+            if (error) {
                 console.log(error);
-                // setShowExistsMessage(false);
+                reset();
+                setSelectedCategories([]);
+                setSelectedRegion(null);
             }
         }
     };
 
-    const categories = [
-        'Category 1',
-        'Category 2',
-        'Category 3',
-        'Category 1',
-        'Category 2',
-        'Category 3',
-        'Category 1',
-        'Category 2',
-        'Category 3',
-        'Category 1',
-        'Category 2',
-        'Category 3',
-        'Category 1',
-        'Category 2',
-        'Category 3',
-        'Category 1',
-        'Category 2',
-        'Category 3',
-        'Category 1',
-        'Category 2',
-        'Category 3',
-        'Category 1',
-        'Category 2',
-        'Category 3',
-    ];
+    useEffect(() => {
+        const fetchRegions = async () => {
+            try {
+                const response = await RegionAPI.getRegions();
+                if (response) {
+                    const regionsData = response.map(
+                        (region: { id: number; name: string }) => ({
+                            value: region.name,
+                            id: region.id,
+                        })
+                    );
+                    setRegions(regionsData);
+                }
+            } catch (error) {
+                console.error('Error fetching regions:', error);
+            }
+        };
+
+        const fetchCategories = async () => {
+            try {
+                const response = await CategoryAPI.getCategories();
+                if (response) {
+                    const categoriesData = response.map(
+                        (category: { id: number; name: string }) => ({
+                            value: category.name,
+                            id: category.id,
+                        })
+                    );
+                    setCategories(categoriesData);
+                }
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+            }
+        };
+
+        fetchRegions();
+        fetchCategories();
+    }, []);
 
     return (
         <div className="report">
@@ -94,25 +114,73 @@ export default function Report() {
                             </div>
 
                             <div
-                                className={`report_input ${errors.category ? 'error' : ''}`}
-                                style={{ width: '45%' }}
+                                className="report_input"
+                                style={{ width: '51%' }}
                             >
-                                <label htmlFor="category">Категорія:</label>
-                                <select
-                                    {...register('category', {
-                                        required: 'Оберіть категорію',
+                                <label htmlFor="name">Категорії:<p>(опційно)</p></label>
+                                <ReactSelect
+                                    options={categories.map((category) => ({
+                                        value: category.id.toString(),
+                                        label: category.value,
+                                    }))}
+                                    value={selectedCategories.map(
+                                        (category) => ({
+                                            value: category.id.toString(),
+                                            label: category.value,
+                                        })
+                                    )}
+                                    onChange={(selectedOptions) => {
+                                        const selectedValues = selectedOptions
+                                            ? selectedOptions.map((option) => ({
+                                                  value: option.label,
+                                                  id: parseInt(option.value),
+                                              }))
+                                            : [];
+                                        setSelectedCategories(selectedValues);
+                                    }}
+                                    isMulti
+                                    noOptionsMessage={() =>
+                                        'Жодної категорії не знайдено'
+                                    }
+                                    closeMenuOnSelect={false}
+                                    placeholder="Оберіть категорії"
+                                    onBlur={() => setIsTyping(false)}
+                                    styles={{
+                                        placeholder: (base) => ({
+                                            ...base,
+                                            fontSize: '0.9rem',
+                                            color: '#dadada',
+                                        }),
+                                        menu: (provided) => ({
+                                            ...provided,
+                                            overflowY: 'auto',
+                                        }),
+                                        control: (base) => ({
+                                            ...base,
+                                            borderWidth: 2,
+                                            boxShadow: 'none',
+                                            maxHeight:'39px',
+                                        }),
+                                        valueContainer: (provided, state) => ({
+                                            ...provided,
+                                            maxHeight: '64px',
+                                            overflow: 'auto',
+                                        }),
+                                    }}
+                                    theme={(theme) => ({
+                                        ...theme,
+                                        borderRadius: 15,
+                                        fontSize: 10,
+                                        colors: {
+                                            ...theme.colors,
+                                            primary25: 'rgba(0, 0, 0, 0.1)',
+                                            primary: '#1C1C1C',
+                                            neutral20: '#000000',
+                                            neutral80: '#000000',
+                                            neutral30: '#000000',
+                                        },
                                     })}
-                                >
-                                    <option value="" disabled selected>
-                                        Оберіть категорію
-                                    </option>
-                                    {categories.map((category, index) => (
-                                        <option key={index} value={category}>
-                                            {category}
-                                        </option>
-                                    ))}
-                                </select>
-                                <p>{errors.category?.message as string}</p>
+                                />
                             </div>
                         </div>
                         <div className="report_group">
@@ -151,10 +219,10 @@ export default function Report() {
                         <div className="report_group drop">
                             <div
                                 className="report_input"
-                                style={{ width: '65%' }}
+                                style={{ width: '60%' }}
                             >
                                 <div
-                                    className={`report_input ${errors.location ? 'error' : ''}`}
+                                    className={`report_input ${errors.mapLocation ? 'error' : ''}`}
                                     style={{ width: '100%' }}
                                 >
                                     <label htmlFor="location">
@@ -164,7 +232,7 @@ export default function Report() {
                                     <input
                                         type="text"
                                         placeholder="Введіть місце розташування"
-                                        {...register('location', {
+                                        {...register('mapLocation', {
                                             minLength: {
                                                 value: 2,
                                                 message:
@@ -172,21 +240,23 @@ export default function Report() {
                                             },
                                         })}
                                     />
-                                    <p>{errors.location?.message as string}</p>
+                                    <p>
+                                        {errors.mapLocation?.message as string}
+                                    </p>
                                 </div>
 
                                 <div
-                                    className={`report_input ${errors.abduction ? 'error' : ''}`}
+                                    className={`report_input ${errors.infoReferences ? 'error' : ''}`}
                                     style={{ width: '100%' }}
                                 >
                                     <label htmlFor="abduction">
-                                        Ймовірне місце викрадення:
+                                        Шляхи втрати:
                                         <p>(опційно)</p>
                                     </label>
                                     <input
                                         type="text"
                                         placeholder="Введіть місце викрадення"
-                                        {...register('abduction', {
+                                        {...register('infoReferences', {
                                             minLength: {
                                                 value: 2,
                                                 message:
@@ -194,14 +264,104 @@ export default function Report() {
                                             },
                                         })}
                                     />
-                                    <p>{errors.abduction?.message as string}</p>
+                                    <p>
+                                        {
+                                            errors.infoReferences
+                                                ?.message as string
+                                        }
+                                    </p>
                                 </div>
                             </div>
 
-                            <DropZone
-                                onFilesChange={setPhotos}
-                                initialFiles={photos}
-                            />
+                            <div
+                                className="region_photo"
+                                style={{ width: '35%' }}
+                            >
+                                <div
+                                    className="report_input"
+                                    style={{ width: '100%' }}
+                                >
+                                    <label htmlFor="name">
+                                        Регіон:
+                                    </label>
+                                    <label>
+                                       <p>(опційно)</p>
+                                    </label>
+                                    <ReactSelect
+                                        options={regions.map((region) => ({
+                                            value: region.id.toString(),
+                                            label: region.value,
+                                        }))}
+                                        isClearable
+                                        noOptionsMessage={() =>
+                                            'Жодного регіону не знайдено'
+                                        }
+                                        placeholder="Оберіть регіон"
+                                        onChange={(selectedOption) => {
+                                            const selectedValue = selectedOption
+                                                ? {
+                                                      value: selectedOption.label,
+                                                      id: parseInt(
+                                                          selectedOption.value
+                                                      ),
+                                                  }
+                                                : null;
+                                            setSelectedRegion(selectedValue);
+                                        }}
+                                        onBlur={() => setIsTyping(false)}
+                                        value={
+                                            selectedRegion
+                                                ? {
+                                                      value: selectedRegion.id.toString(),
+                                                      label: selectedRegion.value,
+                                                  }
+                                                : null
+                                        }
+                                        styles={{
+                                            placeholder: (base) => ({
+                                                ...base,
+                                                fontSize: '0.9rem',
+                                                color: '#dadada',
+                                            }),
+                                            menu: (provided) => ({
+                                                ...provided,
+                                                overflowY: 'auto',
+                                            }),
+                                            control: (base) => ({
+                                                ...base,
+                                                borderWidth: 2,
+                                                maxHeight:'33px',
+                                                boxShadow: 'none',
+                                            }),
+                                            valueContainer: (
+                                                provided,
+                                                state
+                                            ) => ({
+                                                ...provided,
+                                                fontSize:'0.9rem',
+                                                overflow: 'auto',
+                                            }),
+                                        }}
+                                        theme={(theme) => ({
+                                            ...theme,
+                                            borderRadius: 15,
+                                            fontSize: 10,
+                                            colors: {
+                                                ...theme.colors,
+                                                primary25: 'rgba(0, 0, 0, 0.1)',
+                                                primary: '#1C1C1C',
+                                                neutral20: '#000000',
+                                                neutral80: '#000000',
+                                                neutral30: '#000000',
+                                            },
+                                        })}
+                                    />
+                                </div>
+                                {/* <DropZone
+                                    onFilesChange={setPhotos}
+                                    initialFiles={photos}
+                                /> */}
+                            </div>
                         </div>
 
                         <button type="submit">Опублікувати</button>
