@@ -18,8 +18,11 @@ import { ShowLabels } from './DataTableShowLabels';
 import { cva } from 'class-variance-authority';
 import { stat } from 'fs';
 import { DataTableRowActions } from './DataTableRowActions';
+import ProtectedItems from '../ProtectedItems';
+import { checkAuthRole } from '../../../src/lib/utils';
+import { RoleEnum } from '../../../src/enums/roles';
 
-export const columns: any = [
+let tmpColumns: any = [
     {
         accessorKey: 'reportId',
         meta: 'Report Id',
@@ -92,5 +95,19 @@ export const columns: any = [
             return value.includes(row.getValue(id));
         },
     },
-    { id: 'action', cell: ({ row }: any) => <DataTableRowActions row={row} /> },
 ];
+
+if (
+    checkAuthRole([
+        RoleEnum.ADMIN,
+        RoleEnum.MODERATOR,
+        RoleEnum.REGIONAL_MODERATOR,
+    ])
+) {
+    tmpColumns.push({
+        id: 'action',
+        cell: ({ row }: any) => <DataTableRowActions row={row} />,
+    });
+}
+
+export const columns = tmpColumns;
