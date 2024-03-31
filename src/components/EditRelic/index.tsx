@@ -36,8 +36,8 @@ import {
     RelicInfoCreateEditDTO,
     LostRelicInfoCreateEditDTO,
     RecoveredRelicInfoCreateEditDTO,
-    RelicStatusEnum,
-} from '../../types/relic';
+} from '../../types/relic.d';
+import { RelicStatusEnum } from '../../enums/relicstatus';
 import { useAtom } from 'jotai';
 import { filesAtom, selectedPropertiesAtom } from '../../stores/atoms';
 import { useMutation } from '@tanstack/react-query';
@@ -117,13 +117,13 @@ export const EditRelic = () => {
 
     const formRef = useRef<HTMLFormElement>(null);
 
-    // const formClick = () => {
-    //     if (formRef.current) {
-    //         formRef.current?.dispatchEvent(
-    //             new Event('submit', { bubbles: true })
-    //         );
-    //     }
-    // };
+    const formClick = () => {
+        if (formRef.current) {
+            formRef.current?.dispatchEvent(
+                new Event('submit', { bubbles: true })
+            );
+        }
+    };
 
     const onSubmit = (data: any) => {
         data = cleanUpData(data);
@@ -138,7 +138,8 @@ export const EditRelic = () => {
         //     ),
         // });
 
-        let lostRelicInfo: LostRelicInfoCreateEditDTO | undefined = {};
+        let LostRelicInfoCreateEditDTO: LostRelicInfoCreateEditDTO | undefined =
+            {};
         if (isLost) {
             const {
                 lossWay = '',
@@ -146,17 +147,17 @@ export const EditRelic = () => {
                 lossTime = '',
                 lossMuseumId = '',
             } = data;
-            lostRelicInfo = {
+            LostRelicInfoCreateEditDTO = {
                 lossWay,
                 probableLocation,
                 lossTime,
-                museumId: lossMuseumId,
+                museumId: lossMuseumId.value,
             };
-            console.log('Lost Relic Info', lostRelicInfo);
         }
 
-        let recoveredRelicInfo: RecoveredRelicInfoCreateEditDTO | undefined =
-            {};
+        let RecoveredRelicInfoCreateEditDTO:
+            | RecoveredRelicInfoCreateEditDTO
+            | undefined = {};
         if (isReturned) {
             const {
                 locationSource = '',
@@ -165,7 +166,7 @@ export const EditRelic = () => {
                 previousSearchInfo = '',
                 courtDecision = '',
             } = data;
-            recoveredRelicInfo = {
+            RecoveredRelicInfoCreateEditDTO = {
                 locationSource,
                 returnProcess,
                 returnDate,
@@ -174,7 +175,7 @@ export const EditRelic = () => {
             };
         }
 
-        const relicInfo: RelicInfoCreateEditDTO = {
+        const relicInfoCreateEditDTO: RelicInfoCreateEditDTO = {
             ...(data.techniqueId && { techniqueId: data.techniqueId.value }),
             ...(data.historicalPeriodId && {
                 historicalPeriodId: data.historicalPeriodId.value,
@@ -187,8 +188,13 @@ export const EditRelic = () => {
             ...(data.appraisedValue && { appraisedValue: data.appraisedValue }),
             ...(data.insuranceValue && { insuranceValue: data.insuranceValue }),
             ...(data.annotations && { annotation: data.annotations }),
-            ...(isLost && { lostRelicInfo: lostRelicInfo }),
-            ...(isReturned && { recoveredRelicInfo: recoveredRelicInfo }),
+            ...(isLost && {
+                LostRelicInfoCreateEditDTO: LostRelicInfoCreateEditDTO,
+            }),
+            ...(isReturned && {
+                RecoveredRelicInfoCreateEditDTO:
+                    RecoveredRelicInfoCreateEditDTO,
+            }),
         };
 
         let propertyValues: string[] = [];
@@ -209,7 +215,7 @@ export const EditRelic = () => {
             ...(data.regionId && { regionId: data.regionId.value }),
             ...(data.name && { name: data.name }),
             ...(data.creationPlaceId && {
-                creationPlaceId: data.creationPlaceId.data,
+                creationPlace: data.creationPlace,
             }),
             ...(data.reportIds && { reportIds: data.reportIds }),
             ...(data.relicCategoryIds && {
@@ -239,7 +245,9 @@ export const EditRelic = () => {
             }),
             ...(propertyIds && { relicPropertyIds: propertyIds }),
             ...(propertyValues && { propertyValues: propertyValues }),
-            ...(relicInfo && { relicInfo: relicInfo }),
+            ...(relicInfoCreateEditDTO && {
+                relicInfoCreateEditDTO: relicInfoCreateEditDTO,
+            }),
         };
 
         addRelic.mutate(relic);
@@ -266,7 +274,7 @@ export const EditRelic = () => {
             comment: '',
             historicalPeriodId: '',
             primaryInventoryNumber: '',
-            copyCreationDate: '',
+            copyCreationTime: '',
             techniqueId: '',
             insuranceValue: '',
             inventoryNumber: '',
@@ -332,7 +340,7 @@ export const EditRelic = () => {
                                 <AlertDialogAction
                                     type="submit"
                                     form="relic-form"
-                                    // onClick={formClick}
+                                    onClick={formClick}
                                 >
                                     Прийняти
                                 </AlertDialogAction>

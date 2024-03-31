@@ -1,9 +1,6 @@
 import requests, { authAPi } from '../requests';
-import {
-    RelicStatusEnum,
-    RelicFilterRequest,
-    RelicDTO,
-} from '@/src/types/relic';
+import { RelicFilterRequest, RelicDTO } from '../../../../src/types/relic';
+import { RelicStatusEnum } from '../../../../src/enums/relicstatus';
 
 const RelicAPI = {
     updateRelicFile: (relicId: number, file: string) =>

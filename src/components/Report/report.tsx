@@ -23,8 +23,17 @@ export default function Report() {
     const [urlInput, setUrlInput] = useState('');
     const [photos, setPhotos] = useState<File[]>([]);
     const submitForm: SubmitHandler<ReportForm> = async (data) => {
-        data.sources = urlInput.split(' ').filter((url) => url.trim() !== '');
-        data.photos = photos;
+        // data.sources = urlInput.split(' ').filter((url) => url.trim() !== '');
+        // data.photos = photos;
+        const ndata = {
+            name: 'sjjdf dss sdfsd',
+            description: '',
+            mapLocation: '',
+            categoryIds: [2, 4],
+            status: 'REJECTED',
+            infoReferences: '',
+            regionId: 3,
+        };
         try {
             console.log(data);
             await ReportAPI.createReport(data);

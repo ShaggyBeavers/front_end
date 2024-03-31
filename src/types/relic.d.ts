@@ -19,10 +19,9 @@ export interface RelicDTO {
     formerInventoryNumber: number;
     relicPropertyIds: number[];
     propertyValues: string[];
-    relicInfo: RelicInfoCreateEditDTO;
+    relicInfoCreateEditDTO: RelicInfoCreateEditDTO;
     // Includes nested interfaces for relicInfo, lostRelicInfo, and recoveredRelicInfo
 }
-
 
 export interface RelicInfoCreateEditDTO {
     techniqueId: number;
@@ -35,8 +34,8 @@ export interface RelicInfoCreateEditDTO {
     appraisedValue: string;
     insuranceValue: string;
     annotation: string;
-    lostRelicInfo?: LostRelicInfoCreateEditDTO;
-    recoveredRelicInfo?: RecoveredRelicInfoCreateEditDTO;
+    LostRelicInfoCreateEditDTO?: LostRelicInfoCreateEditDTO;
+    RecoveredRelicInfoCreateEditDTO?: RecoveredRelicInfoCreateEditDTO;
 }
 
 export interface LostRelicInfoCreateEditDTO {
@@ -52,13 +51,6 @@ export interface RecoveredRelicInfoCreateEditDTO {
     returnProcess?: string;
     returnDate?: string;
     courtDecision?: string;
-}
-
-export enum RelicStatusEnum {
-    DESTROYED = 'DESTROYED',
-    STOLEN = 'STOLEN',
-    RETURNED = 'RETURNED',
-    UNKNOWN = 'UNKNOWN',
 }
 
 interface RelicFilterRequest {
