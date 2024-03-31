@@ -117,7 +117,9 @@ export default function Report() {
                                 className="report_input"
                                 style={{ width: '51%' }}
                             >
-                                <label htmlFor="name">Категорії:<p>(опційно)</p></label>
+                                <label htmlFor="name">
+                                    Категорії:<p>(опційно)</p>
+                                </label>
                                 <ReactSelect
                                     options={categories.map((category) => ({
                                         value: category.id.toString(),
@@ -148,7 +150,7 @@ export default function Report() {
                                     styles={{
                                         placeholder: (base) => ({
                                             ...base,
-                                            fontSize: '0.9rem',
+                                            fontSize: '0.84rem',
                                             color: '#dadada',
                                         }),
                                         menu: (provided) => ({
@@ -159,7 +161,7 @@ export default function Report() {
                                             ...base,
                                             borderWidth: 2,
                                             boxShadow: 'none',
-                                            maxHeight:'39px',
+                                            maxHeight: '39px',
                                         }),
                                         valueContainer: (provided, state) => ({
                                             ...provided,
@@ -222,13 +224,13 @@ export default function Report() {
                                 style={{ width: '60%' }}
                             >
                                 <div
-                                    className={`report_input ${errors.mapLocation ? 'error' : ''}`}
+                                    className={`report_input optional_v ${errors.mapLocation ? 'error' : ''}`}
                                     style={{ width: '100%' }}
                                 >
                                     <label htmlFor="location">
                                         Ймовірне місце розташування:
-                                        <p>(опційно)</p>
                                     </label>
+                                    <label > <p>(опційно)</p></label>
                                     <input
                                         type="text"
                                         placeholder="Введіть місце розташування"
@@ -278,14 +280,12 @@ export default function Report() {
                                 style={{ width: '35%' }}
                             >
                                 <div
-                                    className="report_input"
+                                    className="report_input optional_v "
                                     style={{ width: '100%' }}
                                 >
-                                    <label htmlFor="name">
-                                        Регіон:
-                                    </label>
+                                    <label htmlFor="name">Регіон:</label>
                                     <label>
-                                       <p>(опційно)</p>
+                                        <p>(опційно)</p>
                                     </label>
                                     <ReactSelect
                                         options={regions.map((region) => ({
@@ -320,7 +320,7 @@ export default function Report() {
                                         styles={{
                                             placeholder: (base) => ({
                                                 ...base,
-                                                fontSize: '0.9rem',
+                                                fontSize: '0.84rem',
                                                 color: '#dadada',
                                             }),
                                             menu: (provided) => ({
@@ -330,7 +330,7 @@ export default function Report() {
                                             control: (base) => ({
                                                 ...base,
                                                 borderWidth: 2,
-                                                maxHeight:'33px',
+                                                maxHeight: '39.5px',
                                                 boxShadow: 'none',
                                             }),
                                             valueContainer: (
@@ -338,7 +338,7 @@ export default function Report() {
                                                 state
                                             ) => ({
                                                 ...provided,
-                                                fontSize:'0.9rem',
+                                                fontSize: '0.9rem',
                                                 overflow: 'auto',
                                             }),
                                         }}

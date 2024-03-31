@@ -44,6 +44,14 @@
     gap: 0.5rem;
 }
 
+.report_input.optional_v{
+    gap:0;
+}
+
+.report_input.optional_v p{
+    margin-bottom:0.2rem;
+}
+
 .report input {
     padding: 0.5rem 0.8125rem;
     flex: 1;
@@ -51,45 +59,19 @@
     outline: none;
     border-radius: 15px;
     font-family: 'eUkraine-Regular';
-    font-size: 0.8125rem;
+    font-size: 0.84rem;
 }
 
 .report input::placeholder,
 .report textarea::placeholder {
     font-family: 'eUkraine-Regular';
     color: #dadada;
+    font-size: 0.84rem;
 }
 
 .report_input.error p,.cat_error {
     color: red;
     font-size: 11px;
-}
-
-.report_input select {
-    padding: 0.44rem 0.8125rem;
-    border: 2px solid;
-    border-radius: 15px;
-    box-sizing: border-box;
-    font-family: 'eUkraine-Regular';
-    font-size: 0.8125rem;
-    cursor: pointer;
-    background: transparent;
-}
-
-select::-webkit-scrollbar {
-    width: 14px;
-    height: 14px;
-}
-
-select::-webkit-scrollbar-track {
-    border: rgb(180, 180, 180);
-    background-color: #dadada;
-}
-
-select::-webkit-scrollbar-thumb {
-    background-color: black;
-    border-radius: 15px;
-    border: 1px solid rgb(193, 193, 193);
 }
 
 .report label {
@@ -108,6 +90,7 @@ select::-webkit-scrollbar-thumb {
     border-radius: 15px;
     box-sizing: border-box;
     font-family: 'eUkraine-Regular';
+    font-size: 0.84rem;
 }
 
 .report button {
@@ -128,4 +111,6 @@ select::-webkit-scrollbar-thumb {
     flex-direction: column;
     justify-content: center;
 }
+
+
 
