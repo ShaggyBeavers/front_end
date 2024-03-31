@@ -6,13 +6,12 @@ import './catalogue.css';
 import SwitchBtn from '../SwitchButton/switch_btn';
 import Pagination from '../Pagination/pagination';
 import NotFound from '../NotFound/not_found';
-import FilterRelicsLine from '../icons/filter_relics_line';
-import FilterModal from '../FilterModal/filter_modal';
-import FilterExpand from '../icons/filter_expand';
-import SelFilterExpand from '../icons/sel_filter_expand';
 import { FilterCategory } from '../FilterCategory/filter_category';
-import { title } from 'process';
 import RelicAPI from '../../app/api/Relic/relic';
+import CategoryAPI from '../../app/api/Category/category';
+import HistoricalPeriodAPI from '../../app/api/HistoricalPeriod/historicalPeriod';
+import TechniqueAPI from '../../app/api/Technique/technique';
+// import CollectionsAPI from '../../app/api/Collection/collection';
 import Relic from '../Relic/Relic';
 
 interface Photo {
@@ -49,7 +48,7 @@ interface GetAllRelicsResponse {
     last: boolean;
     numberOfElements: number;
     empty: boolean;
-  }
+}
 
 export interface Filters {
     historicalPeriods: string[];
@@ -65,7 +64,8 @@ const PAGE_SIZE = 18;
 const Catalogue = () => {
     const navigate = useNavigate();
     const location = useLocation();
-
+    const [notFound, setNotFound] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
     // const [items, setItems] = useState<Photo[]>([]);   FOR STYLING
     const [result, setResult] = useState<GetAllRelicsResponse>({
         totalPages: 0,
@@ -95,8 +95,6 @@ const Catalogue = () => {
         numberOfElements: 0,
         empty: true,
     });
-    const [notFound, setNotFound] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(
         null
     );
@@ -119,6 +117,7 @@ const Catalogue = () => {
             // const response = await axios.get<Photo[]>(
             //     `https://jsonplaceholder.typicode.com/photos?_page=${page}&_limit=${PAGE_SIZE}` //request is under,this is just to display styling
             // );
+            console.log(selectedFilterOptions, 'opa');
             const response = await RelicAPI.filterRelics(
                 page - 1,
                 PAGE_SIZE,
@@ -136,12 +135,27 @@ const Catalogue = () => {
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
         const pageParam = searchParams.get('page');
+        const categoryParam = searchParams.get('category');
+        console.log(categoryParam)
         const pageNumber = pageParam ? parseInt(pageParam, 10) : 1;
         if (pageNumber >= 1 && pageNumber <= totalPages) {
             setCurrentPage(pageNumber);
         } else {
             setNotFound(true);
         }
+
+        if (categoryParam) {
+            const categoriesArray = categoryParam.split(',');
+            setSelectedFilterOptions({
+                categories: categoriesArray,
+                historicalPeriods: [],
+                statuses: [],
+                techniques: [],
+                collections: [],
+            });
+        }
+
+        fetchItems(pageNumber);
     }, [location.search]);
 
     useEffect(() => {
@@ -167,63 +181,112 @@ const Catalogue = () => {
     };
 
     const handleFilterOptionClick = (option: string, category: string) => {
+        let selectedValue = option; // Default to option if not found in statusOptions
+        if (category === 'statuses') {
+            const selectedOption = statusOptions.find(
+                ({ label }) => label === option
+            );
+            if (selectedOption) {
+                selectedValue = selectedOption.value; // Use value if label found
+            }
+        }
         setSelectedFilterOptions((prevOptions) => ({
             ...prevOptions,
             [category]:
                 option === 'clear'
                     ? []
                     : prevOptions[category]
-                      ? prevOptions[category].includes(option)
+                      ? prevOptions[category].includes(selectedValue)
                           ? prevOptions[category].filter(
-                                (item) => item !== option
+                                (item) => item !== selectedValue
                             )
-                          : [...prevOptions[category], option]
-                      : [option],
+                          : [...prevOptions[category], selectedValue]
+                      : [selectedValue],
         }));
     };
 
     useEffect(() => {
-        console.log(selectedFilterOptions);
-    }, [selectedFilterOptions]);
+        const fetchCategories = async () => {
+            try {
+                const response = await CategoryAPI.getCategories();
+                const categoryNames = response.map(
+                    (item: { name: string }) => item.name
+                );
+                setCategories(categoryNames);
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+            }
+        };
+
+        const fetchHistoricalPeriods = async () => {
+            try {
+                const response =
+                    await HistoricalPeriodAPI.getHistoricalPeriods();
+                const periodNames = response.map(
+                    (item: { name: string }) => item.name
+                );
+                setHistoricalPeriods(periodNames);
+            } catch (error) {
+                console.error('Error fetching historical periods:', error);
+            }
+        };
+
+        const fetchTechniques = async () => {
+            try {
+                const response = await TechniqueAPI.getTechniques();
+                const techniqueNames = response.map(
+                    (item: { name: string }) => item.name
+                );
+                setTechniques(techniqueNames);
+            } catch (error) {
+                console.error('Error fetching techniques:', error);
+            }
+        };
+
+        // const fetchCollections = async () => {
+        //     try {
+        //         const response = await CollectionsAPI.getCollections();
+        //         const collectionNames = response.map((item: { name: string }) => item.name);
+        //         setCollections(collectionNames);
+        //     } catch (error) {
+        //         console.error('Error fetching collections:', error);
+        //     }
+        // };
+
+        fetchCategories();
+        fetchHistoricalPeriods();
+        fetchTechniques();
+        // fetchCollections();
+    }, []);
 
     const filterTitles = [
         'Категорія',
-        'Місце',
-        'Матеріал',
-        'Дата створення',
         'Статус',
+        'Історичний період',
         'Колекція',
-        'Автор',
         'Техніка',
     ];
     const filterCategories = [
-        'category',
-        'place',
-        'material',
-        'creationDate',
-        'status',
-        'collection',
-        'author',
-        'technique',
+        'categories',
+        'statuses',
+        'historicalPeriods',
+        'collections',
+        'techniques',
     ];
     const translatedTitles = filterCategories.map(
         (category, index) => filterTitles[index] || category
     );
-    const filterOptions = [
-        'Option1',
-        'Option2',
-        'Option3',
-        'cow',
-        'opposum',
-        'Drake',
-        'cowbigchonk',
-        'opposumextrafff small',
-        'Drake2',
-        'nocow',
-        'opposum1',
-        'Drakie',
-    ];
 
+    const [categories, setCategories] = useState<string[]>([]);
+    const [historicalPeriods, setHistoricalPeriods] = useState<string[]>([]);
+    const [techniques, setTechniques] = useState<string[]>([]);
+    const [collections, setCollections] = useState<string[]>([]);
+    const statusOptions = [
+        { value: 'DESTROYED', label: 'Знищено' },
+        { value: 'STOLEN', label: 'Вкрадено' },
+        { value: 'RETURNED', label: 'Повернуто' },
+        { value: 'UNKNOWN', label: 'Невідомо' },
+    ];
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
@@ -259,7 +322,24 @@ const Catalogue = () => {
                                             isFilterModalOpen={
                                                 isFilterModalOpen
                                             }
-                                            options={filterOptions}
+                                            options={
+                                                category === 'statuses'
+                                                    ? statusOptions.map(
+                                                          ({ label }) => label
+                                                      )
+                                                    : category === 'categories'
+                                                      ? categories
+                                                      : category ===
+                                                          'historicalPeriods'
+                                                        ? historicalPeriods
+                                                        : category ===
+                                                            'techniques'
+                                                          ? techniques
+                                                          : category ===
+                                                              'collections'
+                                                            ? collections
+                                                            : []
+                                            }
                                             selectedFilterOptions={
                                                 selectedFilterOptions
                                             }

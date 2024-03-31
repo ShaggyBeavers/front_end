@@ -18,6 +18,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
     const handleClearFilters = () => {
         onOptionClick('clear');
     };
+
     return (
         <div className="filter-modal">
             <div className="filter-options">
