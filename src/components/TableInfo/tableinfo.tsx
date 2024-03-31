@@ -78,7 +78,6 @@ const RelicTableInfo = () => {
     // ];
 
     const props = reports?.data!.data.content;
-    console.log(props);
 
     return (
         <>

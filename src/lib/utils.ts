@@ -29,8 +29,6 @@ export const checkAuthRole = (roles: string[]) => {
     // if (!isLoggedIn) return false;
     // return roles.includes(userRole as string);
     const token = JSON.parse(localStorage.getItem('auth-store') || '{}');
-    // console.log(token.state.user);
     const user = token.state.user;
-    // console.log(user);
     return roles.includes(user.role);
 };
