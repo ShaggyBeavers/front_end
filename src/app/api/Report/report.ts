@@ -1,6 +1,6 @@
 import { statusTypeEN } from '@/src/types/status-type-en';
 import requests, { authAPi } from '../requests';
-import { RelicStatusEnum } from '@/src/types/relic';
+import { ReportStatusEnum } from '../../../../src/enums/reportstatus';
 
 export interface reportData {
     name: string;
@@ -13,12 +13,16 @@ export interface reportData {
 }
 
 const ReportAPI = {
+    getAllReports: (page: number, size: number) =>
+        authAPi.get(`api/report/?page=${page}&size=${size}`),
     createReport: (values: {}) => authAPi.post('api/report/', values),
-    getAllReports: () => authAPi.get('api/report/'),
     updateReportStatus: (values: {
         reportId: number;
-        status: RelicStatusEnum;
-    }) => authAPi.put('api/report/status', values),
+        status: ReportStatusEnum;
+    }) =>
+        authAPi.put(
+            `api/report/status?reportId=${values.reportId}&status=${values.status}`
+        ),
     getReport: (reportId: number) => authAPi.get(`api/report/${reportId}`),
     deleteReport: (reportId: number) =>
         authAPi.delete(`api/report/delete/${reportId}`),

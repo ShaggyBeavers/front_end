@@ -68,14 +68,14 @@ export const columns: any = [
         cell: ({ row }: any) => {
             const categories = row.getValue('categories');
             const labels = categories.map(
-                (category: categoryType) => category.categoryName
+                (category: categoryType) => category.name
             );
             // const labels = categories.map((category: categoryType) => {
             //     return (
             //         categories.find(
             //             (t: categoryType) =>
-            //                 t.categoryName === category.categoryName
-            //         )?.categoryName || category.categoryName
+            //                 t.name === category.name
+            //         )?.name || category.name
             //     );
             // });
 
@@ -97,8 +97,8 @@ export const columns: any = [
             //     return (
             //         categories.find(
             //             (t: categoryType) =>
-            //                 t.categoryName === category.categoryName
-            //         )?.categoryName || category.categoryName
+            //                 t.name === category.name
+            //         )?.name || category.name
             //     );
             // });
 

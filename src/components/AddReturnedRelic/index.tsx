@@ -9,19 +9,13 @@ import {
     FormMessage,
 } from '../ui/form';
 import { Separator } from '../ui/separator';
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from '../ui/tooltip';
 
 const AddReturnedRelic = ({ form }: any) => {
     return (
         <div>
             <h2 className="text-4xl mb-5">Інформація про повернуту реліквію</h2>
             <div className="grid grid-cols-2 gap-10">
-                <div className="grid grid-rows-2 gap-5">
+                <div className="grid grid-rows-3 gap-5">
                     {/* location source */}
                     <FormField
                         control={form.control}
@@ -63,10 +57,25 @@ const AddReturnedRelic = ({ form }: any) => {
                             </FormItem>
                         )}
                     />
-                    {/* Restoration */}
+                    {/* return date */}
+                    <FormField
+                        control={form.control}
+                        name="returnDate"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel htmlFor="returnDate">
+                                    Дата повернення
+                                </FormLabel>
+                                <FormControl>
+                                    <Input type="date" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                 </div>
-                <div className="grid grid-rows-2 gap-5">
-                    {/* marks */}
+                <div className="grid grid-rows-3 gap-5">
+                    {/* prevSearchInfo */}
                     <FormField
                         control={form.control}
                         name="previousSearchInfo"

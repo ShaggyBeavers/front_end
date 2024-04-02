@@ -50,7 +50,7 @@ export function DataTable<TData, TValue>({
         const values: any = new Set(row.getValue(columnId) as string[]);
         const included = [...selectedValues].every((selected) =>
             Array.from(values).some(
-                (item: any) => item.categoryName === selected || item.name === selected
+                (item: any) => item.name === selected || item.name === selected
             )
         );
 
@@ -82,7 +82,7 @@ export function DataTable<TData, TValue>({
 
     return (
         <div className="space-y-4">
-            <DataTableToolbar table={table} constants={constants}/>
+            <DataTableToolbar table={table} constants={constants} />
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>

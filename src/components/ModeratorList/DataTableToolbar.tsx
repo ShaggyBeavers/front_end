@@ -19,8 +19,8 @@ interface DataTableToolbarProps<TData> {
 
 // convert categories to options
 const categoriesOptions: options[] = categories.map((category) => ({
-    label: category.categoryName,
-    value: category.categoryName,
+    label: category.name,
+    value: category.name,
 }));
 
 const statusesOptions: options[] = statuses.map((status) => ({

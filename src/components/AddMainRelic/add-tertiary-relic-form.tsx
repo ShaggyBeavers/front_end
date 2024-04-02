@@ -49,7 +49,7 @@ export const AddTertiaryRelicForm = ({ form }: any) => {
                                     Розміри
                                 </FormLabel>
                                 <FormControl>
-                                    <Input type="text"  {...field}   />
+                                    <Input type="text" {...field} />
                                 </FormControl>
                                 <FormDescription>
                                     Вкажіть розмір у мм
@@ -87,7 +87,8 @@ export const AddTertiaryRelicForm = ({ form }: any) => {
                                     <Input type="text" {...field} />
                                 </FormControl>
                                 <FormDescription>
-                                Інформація про здійснення/потребу здійснення реставрації
+                                    Інформація про здійснення/потребу здійснення
+                                    реставрації
                                 </FormDescription>
                                 <FormMessage />
                             </FormItem>
@@ -101,12 +102,14 @@ export const AddTertiaryRelicForm = ({ form }: any) => {
                         name="marks"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor="marks">
-                                    Марки
-                                </FormLabel>
+                                <FormLabel htmlFor="marks">Стан</FormLabel>
                                 <FormControl>
                                     <Input type="text" {...field} />
                                 </FormControl>
+                                <FormDescription>
+                                    Стан збереження, наявність пошкоджень,
+                                    потертостей
+                                </FormDescription>
                                 <FormMessage />
                             </FormItem>
                         )}
@@ -117,10 +120,7 @@ export const AddTertiaryRelicForm = ({ form }: any) => {
                         name="labels"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel 
-                                htmlFor="labels">
-                                    Ярлики
-                                    </FormLabel>
+                                <FormLabel htmlFor="labels">Ярлики</FormLabel>
                                 <FormControl>
                                     <Input type="text" {...field} />
                                 </FormControl>
@@ -141,7 +141,9 @@ export const AddTertiaryRelicForm = ({ form }: any) => {
                                     <Input type="text" {...field} />
                                 </FormControl>
                                 <FormDescription>
-                                Будь-яка інформація з історії перебування культурної цінності до/після втрати її музеєм
+                                    Будь-яка інформація з історії перебування
+                                    культурної цінності до/після втрати її
+                                    музеєм
                                 </FormDescription>
                                 <FormMessage />
                             </FormItem>

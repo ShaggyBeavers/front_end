@@ -24,7 +24,7 @@ interface Region {
 
 interface Categories {
     id?: number;
-    categoryName: string;
+    name: string;
 }
 
 interface Moderator {
@@ -82,7 +82,7 @@ const ModeratorList = () => {
             ...(moderatorsData.data?.data || [])
                 .reduce((acc: Categories[], moderator: Moderator) => {
                     const moderatorCategories = moderator.categories.map(
-                        (category: Categories) => category.categoryName
+                        (category: Categories) => category.name
                     );
                     return [...acc, ...moderatorCategories];
                 }, [])
@@ -93,7 +93,7 @@ const ModeratorList = () => {
             ...(regModeratorsData.data?.data || [])
                 .reduce((acc: Categories[], moderator: Moderator) => {
                     const moderatorCategories = moderator.categories.map(
-                        (category: Categories) => category.categoryName
+                        (category: Categories) => category.name
                     );
                     return [...acc, ...moderatorCategories];
                 }, [])

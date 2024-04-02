@@ -158,12 +158,21 @@ const SideMenu: React.FC<SideMenuProps> = ({ currentPage }) => {
                 <ProtectedItems
                     role={[RoleEnum.ADMIN, RoleEnum.REGIONAL_MODERATOR]}
                 >
-                    <DefaultButton
-                        height={38}
-                        width={300}
-                        text="Список модераторів"
-                        action={() => handleModeratorList()}
-                    />
+                    {currentPage.endsWith('moderator-list') ? (
+                        <DefaultButton
+                            height={38}
+                            width={300}
+                            text="Список репортів"
+                            action={() => navigate('/profile')}
+                        />
+                    ) : (
+                        <DefaultButton
+                            height={38}
+                            width={300}
+                            text="Список модераторів"
+                            action={() => navigate('/profile/moderator-list')}
+                        />
+                    )}
                 </ProtectedItems>
                 <ProtectedItems
                     role={[
@@ -184,7 +193,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ currentPage }) => {
                             height={38}
                             width={300}
                             text="Додати термін"
-                            action={() => navigate('./add-term')}
+                            action={() => navigate('/profile/add-term')}
                         />
                     )}
                 </ProtectedItems>
