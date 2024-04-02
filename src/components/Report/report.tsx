@@ -161,7 +161,6 @@ export default function Report() {
                                             ...base,
                                             borderWidth: 2,
                                             boxShadow: 'none',
-                                            maxHeight: '39px',
                                         }),
                                         valueContainer: (provided, state) => ({
                                             ...provided,

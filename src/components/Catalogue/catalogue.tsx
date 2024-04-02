@@ -117,7 +117,7 @@ const Catalogue = () => {
             // const response = await axios.get<Photo[]>(
             //     `https://jsonplaceholder.typicode.com/photos?_page=${page}&_limit=${PAGE_SIZE}` //request is under,this is just to display styling
             // );
-            console.log(selectedFilterOptions, 'opa');
+            console.log(selectedFilterOptions, ': selected filter options before fetch');
             const response = await RelicAPI.filterRelics(
                 page - 1,
                 PAGE_SIZE,
@@ -136,7 +136,6 @@ const Catalogue = () => {
         const searchParams = new URLSearchParams(location.search);
         const pageParam = searchParams.get('page');
         const categoryParam = searchParams.get('category');
-        console.log(categoryParam)
         const pageNumber = pageParam ? parseInt(pageParam, 10) : 1;
         if (pageNumber >= 1 && pageNumber <= totalPages) {
             setCurrentPage(pageNumber);
@@ -146,6 +145,7 @@ const Catalogue = () => {
 
         if (categoryParam) {
             const categoriesArray = categoryParam.split(',');
+            console.log(categoriesArray,'category param array')
             setSelectedFilterOptions({
                 categories: categoriesArray,
                 historicalPeriods: [],
@@ -155,12 +155,11 @@ const Catalogue = () => {
             });
         }
 
-        fetchItems(pageNumber);
     }, [location.search]);
 
     useEffect(() => {
         fetchItems(currentPage);
-    }, [currentPage, navigate]);
+    }, [currentPage, navigate,selectedFilterOptions]);
 
     const paginate = (pageNumber: number) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -181,13 +180,13 @@ const Catalogue = () => {
     };
 
     const handleFilterOptionClick = (option: string, category: string) => {
-        let selectedValue = option; // Default to option if not found in statusOptions
+        let selectedValue = option; 
         if (category === 'statuses') {
             const selectedOption = statusOptions.find(
                 ({ label }) => label === option
             );
             if (selectedOption) {
-                selectedValue = selectedOption.value; // Use value if label found
+                selectedValue = selectedOption.value; 
             }
         }
         setSelectedFilterOptions((prevOptions) => ({
