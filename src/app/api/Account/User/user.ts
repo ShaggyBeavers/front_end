@@ -1,16 +1,17 @@
 import requests, { authAPi } from '../../requests';
 
 const UserAPI = {
-    editUser: (
-        userId: number,
-        values: { email: string; firstName: string; lastName: string }
-    ) => requests.put(`api/user/edit/${userId}`, values),
+    editUser: (values: {
+        email: string;
+        firstName: string;
+        lastName: string;
+    }) => authAPi.put(`api/user/edit/`, values),
     resetPassword: (values: {
         token: string;
         password: string;
         passwordConfirmation: string;
     }) => requests.post('api/user/password/reset', values),
-    recoveryRequest: (values: {email: string}) =>
+    recoveryRequest: (values: { email: string }) =>
         requests.post('api/user/password/request-reset', values),
     newPassword: (values: { password: string; passwordConfirmation: string }) =>
         requests.patch('api/user/password/change', values),

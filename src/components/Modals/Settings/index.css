@@ -87,17 +87,32 @@
 }
 
 .submit-button {
-    width: 7.125rem;
-    height: 2.5rem;
+    width: 6.125rem;
+    height: 2.25rem;
     flex-shrink: 0;
     border-radius: 2.5rem;
-    color: white;
-    background: black;
-    border: none;
+    color: black;
+    /* background: black !important; */
+
+    /* border: none; */
+    border: 2px solid black;
     font-size: 0.8125rem;
     font-family: e-Ukraine;
     font-style: normal;
     font-weight: 400;
+}
+
+.submit-button:hover {
+    background: black;
+    color: white;
+}
+
+.submit-button:disabled {
+    /* border: none;
+    background: none;
+    color: transparent; */
+    background: var(--Grey, #dadada);
+    color: var(--GreyText, #8e8e8e);
 }
 
 .disabled {
@@ -131,7 +146,7 @@
 }
 
 .password-block {
-    margin-top: 3rem;
+    margin-top: 1.4rem;
 }
 
 .errors {
