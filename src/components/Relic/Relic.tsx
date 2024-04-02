@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './relic.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import RelicAPI from '../../app/api/Relic/relic';
-
-interface RelicProps {
-    relicId: number;
-}
 
 interface RelicPropertyDTO {
     name: string;
@@ -40,6 +36,7 @@ interface LostRelicInfoDTO {
 interface Relic {
     id: number;
     name: string;
+    author: string;
     creationDate: string;
     creationPlaceName: string;
     imageUrl: string;
@@ -49,30 +46,37 @@ interface Relic {
     collection: string;
     comment: string;
     status: string;
+    inventoryNumber: number,
+    formerInventoryNumber: number,
+    copyInformation: string,
+    copyCreationTime: string,
     relicPropertyDTOs: RelicPropertyDTO[];
     relicInfoDTO: RelicInfoDTO;
     recoveredRelicInfoDTO: RecoveredRelicInfoDTO;
     lostRelicInfoDTO: LostRelicInfoDTO;
+    
 }
 
-const Relic = ({ relicId }: RelicProps) => {
+const Relic = () => {
     const navigate = useNavigate();
+    const params = useParams();
     const [item, setItem] = useState<Relic | null>(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     useEffect(() => {
         const fetchItemDetails = async () => {
             try {
-                const response = await RelicAPI.fetchDetails(relicId);
-                console.log('Request Details:', response.config);
-                setItem(response.data);
-                console.log(item);
+                const response = await RelicAPI.fetchDetails(
+                    Number(params.relicsid)
+                );
+                console.log('Request Details:', response);
+                setItem(response);
             } catch (error) {
                 console.error('Error fetching item details:', error);
             }
         };
         fetchItemDetails();
-    }, [relicId]);
+    }, [params.relicsid]);
 
     const goBack = () => {
         navigate(-1);
@@ -93,7 +97,20 @@ const Relic = ({ relicId }: RelicProps) => {
     };
 
     function renderFieldValue(value: any) {
-        return value !== null && value !== undefined ? value : '-';
+        const statusVocabulary: { [key: string]: string } = {
+            UNKNOWN: 'Невідомо',
+            DESTROYED: 'Знищено',
+            RETURNED: 'Повернуто',
+            STOLEN: 'Викрадено',
+        };
+
+        if (value === null || value === undefined) {
+            return '-';
+        } else if (statusVocabulary[value]) {
+            return statusVocabulary[value];
+        } else {
+            return value;
+        }
     }
 
     return (
@@ -107,11 +124,7 @@ const Relic = ({ relicId }: RelicProps) => {
                     />
                     <p>Повернутись</p>
                 </div>
-                <h3>
-                    Мозаїчне зображення Димитрія Солунського з Михайлівського
-                    Золотоверхого собору
-                </h3>
-                {/* <h3>{renderFieldValue(item?.name)}</h3> */}
+                <h3>{renderFieldValue(item?.name)}</h3>
                 <div>
                     <h6>Категорія:</h6>
                     <p>Мозаїка</p>
@@ -120,48 +133,33 @@ const Relic = ({ relicId }: RelicProps) => {
                 <div className="relic_col">
                     <h6>Колекція:</h6>
                     <a style={{ cursor: 'unset' }}>
-                        Якась гіпер довга назва аби Макс глянув чи вона працює
+                        {' '}
+                        {renderFieldValue(item?.collection)}
                     </a>
-                    {/* <a style={{ cursor: 'unset' }}> {renderFieldValue(item?.collection)}</a> */}
                 </div>
                 <div>
                     <h6>Автор:</h6>
-                    <p>Beaver Beaverovich</p>
-                    {/* waiting for back */}
+                    <p>{renderFieldValue(item?.author)}</p>
                 </div>
                 <div>
                     <h6>Опис:</h6>
-                    <p>
-                        Михайлівський собор, збудований у 1108-1113 роках, був
-                        зруйнований у 1937 році. Мозаїки та фрески з собору були
-                        виставлені в Державному українському музеї в Києві.
-                        Після розстрілу директора музею частину творів вивезли
-                        до Софійського собору та Москви. Незважаючи на
-                        реконструкцію, ключові твори мистецтва так і не були
-                        повернуті до Києва і залишаються в Третьяковській
-                        галереї в Москві.
-                    </p>
-                    {/* <p>{renderFieldValue(item?.comment)}</p> */}
+                    <p>{renderFieldValue(item?.comment)}</p>
                 </div>
                 <div>
                     <h6>Дата створення:</h6>
-                    <p>70-роки якоїсь там доби</p>
-                    {/* <p>{renderFieldValue(item?.creationDate)}</p> */}
+                    <p>{renderFieldValue(item?.creationDate)}</p>
                 </div>
                 <div>
                     <h6>Кількість:</h6>
-                    <p>1</p>
-                    {/* <p> {renderFieldValue(item?.quantity)}</p> */}
+                    <p> {renderFieldValue(item?.quantity)}</p>
                 </div>
                 <div>
                     <h6>Історичне місце знаходження:</h6>
-                    <p>Михайлівський Золотоверхий монастир, Київ, Україна</p>
-                    {/* <p>{renderFieldValue(item?.creationPlaceName)}</p> */}
+                    <p>{renderFieldValue(item?.creationPlaceName)}</p>
                 </div>
                 <div>
                     <h6>Статус:</h6>
-                    <p>Викрадено</p>
-                    {/* <p>{renderFieldValue(item?.status)}</p> */}
+                    <p>{renderFieldValue(item?.status)}</p>
                 </div>
 
                 <div className="relic_divider" />
@@ -171,19 +169,19 @@ const Relic = ({ relicId }: RelicProps) => {
 
                 <div>
                     <h6>Первинний інвентарний номер:</h6>
-                    <p>73820239480932</p>
+                    <p>{renderFieldValue(item?.formerInventoryNumber)}</p>
                 </div>
                 <div>
                     <h6>Інвентарний номер:</h6>
-                    <p>32718</p>
+                    <p>{renderFieldValue(item?.inventoryNumber)}</p>
                 </div>
                 <div>
                     <h6>Дата створення копії:</h6>
-                    <p>-</p>
+                    <p>{renderFieldValue(item?.copyCreationTime)}</p>
                 </div>
                 <div>
                     <h6>Інформація про копію:</h6>
-                    <p>Не існує</p>
+                    <p>{renderFieldValue(item?.copyInformation)}</p>
                 </div>
                 <div>
                     <h6>Страхова вартість:</h6>
@@ -200,33 +198,27 @@ const Relic = ({ relicId }: RelicProps) => {
 
                 <div>
                     <h6>Розміри:</h6>
-                    <p>61/62/64</p>
-                    {/* <p>{renderFieldValue(item?.relicInfoDTO.dimensions)}</p> */}
+                    <p>{renderFieldValue(item?.relicInfoDTO?.dimensions)}</p>
                 </div>
                 <div>
                     <h6>Позначки:</h6>
-                    <p>-</p>
-                    {/* <p>{renderFieldValue(item?.relicInfoDTO.marks)}</p> */}
+                    <p>{renderFieldValue(item?.relicInfoDTO?.marks)}</p>
                 </div>
                 <div>
                     <h6>Підписи:</h6>
-                    <p>-</p>
-                    {/* <p>{renderFieldValue(item?.relicInfoDTO.signatures)}</p> */}
+                    <p>{renderFieldValue(item?.relicInfoDTO?.signatures)}</p>
                 </div>
                 <div>
                     <h6>Бірка:</h6>
-                    <p>Кльова</p>
-                    {/* <p>{renderFieldValue(item?.relicInfoDTO.labels)}</p> */}
+                    <p>{renderFieldValue(item?.relicInfoDTO?.labels)}</p>
                 </div>
                 <div>
                     <h6>Реставрація:</h6>
-                    <p>-</p>
-                   {/* <p>{renderFieldValue(item?.relicInfoDTO.restoration)}</p> */}
+                    <p>{renderFieldValue(item?.relicInfoDTO?.restoration)}</p>
                 </div>
                 <div>
                     <h6>Анотація:</h6>
-                    <p>-</p>
-                   {/* <p>{renderFieldValue(item?.relicInfoDTO.annotation)}</p> */}
+                    <p>{renderFieldValue(item?.relicInfoDTO?.annotation)}</p>
                 </div>
 
                 <div className="relic_divider" />
@@ -235,18 +227,19 @@ const Relic = ({ relicId }: RelicProps) => {
 
                 <div>
                     <h6>Шлях втрати:</h6>
-                    <p>-</p>
-                    {/* <p>{renderFieldValue(item?.lostRelicInfoDTO.lossWay)}</p> */}
+                    <p>{renderFieldValue(item?.lostRelicInfoDTO?.lossWay)}</p>
                 </div>
                 <div>
                     <h6>Дата втрати:</h6>
-                    <p>23.01.19</p>
-                    {/* <p>{renderFieldValue(item?.lostRelicInfoDTO.lossTime)}</p> */}
+                    <p>{renderFieldValue(item?.lostRelicInfoDTO?.lossTime)}</p>
                 </div>
                 <div>
                     <h6>Можливе місцезнаходження:</h6>
-                    <p>-</p>
-                    {/* <p>{renderFieldValue(item?.lostRelicInfoDTO.probableLocation)}</p> */}
+                    <p>
+                        {renderFieldValue(
+                            item?.lostRelicInfoDTO?.probableLocation
+                        )}
+                    </p>
                 </div>
 
                 <div className="relic_divider" />
@@ -255,23 +248,19 @@ const Relic = ({ relicId }: RelicProps) => {
 
                 <div>
                     <h6>Джерело інформації про повернення:</h6>
-                    <p>Новини</p>
-                   {/* <p>{renderFieldValue(item?.recoveredRelicInfoDTO.locationSource)}</p> */}
+                    <p>{renderFieldValue(item?.recoveredRelicInfoDTO?.locationSource)}</p>
                 </div>
                 <div>
-                    <h6>Попереднє джерело про пошук:</h6>
-                    <p>-</p>
-                     {/* <p>{renderFieldValue(item?.recoveredRelicInfoDTO.previousSearchInfo)}</p> */}
+                    <h6>Час повернення:</h6>
+                    <p>{renderFieldValue(item?.recoveredRelicInfoDTO?.returnDate)}</p>
                 </div>
                 <div>
                     <h6>Процес повернення:</h6>
-                    <p>Розпочато</p>
-                    {/* <p>{renderFieldValue(item?.recoveredRelicInfoDTO.returnProcess)}</p> */}
+                    <p>{renderFieldValue(item?.recoveredRelicInfoDTO?.returnProcess)}</p>
                 </div>
                 <div>
                     <h6>Судовий процес:</h6>
-                    <p>Розпочато</p>
-                    {/* <p>{renderFieldValue(item?.recoveredRelicInfoDTO.courtDecision)}</p> */}
+                    <p>{renderFieldValue(item?.recoveredRelicInfoDTO?.courtDecision)}</p>
                 </div>
             </div>
             <div className="relic_right">

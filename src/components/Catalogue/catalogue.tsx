@@ -117,7 +117,10 @@ const Catalogue = () => {
             // const response = await axios.get<Photo[]>(
             //     `https://jsonplaceholder.typicode.com/photos?_page=${page}&_limit=${PAGE_SIZE}` //request is under,this is just to display styling
             // );
-            console.log(selectedFilterOptions, ': selected filter options before fetch');
+            console.log(
+                selectedFilterOptions,
+                ': selected filter options before fetch'
+            );
             const response = await RelicAPI.filterRelics(
                 page - 1,
                 PAGE_SIZE,
@@ -145,7 +148,7 @@ const Catalogue = () => {
 
         if (categoryParam) {
             const categoriesArray = categoryParam.split(',');
-            console.log(categoriesArray,'category param array')
+            console.log(categoriesArray, 'category param array');
             setSelectedFilterOptions({
                 categories: categoriesArray,
                 historicalPeriods: [],
@@ -154,12 +157,11 @@ const Catalogue = () => {
                 collections: [],
             });
         }
-
     }, [location.search]);
 
     useEffect(() => {
         fetchItems(currentPage);
-    }, [currentPage, navigate,selectedFilterOptions]);
+    }, [currentPage, navigate, selectedFilterOptions]);
 
     const paginate = (pageNumber: number) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -180,13 +182,13 @@ const Catalogue = () => {
     };
 
     const handleFilterOptionClick = (option: string, category: string) => {
-        let selectedValue = option; 
+        let selectedValue = option;
         if (category === 'statuses') {
             const selectedOption = statusOptions.find(
                 ({ label }) => label === option
             );
             if (selectedOption) {
-                selectedValue = selectedOption.value; 
+                selectedValue = selectedOption.value;
             }
         }
         setSelectedFilterOptions((prevOptions) => ({
@@ -359,27 +361,18 @@ const Catalogue = () => {
                         <Search />
                         <div className="cat-items-container">
                             {result &&
-                                result.content.map((item, index) => (
+                                result.content.map((item) => (
                                     <Link
                                         key={item.id}
-                                        to={`/catalogue/${item.id}`}
+                                        to={`/catalogue?id=${encodeURIComponent(item.id)}`}
                                         className="cat-item"
                                     >
                                         <img
                                             src={item.imageUrl}
-                                            alt={item.name}
                                         />
                                         {/* <div className='cat-item-title'><p>{item.title}</p></div> */}
                                         <div className="cat-item-title">
-                                            {' '}
-                                            {index === 0 ? (
-                                                <p>
-                                                    Мозаїчне зображення Димитрія
-                                                    Солунського
-                                                </p>
-                                            ) : (
-                                                <p>{item.name}</p>
-                                            )}
+                                            <p>{item.name}</p>
                                         </div>
                                     </Link>
                                 ))}
