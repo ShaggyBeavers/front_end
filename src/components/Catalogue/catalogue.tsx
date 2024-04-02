@@ -364,12 +364,10 @@ const Catalogue = () => {
                                 result.content.map((item) => (
                                     <Link
                                         key={item.id}
-                                        to={`/catalogue?id=${encodeURIComponent(item.id)}`}
+                                        to={`/catalogue/${item.id}`}
                                         className="cat-item"
                                     >
-                                        <img
-                                            src={item.imageUrl}
-                                        />
+                                        <img src={item.imageUrl} />
                                         {/* <div className='cat-item-title'><p>{item.title}</p></div> */}
                                         <div className="cat-item-title">
                                             <p>{item.name}</p>
