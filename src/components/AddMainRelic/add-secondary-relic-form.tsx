@@ -18,16 +18,17 @@ export const AddSecondaryRelicForm = ({ form }: any) => {
                 <div className="grid grid-rows-3 gap-5">
                     <FormField
                         control={form.control}
-                        name="inventoryNumber"
+                        name="formerInventoryNumber"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor="inventoryNumber">
+                                <FormLabel htmlFor="formerInventoryNumber">
                                     Первинний інвентарний номер
                                 </FormLabel>
                                 <FormControl>
                                     <Input
+                                        type="number"
                                         placeholder="Введіть інвентарний номер реліквії"
-                                        id="inventoryNumber"
+                                        id="formerInventoryNumber"
                                         {...field}
                                     />
                                 </FormControl>

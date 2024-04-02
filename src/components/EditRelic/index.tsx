@@ -57,7 +57,13 @@ const relicFormSchema = z
         //     required_error: 'Вкажіть дату',
         //     invalid_type_error: 'Невірний формат дати',
         // }),
-        quantity: z.string({ required_error: 'Вкажіть кількість' }),
+        quantity: z.coerce
+            .number({ required_error: 'Вкажіть кількість' })
+            .min(1, {
+                message: 'Кількість повинна бути більше 0',
+            }),
+        inventoryNumber: z.coerce.number().optional(),
+        formerInventoryNumber: z.coerce.number().optional(),
         // categories: z.array(z.any()),
         // collection: z.string({ required_error: 'Вкажіть колекцію' }).optional(),
         // image: z.any().optional(),
@@ -215,7 +221,7 @@ export const EditRelic = () => {
             ...(data.regionId && { regionId: data.regionId.value }),
             ...(data.name && { name: data.name }),
             ...(data.creationPlaceId && {
-                creationPlace: data.creationPlace,
+                creationPlaceId: data.creationPlaceId.value,
             }),
             ...(data.reportIds && { reportIds: data.reportIds }),
             ...(data.relicCategoryIds && {
@@ -268,12 +274,12 @@ export const EditRelic = () => {
             categories: '',
             author: '',
             creationDate: '',
-            quantity: '',
+            quantity: 0,
             status: '',
             regionId: '',
             comment: '',
             historicalPeriodId: '',
-            primaryInventoryNumber: '',
+            formerInventoryNumber: '',
             copyCreationTime: '',
             techniqueId: '',
             insuranceValue: '',
@@ -286,7 +292,7 @@ export const EditRelic = () => {
             restoration: '',
             marks: '',
             labels: '',
-            annotations: '',
+            annotation: '',
             museumId: '',
             ...(isLost && {
                 lossWay: '',

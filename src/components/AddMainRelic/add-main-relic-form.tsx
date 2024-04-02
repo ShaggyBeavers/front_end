@@ -332,6 +332,7 @@ const AddMainRelic = ({ form }: any) => {
                                 </FormLabel>
                                 <FormControl>
                                     <Input
+                                        type="number"
                                         placeholder="Введіть кількість"
                                         {...field}
                                     />
@@ -446,7 +447,7 @@ const AddMainRelic = ({ form }: any) => {
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel htmlFor="creationPlaceId">
-                                   Місце створення 
+                                    Місце створення
                                 </FormLabel>
                                 <ReactSelect
                                     {...field}
