@@ -14,7 +14,7 @@
     padding: 1rem 2rem 5rem;
 }
 
-.categories a {
+.cat_link_all {
     color: black;
     align-self: flex-end;
     padding-right: 2rem;
