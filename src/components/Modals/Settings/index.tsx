@@ -1,5 +1,5 @@
 import React from 'react';
-import { useForm, useWatch } from 'react-hook-form';
+import { SubmitHandler, useForm, useWatch } from 'react-hook-form';
 import './index.css';
 import Arrow from '../../Arrow';
 import EditIcon from '../../EditIcon';
@@ -7,6 +7,8 @@ import { useAuthStore } from '../../../stores/AuthStore';
 import { roleToUkr } from '../../../types/role';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import UserAPI from '../../../../src/app/api/Account/User/user';
+import ProtectedItems from '../../ProtectedItems';
+import { RoleEnum } from '../../../../src/enums/roles';
 
 const Settings = () => {
     const queryClient = useQueryClient();
@@ -39,15 +41,33 @@ const Settings = () => {
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        formState: { errors, isValid, isDirty },
         watch,
-    } = useForm();
+    } = useForm({
+        mode: 'onChange',
+        defaultValues: {
+            firstName: userProfile.data?.data.firstName,
+            lastName: userProfile.data?.data.lastName,
+        },
+    });
+
+    const {
+        register: register2,
+        handleSubmit: handleSubmit2,
+        formState: { errors: errors2, isValid: isValid2, isDirty: isDirty2 },
+        watch: watch2,
+        getValues: getValues2,
+    } = useForm({
+        mode: 'onBlur',
+    });
+
     const [isCategoryListVisible, setIsCategoryListVisible] =
         React.useState(false);
+    const [isRegionListVisible, setIsRegionListVisible] = React.useState(false);
 
     const user = useAuthStore((state) => state.user) || {};
 
-    const password = watch('oldPassword', '');
+    const password = watch2('oldPassword', '');
 
     const passwordValidation = {
         length: password.length >= 8,
@@ -59,10 +79,15 @@ const Settings = () => {
     const lastName = 'Бобрар';
     const role = 'Модератор';
 
-    const onSubmitEmailName = (data: any) => {
+    const onSubmitEmailName: SubmitHandler<any> = (
+        data: any,
+        e?: React.BaseSyntheticEvent
+    ) => {
+        e?.preventDefault();
         const email = userProfile.data?.data.email;
         const firstName = data.firstName || userProfile.data?.data.firstName;
         const lastName = data.lastName || userProfile.data?.data.lastName;
+        console.log(data);
 
         if (data.firstName || data.lastName) {
             editUser.mutate({
@@ -73,7 +98,8 @@ const Settings = () => {
         }
     };
 
-    const onSubmitPassword = (data: any) => {
+    const onSubmitPassword = (data: any, e?: React.BaseSyntheticEvent) => {
+        e?.preventDefault();
         const password = data.oldPassword;
         const passwordConfirmation = data.newPassword;
         if (data.newPassword) {
@@ -95,10 +121,14 @@ const Settings = () => {
     const regions = userData.regions;
 
     return (
-        <form className="table-form" onSubmit={handleSubmit(onSubmitEmailName)}>
+        <div className="table-form">
             <div className="col-1">
                 <div className="inputs">
-                    <form className="info-block">
+                    <form
+                        key={1}
+                        onSubmit={handleSubmit(onSubmitEmailName)}
+                        className="info-block"
+                    >
                         <div className="input-section">
                             <label htmlFor="firstName">Ваше ім'я:</label>
                             <div className="input-row">
@@ -106,12 +136,28 @@ const Settings = () => {
                                     type="text"
                                     id="firstName"
                                     placeholder={userData.firstName}
-                                    {...register('firstName')}
+                                    {...register('firstName', {
+                                        minLength: {
+                                            value: 1,
+                                            message: 'Мінімум 1 символ',
+                                        },
+                                        validate: {
+                                            hasCharacter: (value) => {
+                                                return value.match(
+                                                    /[a-zA-Zа-яА-Я]/g
+                                                )
+                                                    ? true
+                                                    : "Ім'я повинно містити тільки букви";
+                                            },
+                                        },
+                                    })}
                                 />
                                 <EditIcon />
                             </div>
                             {errors.firstName && (
-                                <span>Це поле є обов'язковим</span>
+                                <span>
+                                    {errors.firstName.message as string}
+                                </span>
                             )}
                         </div>
 
@@ -122,22 +168,41 @@ const Settings = () => {
                                     type="text"
                                     id="lastName"
                                     placeholder={userData.lastName || ''}
-                                    {...register('lastName')}
+                                    {...register('lastName', {
+                                        minLength: {
+                                            value: 1,
+                                            message: 'Мінімум 1 символи',
+                                        },
+                                        validate: {
+                                            hasCharacter: (value) => {
+                                                return value.match(
+                                                    /[a-zA-Zа-яА-Я]/g
+                                                )
+                                                    ? true
+                                                    : 'Прізвище повинно містити тільки букви';
+                                            },
+                                        },
+                                    })}
                                 />
                                 <EditIcon />
                             </div>
                             {errors.lastName && (
-                                <span>Це поле є обов'язковим</span>
+                                <span>{errors.lastName.message as string}</span>
                             )}
                         </div>
-                        <button className="submit-button" type="submit">
+                        <button
+                            disabled={!isDirty || !isValid}
+                            className={`submit-button ${(!isDirty || !isValid) && 'hidden'}`}
+                            type="submit"
+                        >
                             Зберегти
                         </button>
                     </form>
 
                     <form
+                        key={2}
                         className="info-block"
-                        onSubmit={handleSubmit(onSubmitPassword)}
+                        onSubmit={handleSubmit2(onSubmitPassword)}
                     >
                         <div className="password-block">
                             <div className="input-section">
@@ -148,7 +213,7 @@ const Settings = () => {
                                     className="password"
                                     type="password"
                                     id="oldPassword"
-                                    {...register('oldPassword', {
+                                    {...register2('oldPassword', {
                                         required: {
                                             value: true,
                                             message: "Це поле є обов'язковим",
@@ -168,9 +233,9 @@ const Settings = () => {
                                         },
                                     })}
                                 />
-                                {errors.oldPassword && (
+                                {errors2.oldPassword && (
                                     <span className="errors">
-                                        {/* {errors.oldPassword?.message as string} */}
+                                        {/* {errors2.oldPassword?.message as string} */}
                                     </span>
                                 )}
                                 <div className="password-req">
@@ -214,7 +279,7 @@ const Settings = () => {
                                         <li className={passwordValidation.uppercase ? 'requirement-met' : 'requirement-not-met'}>1 буква у верхньому регістрі</li> */}
                                     </ul>
                                 </div>
-                                {/* <span>{errors.oldPassword?.message as string}</span> */}
+                                {/* <span>{errors2.oldPassword?.message as string}</span> */}
                             </div>
 
                             <div className="input-section">
@@ -225,24 +290,34 @@ const Settings = () => {
                                     className="password"
                                     type="password"
                                     id="newPassword"
-                                    {...register('newPassword', {
+                                    {...register2('newPassword', {
                                         required: {
                                             value: true,
                                             message: "Це поле є обов'язковим",
                                         },
+                                        validate: {
+                                            samePassword: (value) => {
+                                                const { oldPassword } =
+                                                    getValues2();
+                                                return (
+                                                    value === oldPassword ||
+                                                    'Паролі повинні співпадати'
+                                                );
+                                            },
+                                        },
                                     })}
                                 />
-                                {errors.oldPasword && (
+                                {errors2.oldPasword && (
                                     <span className="errors">
-                                        {errors.oldPassword?.message as string}
+                                        {errors2.oldPassword?.message as string}
                                     </span>
                                 )}
                             </div>
                         </div>
                         <button
-                            className="submit-button"
+                            disabled={!isValid2 || !isDirty2}
+                            className={`submit-button ${(!isDirty2 || !isValid2) && 'hidden'}`}
                             type="submit"
-                            disabled
                         >
                             Зберегти
                         </button>
@@ -257,36 +332,77 @@ const Settings = () => {
             </div>
 
             <div className="col-2">
-                <label
-                    className="categories-label"
-                    htmlFor="categories"
-                    onClick={() =>
-                        setIsCategoryListVisible(!isCategoryListVisible)
-                    }
+                <ProtectedItems
+                    role={[
+                        RoleEnum.ADMIN,
+                        RoleEnum.REGIONAL_MODERATOR,
+                        RoleEnum.MODERATOR,
+                    ]}
                 >
-                    Доручені вам категорії
-                    <Arrow
-                        className={`arrow${isCategoryListVisible ? ' arrow-up' : ''}`}
-                        arrowStyles={{
-                            stroke: 'black',
-                            width: '1rem',
-                            height: '0.45rem',
+                    <label
+                        className="categories-label"
+                        htmlFor="categories"
+                        onClick={() => {
+                            setIsCategoryListVisible(!isCategoryListVisible);
+                            setIsRegionListVisible(false);
                         }}
-                    />
-                </label>
-                {isCategoryListVisible && (
-                    <div className="categories-list">
-                        <ul>
-                            {categories.map((category: any) => (
-                                <li key={category.value} value={category.value}>
-                                    {category.label}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
+                    >
+                        Доручені вам категорії
+                        <Arrow
+                            className={`arrow${isCategoryListVisible ? ' arrow-up' : ''}`}
+                            arrowStyles={{
+                                stroke: 'black',
+                                width: '1rem',
+                                height: '0.45rem',
+                            }}
+                        />
+                    </label>
+                    {isCategoryListVisible && (
+                        <div className="categories-list">
+                            <ul>
+                                {categories.map((category: any) => (
+                                    <li
+                                        key={category.value}
+                                        value={category.value}
+                                    >
+                                        {category.label}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                    <label
+                        className="categories-label"
+                        htmlFor="categories"
+                        onClick={() => {
+                            setIsRegionListVisible(!isRegionListVisible);
+                            setIsCategoryListVisible(false);
+                        }}
+                    >
+                        Доручені вам регіони
+                        <Arrow
+                            className={`arrow${isRegionListVisible ? ' arrow-up' : ''}`}
+                            arrowStyles={{
+                                stroke: 'black',
+                                width: '1rem',
+                                height: '0.45rem',
+                            }}
+                        />
+                    </label>
+                    {isRegionListVisible && (
+                        <div className="regions-list">
+                            <ul>
+                                {regions.map((region: any) => (
+                                    <li key={region.value} value={region.value}>
+                                        {region.label}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                </ProtectedItems>
             </div>
-        </form>
+        </div>
     );
 };
 

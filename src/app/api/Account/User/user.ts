@@ -5,7 +5,7 @@ const UserAPI = {
         email: string;
         firstName: string;
         lastName: string;
-    }) => authAPi.put(`api/user/edit/`, values),
+    }) => authAPi.put(`api/user/edit`, values),
     resetPassword: (values: {
         token: string;
         password: string;
