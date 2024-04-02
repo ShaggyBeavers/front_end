@@ -6,7 +6,6 @@ interface FilterModalProps {
     selectedOptions: string[];
     onClose: () => void;
     onOptionClick: (option: string) => void;
-    style?: React.CSSProperties;
 }
 
 const FilterModal: React.FC<FilterModalProps> = ({
@@ -19,6 +18,13 @@ const FilterModal: React.FC<FilterModalProps> = ({
         onOptionClick('clear');
     };
 
+    const statusOptions = [
+        { value: 'DESTROYED', label: 'Знищено' },
+        { value: 'STOLEN', label: 'Вкрадено' },
+        { value: 'RETURNED', label: 'Повернуто' },
+        { value: 'UNKNOWN', label: 'Невідомо' },
+    ];
+
     return (
         <div className="filter-modal">
             <div className="filter-options">
@@ -27,7 +33,15 @@ const FilterModal: React.FC<FilterModalProps> = ({
                         key={option}
                         onClick={() => onOptionClick(option)}
                         className={
-                            selectedOptions.includes(option) ? 'selected' : ''
+                            selectedOptions.includes(option) ||
+                            selectedOptions.some((selectedOption) => {
+                                const selectedLabel = statusOptions.find(
+                                    ({ value }) => value === selectedOption
+                                )?.label;
+                                return selectedLabel === option;
+                            })
+                                ? 'selected'
+                                : ''
                         }
                     >
                         {option}
