@@ -19,23 +19,23 @@ const BannerLanding = () => {
         queryFn: async () =>
             await RelicAPI.countRelicsByStatuses([RelicStatusEnum.RETURNED]),
     });
-    if (
-        countRelicsByStolen.isLoading ||
-        countRelicsByDestroyed.isLoading ||
-        countRelicsByReturned.isLoading
-    ) {
-        return <div>Loading...</div>;
-    }
-    if (
-        countRelicsByStolen.isError ||
-        countRelicsByDestroyed.isError ||
-        countRelicsByReturned.isError
-    ) {
-        return <div>Error...</div>;
-    }
-    let stolen = countRelicsByStolen.data;
-    let destroyed = countRelicsByDestroyed.data;
-    let returned = countRelicsByReturned.data;
+    // if (
+    //     countRelicsByStolen.isLoading ||
+    //     countRelicsByDestroyed.isLoading ||
+    //     countRelicsByReturned.isLoading
+    // ) {
+    //     return <div>Loading...</div>;
+    // }
+    // if (
+    //     countRelicsByStolen.isError ||
+    //     countRelicsByDestroyed.isError ||
+    //     countRelicsByReturned.isError
+    // ) {
+    //     return <div>Error...</div>;
+    // }
+    // let stolen = countRelicsByStolen.data;
+    // let destroyed = countRelicsByDestroyed.data;
+    // let returned = countRelicsByReturned.data;
     return (
         <div>
             <div className="banner_landing">
@@ -43,16 +43,31 @@ const BannerLanding = () => {
                     <div className="mb-5 justify-items-center">
                         <h1>Реліквій було вкрадено:</h1>
                         {/* temporarily hardcoded */}
-                        <span>{stolen}</span>
+                        <span>
+                            {!countRelicsByStolen.isLoading &&
+                            !countRelicsByStolen.isError
+                                ? countRelicsByStolen.data
+                                : 0}
+                        </span>
                     </div>
                     <div className="flex row justify-around">
                         <div className="">
                             <h2 className="">Знищено:</h2>
-                            <p className="text-[4.2rem]">{destroyed}</p>
+                            <p className="text-[4.2rem]">
+                                {!countRelicsByDestroyed.isLoading &&
+                                !countRelicsByDestroyed.isError
+                                    ? countRelicsByDestroyed.data
+                                    : 0}
+                            </p>
                         </div>
                         <div>
                             <h2 className="">Повернуто:</h2>
-                            <p className="text-[4.2rem]">{returned}</p>
+                            <p className="text-[4.2rem]">
+                                {!countRelicsByReturned.isLoading &&
+                                !countRelicsByReturned.isError
+                                    ? countRelicsByReturned.data
+                                    : 0}
+                            </p>
                         </div>
                     </div>
                 </div>
