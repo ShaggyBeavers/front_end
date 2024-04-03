@@ -83,7 +83,8 @@ export function DataTable<TData, TValue>({
         filterFns: {
             select: selectFilter,
         },
-        pageCount: reports.data?.data?.totalElements ?? 0,
+        manualPagination: true,
+        rowCount: reports.data?.data?.totalElements ?? 0,
         onSortingChange: setSorting,
         onPaginationChange: setPagination,
         // onColumnFiltersChange: setColumnFilters,
