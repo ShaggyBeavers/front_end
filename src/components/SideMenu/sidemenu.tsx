@@ -60,14 +60,14 @@ const SideMenu: React.FC<SideMenuProps> = ({ currentPage }) => {
         queryFn: () => UserAPI.getUserProfile(),
     });
 
-    const handleModeratorList = () => {
-        const currentPath = window.location.pathname;
-        if (currentPath.endsWith('moderator-list')) {
-            window.location.reload();
-        } else {
-            navigate('./moderator-list');
-        }
-    };
+    // const handleModeratorList = () => {
+    //     const currentPath = window.location.pathname;
+    //     if (currentPath.endsWith('moderator-list')) {
+    //         window.location.reload();
+    //     } else {
+    //         navigate('./moderator-list');
+    //     }
+    // };
 
     const handleModal = (modalName: string, isOpen: boolean) => {
         setModals((prevModals) => ({
@@ -102,7 +102,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ currentPage }) => {
 
     let firstName = '';
     let lastName = '';
-    if(!userProfile.isError && !userProfile.isLoading) {
+    if (!userProfile.isError && !userProfile.isLoading) {
         firstName = userProfile.data?.data?.firstName;
         lastName = userProfile.data?.data?.lastName;
     }

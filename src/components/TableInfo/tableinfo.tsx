@@ -31,7 +31,7 @@ const RelicTableInfo = () => {
 
     return (
         <>
-            <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">
+            <div className="hidden h-full w-full flex-1 flex-col space-y-8 pr-8 md:flex">
                 <DataTable columns={columns} data={props} />
             </div>
         </>

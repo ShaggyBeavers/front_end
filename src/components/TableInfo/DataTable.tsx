@@ -25,6 +25,7 @@ import {
     TableRow,
 } from '../ui/table';
 
+import Modal from 'react-modal';
 import { DataTablePagination } from './DataTablePagination';
 import { DataTableToolbar } from './DataTableToolbar';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
@@ -97,8 +98,11 @@ export function DataTable<TData, TValue>({
         getFacetedUniqueValues: getFacetedUniqueValues(),
     });
 
+    // const [modals, setModals] = useState<IModal>({isFilter,});
+
     return (
         <div className="space-y-4">
+            {/* <Modal>{modals.content}</Modal> */}
             <DataTableToolbar table={table} />
             <div className="rounded-md border">
                 <Table>
@@ -132,6 +136,10 @@ export function DataTable<TData, TValue>({
                                     data-state={
                                         row.getIsSelected() && 'selected'
                                     }
+                                    className="hover:bg-gray-50 cursor-pointer"
+                                    onClick={() => {
+                                        console.log(row.getValue('reportId'));
+                                    }}
                                     // className='odd:bg-gray-50'
                                 >
                                     {row.getVisibleCells().map((cell) => (

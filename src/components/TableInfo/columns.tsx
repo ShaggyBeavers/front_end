@@ -36,6 +36,18 @@ let tmpColumns: any = [
         ),
     },
     {
+        accessorKey: 'userId',
+        meta: 'Автор Id',
+        header: ({ column }: any) => (
+            <DataTableColumnHeader column={column} title="Автор Id" />
+        ),
+        cell: ({ row }: any) => (
+            <div className="max-w-[500px] truncate font-medium">
+                <span>{row.getValue('userId')}</span>
+            </div>
+        ),
+    },
+    {
         accessorKey: 'name',
         meta: 'Назва',
         header: ({ column }: any) => (
@@ -48,6 +60,18 @@ let tmpColumns: any = [
         ),
     },
     {
+        accessorKey: 'regionName',
+        meta: 'Регіон',
+        header: ({ column }: any) => (
+            <DataTableColumnHeader column={column} title="Регіон" />
+        ),
+        cell: ({ row }: any) => (
+            <div className="max-w-[500px] truncate font-medium">
+                <span>{row.getValue('regionName')}</span>
+            </div>
+        ),
+    },
+    {
         accessorKey: 'categoriesDTO',
         meta: 'Категорія',
         header: ({ column }: any) => (
@@ -55,6 +79,7 @@ let tmpColumns: any = [
         ),
         cell: ({ row }: any) => {
             const categories = row.getValue('categoriesDTO');
+            console.log(categories);
             let labels = categories.map((category: categoryType) => {
                 return (
                     categories.find(
