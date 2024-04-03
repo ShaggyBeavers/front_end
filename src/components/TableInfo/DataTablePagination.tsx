@@ -76,7 +76,7 @@ export function DataTablePagination<TData>({
                         onClick={() => table.previousPage()}
                         disabled={!table.getCanPreviousPage()}
                     >
-                        <span className="sr-only">До попердньої сторінки</span>
+                        <span className="sr-only">До попередньої сторінки</span>
                         <ChevronLeftIcon className="h-4 w-4" />
                     </Button>
                     <Button

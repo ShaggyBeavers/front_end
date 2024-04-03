@@ -12,6 +12,7 @@ import {
     getPaginationRowModel,
     getSortedRowModel,
     useReactTable,
+    PaginationState,
     FilterFn,
 } from '@tanstack/react-table';
 
@@ -26,6 +27,8 @@ import {
 
 import { DataTablePagination } from './DataTablePagination';
 import { DataTableToolbar } from './DataTableToolbar';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import ReportAPI from '../../../src/app/api/Report/report';
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -42,6 +45,20 @@ export function DataTable<TData, TValue>({
     const [columnFilters, setColumnFilters] =
         React.useState<ColumnFiltersState>([]);
     const [sorting, setSorting] = React.useState<SortingState>([]);
+    const [pagination, setPagination] = React.useState<PaginationState>({
+        pageIndex: 0,
+        pageSize: 10,
+    });
+
+    const reports = useQuery({
+        queryKey: ['reports', pagination.pageIndex, pagination.pageSize],
+        queryFn: async () =>
+            await ReportAPI.getAllReports(
+                pagination.pageIndex,
+                pagination.pageSize
+            ),
+        placeholderData: keepPreviousData,
+    });
 
     const selectFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
         const selectedValues = value;
@@ -54,18 +71,21 @@ export function DataTable<TData, TValue>({
     };
 
     const table = useReactTable({
-        data,
+        data: reports.data?.data?.content ?? [],
         columns,
         state: {
             sorting,
             columnVisibility,
+            pagination,
             // rowSelection,
             // columnFilters,
         },
         filterFns: {
             select: selectFilter,
         },
+        pageCount: reports.data?.data?.totalElements ?? 0,
         onSortingChange: setSorting,
+        onPaginationChange: setPagination,
         // onColumnFiltersChange: setColumnFilters,
         onColumnVisibilityChange: setColumnVisibility,
         getCoreRowModel: getCoreRowModel(),
@@ -74,6 +94,7 @@ export function DataTable<TData, TValue>({
         getSortedRowModel: getSortedRowModel(),
         getFacetedRowModel: getFacetedRowModel(),
         getFacetedUniqueValues: getFacetedUniqueValues(),
+        debugTable: true,
     });
 
     return (

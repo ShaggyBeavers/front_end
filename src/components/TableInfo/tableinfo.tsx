@@ -19,15 +19,15 @@ interface TableInfoProps {
 }
 
 const RelicTableInfo = () => {
-    const reports = useQuery({
-        queryKey: ['reports'],
-        queryFn: async () => await ReportAPI.getAllReports(0, 20),
-    });
+    // const reports = useQuery({
+    //     queryKey: ['reports'],
+    //     queryFn: async () => await ReportAPI.getAllReports(0, 20),
+    // });
 
     let props: any[] = [];
-    if (!reports.isLoading && !reports.isError) {
-        props = reports?.data?.data?.content || [];
-    }
+    // if (!reports.isLoading && !reports.isError) {
+    //     props = reports?.data?.data?.content || [];
+    // }
 
     return (
         <>

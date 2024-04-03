@@ -62,8 +62,8 @@ const relicFormSchema = z
             .min(1, {
                 message: 'Кількість повинна бути більше 0',
             }),
-        inventoryNumber: z.coerce.number().optional(),
-        formerInventoryNumber: z.coerce.number().optional(),
+        inventoryNumber: z.string().optional(),
+        formerInventoryNumber: z.string().optional(),
         // categories: z.array(z.any()),
         // collection: z.string({ required_error: 'Вкажіть колекцію' }).optional(),
         // image: z.any().optional(),
