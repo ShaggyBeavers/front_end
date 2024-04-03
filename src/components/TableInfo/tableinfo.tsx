@@ -24,60 +24,10 @@ const RelicTableInfo = () => {
         queryFn: async () => await ReportAPI.getAllReports(0, 20),
     });
 
-    if (reports.isLoading) {
-        return <div>Loading...</div>;
+    let props: any[] = [];
+    if (!reports.isLoading && !reports.isError) {
+        props = reports?.data?.data?.content || [];
     }
-
-    if (reports.isError) {
-        return <div>Error</div>;
-    }
-
-    // const props: any = [
-    //     {
-    //         title: 'Казан',
-    //         categoryList: [],
-    //         status: 'BEING_PROCESSED',
-    //     },
-    //     {
-    //         title: 'Келішек',
-    //         status: 'NEW',
-    //         categoryList: [],
-    //     },
-    //     {
-    //         title: 'Золото Кримського ханства',
-    //         categoryList: [
-    //             {
-    //                 id: 10,
-    //                 name: 'Ancient Artifacts',
-    //             },
-    //             {
-    //                 id: 7,
-    //                 name: 'Золото',
-    //             },
-    //             {
-    //                 id: 5,
-    //                 name: 'Ware',
-    //             },
-    //             {
-    //                 id: 1,
-    //                 name: 'Inscriptions',
-    //             },
-    //         ],
-    //         status: 'APPROVED',
-    //     },
-    //     {
-    //         title: 'Останній з Василів',
-    //         categoryList: [
-    //             {
-    //                 id: 7,
-    //                 name: 'Золото',
-    //             },
-    //         ],
-    //         status: 'REJECTED',
-    //     },
-    // ];
-
-    const props = reports?.data!.data.content;
 
     return (
         <>

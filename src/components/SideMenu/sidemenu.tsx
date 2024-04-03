@@ -55,7 +55,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ currentPage }) => {
     //@ts-ignore
     const email = useAuthStore((state) => state.user.email);
     const accessToken = useAuthStore((state) => state.accessToken);
-    const { data, isLoading, isError, error } = useQuery({
+    const userProfile = useQuery({
         queryKey: ['currentUser'],
         queryFn: () => UserAPI.getUserProfile(),
     });
@@ -100,6 +100,13 @@ const SideMenu: React.FC<SideMenuProps> = ({ currentPage }) => {
         // },
     };
 
+    let firstName = '';
+    let lastName = '';
+    if(!userProfile.isError && !userProfile.isLoading) {
+        firstName = userProfile.data?.data?.firstName;
+        lastName = userProfile.data?.data?.lastName;
+    }
+
     return (
         <>
             {Object.keys(modals).map((modalName) => (
@@ -118,7 +125,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ currentPage }) => {
                 <div className="name-banner">
                     <div className="row1">
                         <h4 className="name">
-                            {data?.data?.firstName} {data?.data?.lastName}
+                            {firstName} {lastName}
                         </h4>
                         <DefaultButton
                             height={28}

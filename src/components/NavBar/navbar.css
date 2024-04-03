@@ -64,6 +64,7 @@ html {
     background: black;
     text-decoration: none;
     transition: 0.7s ease;
+    position: relative;
 }
 
 .main:hover a {
@@ -75,12 +76,11 @@ html {
     text-decoration: none;
 }
 
-
-.nav_log_btn:hover {
+/* .nav_log_btn:hover {
     color: black;
     background: white;
     transition: 0.7s;
-}
+} */
 
 .reg_links,
 .log_links {
@@ -99,6 +99,19 @@ html {
 .reg_links a:hover,
 .log_links a:hover {
     color: black;
+}
+
+.nav_log_btn .logout_btn {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+}
+
+.nav_log_btn:hover .logout_btn {
+    display: flex;
+    padding-top: 0.5rem;
 }
 
 @media (max-width: 600px) {
