@@ -367,8 +367,9 @@ const Catalogue = () => {
                                         to={`/catalogue/${item.id}`}
                                         className="cat-item"
                                     >
-                                        <img src={item.imageUrl} />
-                                        {/* <div className='cat-item-title'><p>{item.title}</p></div> */}
+                                        <img
+                                            src={item.imageUrl}
+                                        />
                                         <div className="cat-item-title">
                                             <p>{item.name}</p>
                                         </div>
