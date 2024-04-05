@@ -5,30 +5,32 @@
 //     CheckCircledIcon,
 // } from '@radix-ui/react-icons';
 
+import { ReportStatusEnum } from '../../../enums/reportstatus';
 import { Timer, CircleIcon, XCircle, CheckCircle2 } from 'lucide-react';
+
 export const statuses = [
     {
-        value: 'NEW',
+        value: ReportStatusEnum.NEW,
         label: 'Нове',
         icon: CircleIcon,
         color: 'text-zinc-300',
     },
     {
-        value: 'BEING_PROCESSED',
+        value: ReportStatusEnum.BEING_PROCESSED,
         label: 'Опрацьовується',
         // icon: StopwatchIcon,
         icon: Timer,
         color: 'text-yellow-400',
     },
     {
-        value: 'APPROVED',
+        value: ReportStatusEnum.APPROVED,
         label: 'Cхвалено',
         // icon: CheckCircledIcon,
         icon: CheckCircle2,
         color: 'text-green-500',
     },
     {
-        value: 'REJECTED',
+        value: ReportStatusEnum.REJECTED,
         label: 'Відхилено',
         // icon: CrossCircledIcon,
         icon: XCircle,
@@ -39,42 +41,42 @@ export const statuses = [
 export const categories = [
     {
         id: 3,
-        categoryName: 'School/Style',
+        name: 'School/Style',
     },
     {
         id: 2,
-        categoryName: 'Ornaments',
+        name: 'Ornaments',
     },
     {
         id: 5,
-        categoryName: 'Ware',
+        name: 'Ware',
     },
     {
         id: 1,
-        categoryName: 'Inscriptions',
+        name: 'Inscriptions',
     },
     {
         id: 4,
-        categoryName: 'Previous Owners',
+        name: 'Previous Owners',
     },
     {
         id: 6,
-        categoryName: 'Technique',
+        name: 'Technique',
     },
     {
         id: 7,
-        categoryName: 'Золото',
+        name: 'Золото',
     },
     {
         id: 8,
-        categoryName: 'Medieval Artifacts',
+        name: 'Medieval Artifacts',
     },
     {
         id: 9,
-        categoryName: 'Renaissance Artifacts',
+        name: 'Renaissance Artifacts',
     },
     {
         id: 10,
-        categoryName: 'Ancient Artifacts',
+        name: 'Ancient Artifacts',
     },
 ];

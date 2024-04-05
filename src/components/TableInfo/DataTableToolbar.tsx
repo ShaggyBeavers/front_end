@@ -16,8 +16,8 @@ interface DataTableToolbarProps<TData> {
 
 // convert categories to options
 const categoriesOptions: options[] = categories.map((category) => ({
-    label: category.categoryName,
-    value: category.categoryName,
+    label: category.name,
+    value: category.name,
 }));
 
 export function DataTableToolbar<TData>({
@@ -31,13 +31,12 @@ export function DataTableToolbar<TData>({
                 <Input
                     placeholder="Пошук по назві..."
                     value={
-                        (table
-                            .getColumn('title')
-                            ?.getFilterValue() as string) ?? ''
+                        (table.getColumn('name')?.getFilterValue() as string) ??
+                        ''
                     }
                     onChange={(event) =>
                         table
-                            .getColumn('title')
+                            .getColumn('name')
                             ?.setFilterValue(event.target.value)
                     }
                     className="h-8 w-[150px] lg:w-[250px]"
@@ -49,9 +48,9 @@ export function DataTableToolbar<TData>({
                         options={statuses}
                     />
                 )}
-                {table.getColumn('categoryList') && (
+                {table.getColumn('categoriesDTO') && (
                     <DataTableFacetedFilter
-                        column={table.getColumn('categoryList')}
+                        column={table.getColumn('categoriesDTO')}
                         title="Категорії"
                         options={categoriesOptions}
                     />

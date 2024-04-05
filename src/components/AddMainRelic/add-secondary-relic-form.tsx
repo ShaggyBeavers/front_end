@@ -18,16 +18,19 @@ export const AddSecondaryRelicForm = ({ form }: any) => {
                 <div className="grid grid-rows-3 gap-5">
                     <FormField
                         control={form.control}
-                        name="primaryInventoryNumber"
+                        name="formerInventoryNumber"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor="name">
+                                <FormLabel htmlFor="formerInventoryNumber">
                                     Первинний інвентарний номер
                                 </FormLabel>
                                 <FormControl>
-                                    <Input 
-                                    placeholder="Введіть інвентарний номер реліквії"
-                                    {...field} />
+                                    <Input
+                                        type="number"
+                                        placeholder="Введіть інвентарний номер реліквії"
+                                        id="formerInventoryNumber"
+                                        {...field}
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -36,14 +39,14 @@ export const AddSecondaryRelicForm = ({ form }: any) => {
                     {/* CopyCreationDate */}
                     <FormField
                         control={form.control}
-                        name="copyCreationDate"
+                        name="copyCreationTime"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor="copyCreationDate">
+                                <FormLabel htmlFor="copyCreationTime">
                                     Дата створення копії
                                 </FormLabel>
                                 <FormControl>
-                                    <Input type="date" {...field} />
+                                    <Input {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -106,9 +109,7 @@ export const AddSecondaryRelicForm = ({ form }: any) => {
                                         {...field}
                                     />
                                 </FormControl>
-                                <FormDescription>
-                                За наявності
-                                </FormDescription>
+                                <FormDescription>За наявності</FormDescription>
                                 <FormMessage />
                             </FormItem>
                         )}

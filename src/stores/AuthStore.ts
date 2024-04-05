@@ -83,8 +83,6 @@ export const useAuthStore = create(
 
                         // save values into user store
                         setAccessToken(accessToken);
-                        console.log('accessToken', accessToken);
-                        console.log('accessTokenData', get().accessTokenData);
                         set({
                             user: { isLoggedIn: true, email: values.email },
                         });

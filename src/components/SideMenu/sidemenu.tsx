@@ -56,18 +56,15 @@ const SideMenu: React.FC<SideMenuProps> = ({ currentPage }) => {
     const email = useAuthStore((state) => state.user.email);
     const accessToken = useAuthStore((state) => state.accessToken);
     const { data, isLoading, isError, error } = useQuery({
-        queryKey: ['currentUser', accessToken],
-        queryFn: () => UserAPI.getUserProfile(accessToken),
+        queryKey: ['currentUser'],
+        queryFn: () => UserAPI.getUserProfile(),
     });
-
-    console.log(data);
 
     const handleModeratorList = () => {
         const currentPath = window.location.pathname;
         if (currentPath.endsWith('moderator-list')) {
             window.location.reload();
         } else {
-            console.log(currentPath);
             navigate('./moderator-list');
         }
     };
@@ -158,13 +155,24 @@ const SideMenu: React.FC<SideMenuProps> = ({ currentPage }) => {
                         action={() => handleModal('addModerator', true)}
                     />
                 </ProtectedItems>
-                <ProtectedItems role={[RoleEnum.ADMIN]}>
-                    <DefaultButton
-                        height={38}
-                        width={300}
-                        text="Список модераторів"
-                        action={() => handleModeratorList()}
-                    />
+                <ProtectedItems
+                    role={[RoleEnum.ADMIN, RoleEnum.REGIONAL_MODERATOR]}
+                >
+                    {currentPage.endsWith('moderator-list') ? (
+                        <DefaultButton
+                            height={38}
+                            width={300}
+                            text="Список репортів"
+                            action={() => navigate('/profile')}
+                        />
+                    ) : (
+                        <DefaultButton
+                            height={38}
+                            width={300}
+                            text="Список модераторів"
+                            action={() => navigate('/profile/moderator-list')}
+                        />
+                    )}
                 </ProtectedItems>
                 <ProtectedItems
                     role={[
@@ -185,7 +193,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ currentPage }) => {
                             height={38}
                             width={300}
                             text="Додати термін"
-                            action={() => navigate('./add-term')}
+                            action={() => navigate('/profile/add-term')}
                         />
                     )}
                 </ProtectedItems>

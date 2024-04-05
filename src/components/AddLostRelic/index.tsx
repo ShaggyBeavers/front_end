@@ -9,88 +9,153 @@ import {
     FormMessage,
 } from '../ui/form';
 import { Separator } from '../ui/separator';
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from '../ui/tooltip';
+import ReactSelect from 'react-select';
+import { convertTermToOptions } from '../../lib/utils';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import MuseumAPI from '../../../src/app/api/Museum/museum';
 
-const AddLostRelic = ({ form }: any) => {
+const AddLostdRelic = ({ form }: any) => {
+    const queryClient = useQueryClient();
+    // const museums: any = queryClient.ensureQueryData({
+    //     queryKey: ['getMuseums'],
+    //     queryFn: async () => await MuseumAPI.getMuseums(),
+    // });
+    const museums = useQuery({
+        queryKey: ['getMuseums'],
+        queryFn: async () => await MuseumAPI.getMuseums(),
+    });
+
+    if (museums.isLoading) return <div>Loading...</div>;
+    let museumOptions: any[] = [];
+    if (museums.data)
+        museumOptions = convertTermToOptions((museums as any).data || []);
+
     return (
         <div>
-            <h2 className="text-4xl mb-5">Інформація про повернуту реліквію</h2>
+            <h2 className="text-4xl mb-5">
+                Інформація про загубленну реліквію
+            </h2>
             <div className="grid grid-cols-2 gap-10">
                 <div className="grid grid-rows-2 gap-5">
-                    {/* Dimensions */}
                     <FormField
                         control={form.control}
-                        name="locationSource"
+                        name="lossWay"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor="locationSource">
-                                    Джерело інформації про повернення
+                                <FormLabel htmlFor="lossWay">
+                                    Шляхи втрати
                                 </FormLabel>
                                 <FormControl>
                                     <Input type="text" {...field} />
-                                </FormControl>
-                                <FormDescription className='mr-10'>
-                                Інформації, за допомогою якої було знайдено культурну цінність (каталог виставки, електронна база даних втрат культурних цінностей)
-                                </FormDescription>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    {/* Signatures */}
-                    <FormField
-                        control={form.control}
-                        name="returnProcess"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel htmlFor="returnProcess">
-                                    Процес повернення
-                                </FormLabel>
-                                <FormControl>
-                                    <Input type="text" {...field}/>
                                 </FormControl>
                                 <FormDescription>
-                                    Вкажіть, як відбувався процес повернення
+                                    Переміщено внаслідок збройного конфлікту,
+                                    викрадено
                                 </FormDescription>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
-                    {/* Restoration */}
-                </div>
-                <div className="grid grid-rows-2 gap-5">
-                    {/* marks */}
                     <FormField
                         control={form.control}
-                        name="previousSearchInfo"
+                        name="probableLocation"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor="previousSearchInfo">
-                                Додаткова інформація про попередній розшук
+                                <FormLabel htmlFor="probableLocation">
+                                    Можливе місце знаходження
                                 </FormLabel>
                                 <FormControl>
                                     <Input type="text" {...field} />
+                                </FormControl>
+                                <FormDescription>
+                                    Найменування установи, де можливе
+                                    місцезнаходження втраченої культурної
+                                    цінності
+                                </FormDescription>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
+                <div className="grid grid-rows-2 gap-5">
+                    <FormField
+                        control={form.control}
+                        name="lossTime"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel htmlFor="lossTime">
+                                    Дата втрачання
+                                </FormLabel>
+                                <FormControl>
+                                    <Input {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
-                    {/* marks */}
+                    {/* Museum */}
                     <FormField
                         control={form.control}
-                        name="courtDecision"
+                        name="lossMuseumId"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor="courtDecision">
-                                    Судовий процес
+                                <FormLabel htmlFor="lossMuseumId">
+                                    Музей з якого було втрачено
                                 </FormLabel>
-                                <FormControl>
-                                    <Input type="text" {...field} />
-                                </FormControl>
+                                <ReactSelect
+                                    {...field}
+                                    // isMulti
+                                    id="lossMuseumId"
+                                    className="select"
+                                    options={museumOptions}
+                                    getOptionLabel={(option) =>
+                                        `
+                                        ${
+                                            museums.data.find(
+                                                (museum: any) =>
+                                                    museum.id === option.value
+                                            )?.name
+                                        } :
+                                        ${
+                                            museums.data.find(
+                                                (museum: any) =>
+                                                    museum.id === option.value
+                                            )?.nameOld
+                                        }`
+                                    }
+                                    placeholder={'Виберіть музей'}
+                                    onBlur={field.onBlur}
+                                    value={museumOptions.filter(
+                                        (category) =>
+                                            field.value?.value ===
+                                            category.value
+                                    )}
+                                    menuPortalTarget={document.body}
+                                    theme={(theme) => ({
+                                        ...theme,
+                                        border: 'none',
+                                        borderRadius: 20,
+                                        fontSize: 10,
+                                        colors: {
+                                            ...theme.colors,
+                                            primary25: 'rgba(0, 0, 0, 0.1)',
+                                            primary: '#1C1C1C',
+                                        },
+                                    })}
+                                    styles={{
+                                        menu: (provided) => ({
+                                            ...provided,
+                                            maxHeight: 180,
+                                            overflow: 'hidden',
+                                        }),
+                                        // control: (provided, state) => ({
+                                        //     ...provided,
+                                        //     borderColor: state.isFocused
+                                        //         ? '#587cc0'
+                                        //         : '#587cc0',
+                                        // }),
+                                    }}
+                                />
                                 <FormMessage />
                             </FormItem>
                         )}
@@ -102,4 +167,4 @@ const AddLostRelic = ({ form }: any) => {
     );
 };
 
-export default AddLostRelic;
+export default AddLostdRelic;

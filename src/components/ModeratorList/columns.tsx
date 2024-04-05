@@ -21,14 +21,29 @@ import { DataTableRowActions } from './DataTableRowActions';
 
 export const columns: any = [
     {
-        accessorKey: 'title',
-        meta: 'Назва',
+        // id: 'id',
+        accessorKey: 'id',
+        meta: 'ID',
         header: ({ column }: any) => (
-            <DataTableColumnHeader column={column} title="Назва" />
+            <DataTableColumnHeader column={column} title="ID" />
         ),
         cell: ({ row }: any) => (
             <div className="max-w-[500px] truncate font-medium">
-                <span>{row.getValue('title')}</span>
+                <span>{row.getValue('id')}</span>
+            </div>
+        ),
+    },
+    {
+        id: 'fullName',
+        accessorFn: (row: any) => `${row.firstName} ${row.lastName}`,
+        // accessorKey: 'fullName',
+        meta: "Ім'я",
+        header: ({ column }: any) => (
+            <DataTableColumnHeader column={column} title="Ім'я" />
+        ),
+        cell: ({ row }: any) => (
+            <div className="max-w-[500px] truncate font-medium">
+                <span>{row.getValue('fullName')}</span>
             </div>
         ),
     },
@@ -45,51 +60,68 @@ export const columns: any = [
         ),
     },
     {
-        accessorKey: 'categoryList',
+        accessorKey: 'categories',
         meta: 'Категорія',
         header: ({ column }: any) => (
             <DataTableColumnHeader column={column} title="Категорія" />
         ),
         cell: ({ row }: any) => {
-            const categories = row.getValue('categoryList');
-            const labels = categories.map((category: categoryType) => {
-                return (
-                    categories.find(
-                        (t: categoryType) =>
-                            t.categoryName === category.categoryName
-                    )?.categoryName || category.categoryName
-                );
-            });
+            const categories = row.getValue('categories');
+            const labels = categories.map(
+                (category: categoryType) => category.name
+            );
+            // const labels = categories.map((category: categoryType) => {
+            //     return (
+            //         categories.find(
+            //             (t: categoryType) =>
+            //                 t.name === category.name
+            //         )?.name || category.name
+            //     );
+            // });
 
             return <ShowLabels labels={labels} />;
         },
         filterFn: 'select',
     },
     {
-        accessorKey: 'region',
+        id: 'regions',
+        accessorKey: 'regions',
         meta: 'Регіон',
         header: ({ column }: any) => (
             <DataTableColumnHeader column={column} title="Регіон" />
         ),
         cell: ({ row }: any) => {
-            const status = statuses.find(
-                (status) => status.value === row.getValue('status')
-            );
-            return (
-                <div className="flex items-center space-x-2">
-                    {status?.icon && (
-                        <status.icon className={`${status.color}`} />
-                    )}
-                    {status ? (
-                        <span className={`p-2`}>{status.label}</span>
-                    ) : (
-                        <span>{row.getValue('status')}</span>
-                    )}
-                </div>
-            );
+            const regions = row.getValue('regions');
+            const labels = regions.map((region: any) => region.name);
+            // const labels = regions.map((region: any) => {
+            //     return (
+            //         categories.find(
+            //             (t: categoryType) =>
+            //                 t.name === category.name
+            //         )?.name || category.name
+            //     );
+            // });
+
+            return <ShowLabels labels={labels} />;
         },
-        filterFn: (row: any, id: any, value: any) => {
-            return value.includes(row.getValue(id));
+        filterFn: 'select',
+    },
+    {
+        accessorKey: 'ban',
+        meta: 'Статус',
+        header: ({ column }: any) => (
+            <DataTableColumnHeader column={column} title="Статус" />
+        ),
+        cell: ({ row }: any) => {
+            const ban = row.getValue('ban');
+            return (
+                <Badge
+                    variant={ban ? 'destructive' : 'secondary'}
+                    className="text-xs"
+                >
+                    {ban ? 'Заблокований' : 'Активний'}
+                </Badge>
+            );
         },
     },
     { id: 'action', cell: ({ row }: any) => <DataTableRowActions row={row} /> },

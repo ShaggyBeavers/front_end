@@ -1,5 +1,4 @@
 import requests, { authAPi } from '../requests';
-import AuthAPI from '../Account/Auth/auth';
 
 const AdminAPI = {
     getRegionalModerators: () => authAPi.get('api/admin/regional-moderators'),

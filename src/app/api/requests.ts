@@ -5,8 +5,8 @@ import { config } from 'process';
 import { useAuthStore } from '../../stores/AuthStore';
 import { useNavigate } from 'react-router-dom';
 
-const BASE_URL = 'http://localhost:8080/';
-// axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+// const BASE_URL = 'http://localhost:8081/';
+const BASE_URL = process.env.REACT_APP_API_URL;
 axios.defaults.baseURL = BASE_URL;
 export const authAPi = axios.create({
     baseURL: BASE_URL,
@@ -35,6 +35,9 @@ authAPi.interceptors.request.use(
     },
     (error) => {
         console.log('Interceptor triggered request error');
+        // navigate('/');
+        window.location.reload();
+        window.location = window.location;
         return Promise.reject(error);
     }
 );
@@ -49,6 +52,9 @@ authAPi.interceptors.response.use(
         const originalRequest = error.config;
         if (error.response.status === 401 && !originalRequest._retry) {
             localStorage.removeItem('auth-store');
+            localStorage.removeItem('ACCESS_TOKEN');
+
+            window.location.reload();
             // useAuthStore.setState({ user: null });
             // originalRequest._retry = true;
 

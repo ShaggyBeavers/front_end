@@ -47,21 +47,9 @@ export function DataTable<TData, TValue>({
         const selectedValues = value;
         const values: any = new Set(row.getValue(columnId) as string[]);
         const included = [...selectedValues].every((selected) =>
-            Array.from(values).some(
-                (item: any) => item.categoryName === selected
-            )
+            Array.from(values).some((item: any) => item.name === selected)
         );
 
-        // console.log(
-        //     'Value: ',
-        //     value,
-        //     '\nIncluded',
-        //     included,
-        //     '\nValues',
-        //     values,
-        //     '\nSelected',
-        //     selectedValues
-        // );
         return included;
     };
 
