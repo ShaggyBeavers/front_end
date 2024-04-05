@@ -14,7 +14,8 @@ export interface reportData {
 
 const ReportAPI = {
     createReport: (values: {}) => authAPi.post('api/report/', values),
-    getAllReports: () => authAPi.get('api/report/'),
+    getAllReports: (page: number, size: number) =>
+        authAPi.get(`api/report/?page=${page}&size=${size}`),
     updateReportStatus: (values: {
         reportId: number;
         status: RelicStatusEnum;
