@@ -17,6 +17,8 @@ interface RelicInfoDTO {
     signatures: string;
     restoration: string;
     annotation: string;
+    appraisedValue: string;
+    insuranceValue: string;
 }
 
 interface RecoveredRelicInfoDTO {
@@ -33,6 +35,11 @@ interface LostRelicInfoDTO {
     probableLocation: string;
 }
 
+interface categoryDTOs {
+    id: number;
+    name: string;
+}
+
 interface Relic {
     id: number;
     name: string;
@@ -46,15 +53,15 @@ interface Relic {
     collection: string;
     comment: string;
     status: string;
-    inventoryNumber: number,
-    formerInventoryNumber: number,
-    copyInformation: string,
-    copyCreationTime: string,
+    inventoryNumber: number;
+    formerInventoryNumber: number;
+    copyInformation: string;
+    copyCreationTime: string;
     relicPropertyDTOs: RelicPropertyDTO[];
     relicInfoDTO: RelicInfoDTO;
     recoveredRelicInfoDTO: RecoveredRelicInfoDTO;
     lostRelicInfoDTO: LostRelicInfoDTO;
-    
+    categoryDTOs: categoryDTOs[];
 }
 
 const Relic = () => {
@@ -62,6 +69,13 @@ const Relic = () => {
     const params = useParams();
     const [item, setItem] = useState<Relic | null>(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [categories, setCategories] = useState<categoryDTOs[]>([]);
+
+    useEffect(() => {
+        if (item) {
+            setCategories(item.categoryDTOs ?? []);
+        }
+    }, [item]);
 
     useEffect(() => {
         const fetchItemDetails = async () => {
@@ -127,8 +141,9 @@ const Relic = () => {
                 <h3>{renderFieldValue(item?.name)}</h3>
                 <div>
                     <h6>Категорія:</h6>
-                    <p>Мозаїка</p>
-                    {/* waiting for back */}
+                    {categories.length === 0
+                        ? renderFieldValue(null)
+                        : <p>{categories.map(category => category.name).join(', ')}</p>}
                 </div>
                 <div className="relic_col">
                     <h6>Колекція:</h6>
@@ -185,11 +200,11 @@ const Relic = () => {
                 </div>
                 <div>
                     <h6>Страхова вартість:</h6>
-                    <p>3 бублика</p>
+                    <p>{renderFieldValue(item?.relicInfoDTO?.insuranceValue)}</p>
                 </div>
                 <div>
                     <h6>Оціночна вартість:</h6>
-                    <p>3 бублика і булочка</p>
+                    <p>{renderFieldValue(item?.relicInfoDTO?.appraisedValue)}</p>
                 </div>
 
                 <div className="relic_divider" />
@@ -248,19 +263,35 @@ const Relic = () => {
 
                 <div>
                     <h6>Джерело інформації про повернення:</h6>
-                    <p>{renderFieldValue(item?.recoveredRelicInfoDTO?.locationSource)}</p>
+                    <p>
+                        {renderFieldValue(
+                            item?.recoveredRelicInfoDTO?.locationSource
+                        )}
+                    </p>
                 </div>
                 <div>
                     <h6>Час повернення:</h6>
-                    <p>{renderFieldValue(item?.recoveredRelicInfoDTO?.returnDate)}</p>
+                    <p>
+                        {renderFieldValue(
+                            item?.recoveredRelicInfoDTO?.returnDate
+                        )}
+                    </p>
                 </div>
                 <div>
                     <h6>Процес повернення:</h6>
-                    <p>{renderFieldValue(item?.recoveredRelicInfoDTO?.returnProcess)}</p>
+                    <p>
+                        {renderFieldValue(
+                            item?.recoveredRelicInfoDTO?.returnProcess
+                        )}
+                    </p>
                 </div>
                 <div>
                     <h6>Судовий процес:</h6>
-                    <p>{renderFieldValue(item?.recoveredRelicInfoDTO?.courtDecision)}</p>
+                    <p>
+                        {renderFieldValue(
+                            item?.recoveredRelicInfoDTO?.courtDecision
+                        )}
+                    </p>
                 </div>
             </div>
             <div className="relic_right">
