@@ -2,6 +2,13 @@ import React, { useEffect, useState } from 'react';
 import './relic.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import RelicAPI from '../../app/api/Relic/relic';
+import { infiniteQueryOptions, useQuery } from '@tanstack/react-query';
+// import { unzipFile } from '../../../src/lib/utils';
+import { set } from 'zod';
+import JSZip from 'jszip';
+// import * from 'uzip';
+import { gzipSync, decompressSync, unzipSync } from 'fflate';
+import { get } from 'http';
 
 interface RelicPropertyDTO {
     name: string;
@@ -46,37 +53,84 @@ interface Relic {
     collection: string;
     comment: string;
     status: string;
-    inventoryNumber: number,
-    formerInventoryNumber: number,
-    copyInformation: string,
-    copyCreationTime: string,
+    inventoryNumber: number;
+    formerInventoryNumber: number;
+    copyInformation: string;
+    copyCreationTime: string;
     relicPropertyDTOs: RelicPropertyDTO[];
     relicInfoDTO: RelicInfoDTO;
     recoveredRelicInfoDTO: RecoveredRelicInfoDTO;
     lostRelicInfoDTO: LostRelicInfoDTO;
-    
 }
+
+const unzipFile = async (zipFile: any) => {
+    try {
+        const new_zip = new JSZip();
+        const images: any = await new_zip
+            .loadAsync(zipFile)
+            .then((zip) => {
+                let promises = Object.keys(zip.files).map(async (fileName) => {
+                    const file = zip.files[fileName];
+                    const data = await file.async('blob');
+                    return { name: fileName, data };
+                });
+                return Promise.all(promises);
+            })
+            .then((files) => {
+                // console.log('files', files);
+                return files.reduce((acc, file) => {
+                    acc[file.name] = file.data;
+                    return acc;
+                }, {} as any);
+                // return files;
+            });
+        console.log('images', images);
+        return images;
+    } catch (error) {
+        console.error('Error unzipping file:', error);
+        return [];
+    }
+};
 
 const Relic = () => {
     const navigate = useNavigate();
     const params = useParams();
-    const [item, setItem] = useState<Relic | null>(null);
+    // const [item, setItem] = useState<Relic | null>(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
+    const [images, setImages] = useState<any[]>([]);
+    const relicId = Number(params.relicsid);
 
-    useEffect(() => {
-        const fetchItemDetails = async () => {
-            try {
-                const response = await RelicAPI.fetchDetails(
-                    Number(params.relicsid)
-                );
-                console.log('Request Details:', response);
-                setItem(response);
-            } catch (error) {
-                console.error('Error fetching item details:', error);
-            }
-        };
-        fetchItemDetails();
-    }, [params.relicsid]);
+    const getImages = useQuery({
+        queryKey: ['relicImages', relicId],
+        queryFn: () => RelicAPI.getRelicFiles(relicId),
+        staleTime: Infinity,
+        retry: false,
+    });
+
+    const getRelic = useQuery({
+        queryKey: ['relic', relicId],
+        queryFn: () => RelicAPI.fetchDetails(relicId),
+        staleTime: Infinity,
+        retry: false,
+    });
+
+    const item = getRelic.data;
+    // setItem(getRelic.data);
+    // useEffect(() => {
+    //     const fetchItemDetails = async () => {
+    //         try {
+    //             const response = await RelicAPI.fetchDetails(
+    //                 Number(params.relicsid)
+    //             );
+    //             console.log('Request Details:', response);
+    //             setItem(response);
+    //         } catch (error) {
+    //             console.error('Error fetching item details:', error);
+    //         }
+    //     };
+    //     fetchItemDetails();
+    // }, [params.relicsid]);
 
     const goBack = () => {
         navigate(-1);
@@ -112,6 +166,73 @@ const Relic = () => {
             return value;
         }
     }
+
+    if (getImages.isLoading) return <div>Loading...</div>;
+    if (getImages.isError) return <>{`Error: ${String(getImages.error)}`}</>;
+
+    if (getImages.isSuccess) {
+        console.log('getImages', getImages.data);
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            console.log('target', e?.target?.result);
+            console.log('reader', reader.result);
+            // const blobData = e?.target?.result;
+
+            const arrayBuffer = new Uint8Array(reader.result as ArrayBuffer);
+            const imagesArray = unzipSync(arrayBuffer);
+            console.log('imagesArray', imagesArray);
+        };
+        reader.onerror = function (e) {
+            console.error('Error reading file:', e?.target?.error);
+        };
+        reader.readAsArrayBuffer(getImages.data);
+        // reader.readAsBinaryString(getImages.data);
+        // const imagesArray = unzipSync(getImages.data);
+        // let arrayBuffer = unzipSync(new Uint8Array(getImages.data));
+        // console.log(JSON.parse(String.fromCharCode.apply(arrayBuffer)));
+    }
+
+    // console.log('imagesArray', imagesArray);
+
+    // setImages(imagesArray.);
+
+    // useEffect(() => {
+    //     const extractImages = async () => {
+    //         setIsLoading(true);
+    //         try {
+    //             const imageZip = await getImages.data;
+    //             const extractedImages = await unzipFile(imageZip);
+    //             setImages(Object.values(extractedImages));
+    //             console.log('Extract images', images);
+    //         } catch (error) {
+    //             console.error('Error extracting images:', error);
+    //         } finally {
+    //             setIsLoading(false);
+    //         }
+    //     };
+
+    //     if (getImages.isSuccess) {
+    //         extractImages();
+    //     }
+    // }, [getImages.data]);
+
+    // const imageZip = getImages.data;
+
+    // const imagesArray =  unzipFile(getImages.data);
+
+    // console.log('imagesArray', imagesArray);
+    // const extImages = async () => {
+    //     const imagesArray = await unzipFile(getImages.data);
+    //     setImages(imagesArray);
+    // };
+    // extImages();
+    // console.log('images', images);
+    // setImages();
+    // const extractImages = async () => {
+    //     const imagesArray = await unzipFile(imageZip);
+    //     setImages(imagesArray);
+    // };
+    // extractImages();
 
     return (
         <div className="relic_con">
@@ -248,19 +369,35 @@ const Relic = () => {
 
                 <div>
                     <h6>Джерело інформації про повернення:</h6>
-                    <p>{renderFieldValue(item?.recoveredRelicInfoDTO?.locationSource)}</p>
+                    <p>
+                        {renderFieldValue(
+                            item?.recoveredRelicInfoDTO?.locationSource
+                        )}
+                    </p>
                 </div>
                 <div>
                     <h6>Час повернення:</h6>
-                    <p>{renderFieldValue(item?.recoveredRelicInfoDTO?.returnDate)}</p>
+                    <p>
+                        {renderFieldValue(
+                            item?.recoveredRelicInfoDTO?.returnDate
+                        )}
+                    </p>
                 </div>
                 <div>
                     <h6>Процес повернення:</h6>
-                    <p>{renderFieldValue(item?.recoveredRelicInfoDTO?.returnProcess)}</p>
+                    <p>
+                        {renderFieldValue(
+                            item?.recoveredRelicInfoDTO?.returnProcess
+                        )}
+                    </p>
                 </div>
                 <div>
                     <h6>Судовий процес:</h6>
-                    <p>{renderFieldValue(item?.recoveredRelicInfoDTO?.courtDecision)}</p>
+                    <p>
+                        {renderFieldValue(
+                            item?.recoveredRelicInfoDTO?.courtDecision
+                        )}
+                    </p>
                 </div>
             </div>
             <div className="relic_right">
@@ -278,12 +415,19 @@ const Relic = () => {
                         />
                     </div>
                     <div className="relic_img_con">
-                        <img
-                            src={placeholderImages[currentImageIndex]}
-                            // src={item.imageUrl[currentImageIndex]}
-                            alt={`Relic Image ${currentImageIndex + 1}`}
-                            // src='/vert.jpg'
-                        />
+                        {isLoading ? (
+                            <p>Loading ...</p>
+                        ) : images.length > 0 ? (
+                            <img
+                                // src={images[currentImageIndex]}
+                                src={images[currentImageIndex]}
+                                // src={item.imageUrl[currentImageIndex]}
+                                alt={`Relic Image ${currentImageIndex + 1}`}
+                                // src='/vert.jpg'
+                            />
+                        ) : (
+                            <p>No Images found</p>
+                        )}
                     </div>
 
                     <div className="relic_pic_nav">
