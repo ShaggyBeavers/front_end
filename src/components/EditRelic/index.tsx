@@ -62,8 +62,8 @@ const relicFormSchema = z
             .min(1, {
                 message: 'Кількість повинна бути більше 0',
             }),
-        inventoryNumber: z.coerce.number().optional(),
-        formerInventoryNumber: z.coerce.number().optional(),
+        inventoryNumber: z.string().optional(),
+        formerInventoryNumber: z.string().optional(),
         // categories: z.array(z.any()),
         // collection: z.string({ required_error: 'Вкажіть колекцію' }).optional(),
         // image: z.any().optional(),
@@ -80,6 +80,7 @@ const cleanUpData = (data: any) => {
 };
 
 export const EditRelic = () => {
+    const [files, setFiles] = useAtom(filesAtom);
     const addRelic = useMutation({
         mutationFn: RelicAPI.createRelic,
         onSuccess: () => {
@@ -90,7 +91,17 @@ export const EditRelic = () => {
         },
     });
 
-    const [files, setFiles] = useAtom(filesAtom);
+    const uploadRelicFile = useMutation({
+        mutationFn: async ({ relicId, file }: { relicId: number; file: any }) =>
+            await RelicAPI.uploadRelicFile(relicId, file),
+        onSuccess: () => {
+            console.log('File uploaded');
+        },
+        onError: (error) => {
+            console.log(error);
+        },
+    });
+
     const [selectedProperties, setSelectedProperties] = useAtom(
         selectedPropertiesAtom
     );
@@ -256,7 +267,17 @@ export const EditRelic = () => {
             }),
         };
 
-        addRelic.mutate(relic);
+        // addRelic.mutate(relic);
+
+        // add upload files to relicId 20
+        const formData = new FormData();
+        files.forEach((file) => {
+            if (file?.file) {
+                formData.append('file', file.file);
+            }
+        });
+
+        uploadRelicFile.mutate({ relicId: 20, file: formData });
 
         toast('You submitted the following values:', {
             description: (

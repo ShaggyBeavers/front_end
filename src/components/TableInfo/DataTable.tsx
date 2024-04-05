@@ -12,6 +12,7 @@ import {
     getPaginationRowModel,
     getSortedRowModel,
     useReactTable,
+    PaginationState,
     FilterFn,
 } from '@tanstack/react-table';
 
@@ -24,8 +25,11 @@ import {
     TableRow,
 } from '../ui/table';
 
+import Modal from 'react-modal';
 import { DataTablePagination } from './DataTablePagination';
 import { DataTableToolbar } from './DataTableToolbar';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import ReportAPI from '../../../src/app/api/Report/report';
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -42,6 +46,20 @@ export function DataTable<TData, TValue>({
     const [columnFilters, setColumnFilters] =
         React.useState<ColumnFiltersState>([]);
     const [sorting, setSorting] = React.useState<SortingState>([]);
+    const [pagination, setPagination] = React.useState<PaginationState>({
+        pageIndex: 0,
+        pageSize: 5,
+    });
+
+    const reports = useQuery({
+        queryKey: ['reports', pagination.pageIndex, pagination.pageSize],
+        queryFn: async () =>
+            await ReportAPI.getAllReports(
+                pagination.pageIndex,
+                pagination.pageSize
+            ),
+        placeholderData: keepPreviousData,
+    });
 
     const selectFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
         const selectedValues = value;
@@ -54,18 +72,22 @@ export function DataTable<TData, TValue>({
     };
 
     const table = useReactTable({
-        data,
+        data: reports.data?.data?.content ?? [],
         columns,
         state: {
             sorting,
             columnVisibility,
+            pagination,
             // rowSelection,
             // columnFilters,
         },
         filterFns: {
             select: selectFilter,
         },
+        manualPagination: true,
+        rowCount: reports.data?.data?.totalElements ?? 0,
         onSortingChange: setSorting,
+        onPaginationChange: setPagination,
         // onColumnFiltersChange: setColumnFilters,
         onColumnVisibilityChange: setColumnVisibility,
         getCoreRowModel: getCoreRowModel(),
@@ -76,8 +98,11 @@ export function DataTable<TData, TValue>({
         getFacetedUniqueValues: getFacetedUniqueValues(),
     });
 
+    // const [modals, setModals] = useState<IModal>({isFilter,});
+
     return (
         <div className="space-y-4">
+            {/* <Modal>{modals.content}</Modal> */}
             <DataTableToolbar table={table} />
             <div className="rounded-md border">
                 <Table>
@@ -111,6 +136,10 @@ export function DataTable<TData, TValue>({
                                     data-state={
                                         row.getIsSelected() && 'selected'
                                     }
+                                    className="hover:bg-gray-50 cursor-pointer"
+                                    onClick={() => {
+                                        console.log(row.getValue('reportId'));
+                                    }}
                                     // className='odd:bg-gray-50'
                                 >
                                     {row.getVisibleCells().map((cell) => (

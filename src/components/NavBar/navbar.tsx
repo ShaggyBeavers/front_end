@@ -97,10 +97,40 @@ const NavBar: React.FC<NavBarProps> = ({ styles }) => {
                                 </li>
                                 <li className="nav_log_btn">
                                     <Link to="/profile">Кабінет</Link>
+                                    <ConfirmButton
+                                        // className="logout_btn"
+                                        buttonMessage="Вийти"
+                                        buttonVariant="link"
+                                        dialogTitle="Вийти"
+                                        dialogDescription="Ви впевнені, що хочете вийти?"
+                                        dialogAction={() => {
+                                            localStorage.removeItem(
+                                                'auth-store'
+                                            );
+                                            window.location.reload();
+                                        }}
+                                    />
                                     {/* <Button>
                                         <Link to="/profile">Кабінет</Link>
                                     </Button> */}
+                                    {/* <button className="logout_btn">
+                                        Вийти
+                                    </button> */}
                                 </li>
+                                {/* <li>
+                                    <ConfirmButton
+                                        buttonMessage="Вийти"
+                                        // buttonVariant="ghost"
+                                        dialogTitle="Вийти"
+                                        dialogDescription="Ви впевнені, що хочете вийти?"
+                                        dialogAction={() => {
+                                            localStorage.removeItem(
+                                                'auth-store'
+                                            );
+                                            window.location.reload();
+                                        }}
+                                    />
+                                </li> */}
                             </>
                         )}
                     </ul>

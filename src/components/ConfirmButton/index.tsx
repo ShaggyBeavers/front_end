@@ -12,6 +12,7 @@ import {
 import { Button } from '../ui/button';
 interface ConfirmButtonProps {
     buttonMessage?: string;
+    buttonVariant?: string;
     dialogTitle?: string;
     dialogDescription?: string;
     dialogAction: () => void;
@@ -22,11 +23,26 @@ export function ConfirmButton({
     dialogTitle,
     dialogDescription,
     dialogAction,
+    buttonVariant = 'outline',
 }: ConfirmButtonProps) {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button variant="outline" type="submit">
+                <Button
+                    variant={
+                        buttonVariant as
+                            | 'link'
+                            | 'default'
+                            | 'destructive'
+                            | 'outline'
+                            | 'secondary'
+                            | 'ghost'
+                            | null
+                            | undefined
+                    }
+                    type="submit"
+                    className="logout_btn"
+                >
                     {buttonMessage || 'Підтвердити'}
                 </Button>
             </AlertDialogTrigger>

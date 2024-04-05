@@ -56,8 +56,8 @@ export function DataTableRowActions<TData>({
     const banUnban = useMutation({
         mutationFn: (userId: number) => UserAPI.banUnban(userId),
         onSettled: () => {
-            // queryClient.invalidateQueries({ queryKey: ['getMod'] });
-            // queryClient.invalidateQueries({ queryKey: ['getRegMod'] });
+            queryClient.invalidateQueries({ queryKey: ['getMod'] });
+            queryClient.invalidateQueries({ queryKey: ['getRegMod'] });
         },
     });
 
@@ -85,7 +85,7 @@ export function DataTableRowActions<TData>({
                         key={status.value}
                         onClick={() => {
                             changeStatus.mutate({
-                                reportId: 32,
+                                reportId: row.getValue('reportId'),
                                 status: status.value,
                             });
                         }}
@@ -100,7 +100,8 @@ export function DataTableRowActions<TData>({
                 <DropdownMenuSeparator className="bg-gray-200" />
                 <DropdownMenuItem
                     onClick={() => {
-                        console.log('Ban ', row.id);
+                        // console.log('Ban ', row.getValue('userId'));
+                        banUnban.mutate(row.getValue('userId'));
                     }}
                 >
                     <Ban className="mr-1 max-w-4" />

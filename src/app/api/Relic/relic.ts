@@ -16,8 +16,8 @@ const RelicAPI = {
             `api/relics/filter?page=${page}&size=${size}`,
             filterRequest
         ),
-    uploadRelicFile: (relicId: number, file: string) =>
-        authAPi.post(`api/relics/edit/${relicId}`, file),
+    uploadRelicFile: (relicId: number, file: any[]) =>
+        authAPi.post(`api/relics/files/upload/${relicId}`, file),
     createRelic: (values: RelicDTO) =>
         authAPi.post('api/relics/create', values),
     changeFavorite: () => requests.post('api/relics/change-favorite', {}), //accepts no params currently
@@ -27,8 +27,8 @@ const RelicAPI = {
             `api/relics/search?relicName=${relicName}&page=${page}&size=${size}`
         ),
     // is redundant relicsPage: (page: number, size: number) => requests.get(`api/relics/page?page=${page}&size=${size}`),
-    getRelicFile: (relicId: number) =>
-        requests.get(`api/relics/file/download/${relicId}`),
+    getRelicFiles: (relicId: number) =>
+        requests.getFile(`api/relics/files/download/${relicId}`),
     favorite: () => requests.get('api/relics/favorite'),
     countRelicsByStatuses: (statuses: RelicStatusEnum[]) =>
         requests.get(`api/relics/count-by-statuses?statuses=${statuses}`),
