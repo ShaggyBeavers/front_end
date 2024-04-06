@@ -77,7 +77,7 @@ export function DataTable<TData, TValue>({
     useEffect(() => {
         console.log(selectedReport);
     }, [selectedReport]);
-    
+
     const getReport = useMutation({
         mutationFn: async (reportId: number) =>
             await ReportAPI.getReport(reportId),
@@ -103,17 +103,6 @@ export function DataTable<TData, TValue>({
                 pagination.pageSize
             ),
         placeholderData: keepPreviousData,
-    });
-
-    const getReport = useMutation({
-        mutationFn: async (reportId: number) =>
-            await ReportAPI.getReport(reportId),
-        onSuccess: (data) => {
-            console.log('Report fetched', data);
-        },
-        onError: (error) => {
-            console.error('Error fetching report', error);
-        },
     });
 
     const selectFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
@@ -192,28 +181,34 @@ export function DataTable<TData, TValue>({
                                         row.getIsSelected() && 'selected'
                                     }
                                     className="hover:bg-gray-50 cursor-pointer"
-                                    onClick={() =>
-                                        handleRowClick(row.getValue('reportId'))
-                                    }
-//                                    onClick={() => {
-//                                        console.log(row.getValue('reportId'));
-//                                        getReport.mutate(
-//                                            row.getValue('reportId')
-//                                        );
-//                                    }}
-                                    // className='odd:bg-gray-50'
                                 >
-                                    {row.getVisibleCells().map((cell) => (
-                                        <TableCell
-                                            key={cell.id}
-                                            // className="first:rounded-l-2xl  last:rounded-r-2xl "
-                                        >
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
-                                            )}
-                                        </TableCell>
-                                    ))}
+                                    {row
+                                        .getVisibleCells()
+                                        .map((cell, index) => (
+                                            <TableCell
+                                                key={cell.id}
+                                                onClick={() => {
+                                                    if (
+                                                        index !==
+                                                        row.getVisibleCells()
+                                                            .length -
+                                                            1
+                                                    ) {
+                                                        handleRowClick(
+                                                            row.getValue(
+                                                                'reportId'
+                                                            )
+                                                        );
+                                                    }
+                                                }}
+                                                // className="first:rounded-l-2xl  last:rounded-r-2xl "
+                                            >
+                                                {flexRender(
+                                                    cell.column.columnDef.cell,
+                                                    cell.getContext()
+                                                )}
+                                            </TableCell>
+                                        ))}
                                 </TableRow>
                             ))
                         ) : (

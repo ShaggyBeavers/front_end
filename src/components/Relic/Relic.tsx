@@ -74,7 +74,7 @@ interface Relic {
 const Relic = () => {
     const navigate = useNavigate();
     const params = useParams();
-    const [item, setItem] = useState<Relic | null>(null);
+    // const [item, setItem] = useState<Relic | null>(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     const [isLoading, setIsLoading] = useState(false);
@@ -82,19 +82,17 @@ const Relic = () => {
     const relicId = Number(params.relicsid);
 
     const [imageNames, setImageNames] = useState<string[]>([]);
-    const relicId = Number(params.relicsid);
 
-//   const [isLoading, setIsLoading] = useState(false);
-//    const [images, setImages] = useState<any[]>([]);
-//    const relicId = Number(params.relicsid);
+    //   const [isLoading, setIsLoading] = useState(false);
+    //    const [images, setImages] = useState<any[]>([]);
+    //    const relicId = Number(params.relicsid);
     const [categories, setCategories] = useState<categoryDTOs[]>([]);
 
-//    useEffect(() => {
-//        if (item) {
-//            setCategories(item.categoryDTOs ?? []);
-//        }
-//    }, [item]);
-
+    //    useEffect(() => {
+    //        if (item) {
+    //            setCategories(item.categoryDTOs ?? []);
+    //        }
+    //    }, [item]);
 
     const getImages = useQuery({
         queryKey: ['relicImages', relicId],
@@ -108,22 +106,22 @@ const Relic = () => {
         queryFn: () => RelicAPI.fetchDetails(relicId),
     });
 
-  
-    setItem(getRelic.data);
-    useEffect(() => {
-        const fetchItemDetails = async () => {
-            try {
-                const response = await RelicAPI.fetchDetails(
-                    Number(params.relicsid)
-                );
-                console.log('Request Details:', response);
-                setItem(response);
-            } catch (error) {
-                console.error('Error fetching item details:', error);
-            }
-        };
-        fetchItemDetails();
-    }, [params.relicsid]);
+    // setItem(getRelic.data);
+    const item = getRelic.data;
+    // useEffect(() => {
+    //     const fetchItemDetails = async () => {
+    //         try {
+    //             const response = await RelicAPI.fetchDetails(
+    //                 Number(params.relicsid)
+    //             );
+    //             console.log('Request Details:', response);
+    //             setItem(response);
+    //         } catch (error) {
+    //             console.error('Error fetching item details:', error);
+    //         }
+    //     };
+    //     fetchItemDetails();
+    // }, [params.relicsid]);
 
     const goBack = () => {
         navigate(-1);
