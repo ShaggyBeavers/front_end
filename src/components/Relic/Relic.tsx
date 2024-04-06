@@ -68,11 +68,8 @@ const Relic = () => {
     const params = useParams();
     // const [item, setItem] = useState<Relic | null>(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    let maxImageIndex = 0;
-    const [isLoading, setIsLoading] = useState(false);
     const [images, setImages] = useState<any[]>([]);
     const [imageNames, setImageNames] = useState<string[]>([]);
-    const [image, setImage] = useState<any>(null);
     const relicId = Number(params.relicsid);
 
     const getImages = useQuery({
@@ -85,8 +82,6 @@ const Relic = () => {
     const getRelic = useQuery({
         queryKey: ['relic', relicId],
         queryFn: () => RelicAPI.fetchDetails(relicId),
-        // staleTime: Infinity,
-        // retry: false,
     });
 
     const item = getRelic.data;
@@ -140,11 +135,11 @@ const Relic = () => {
 
     useEffect(() => {
         if (getImages.isSuccess) {
-            console.log('getImages', getImages.data);
+            // console.log('getImages', getImages.data);
             const reader = new FileReader();
             reader.onload = function (e) {
-                console.log('target', e?.target?.result);
-                console.log('reader', reader.result);
+                // console.log('target', e?.target?.result);
+                // console.log('reader', reader.result);
                 // const blobData = e?.target?.result;
 
                 const arrayBuffer = new Uint8Array(
@@ -166,68 +161,14 @@ const Relic = () => {
                     ]);
                 }
                 setImageNames(keys);
-                // maxImageIndex = keys.length;
                 console.log('Image names-keys', imageNames);
-                // console.log('images', images);
-                // const base64String =
-                // console.log('base64String', base64String);
-                // setImage(base64String);
             };
             reader.onerror = function (e) {
                 console.error('Error reading file:', e?.target?.error);
             };
             reader.readAsArrayBuffer(getImages.data);
-            // reader.readAsBinaryString(getImages.data);
-            // const imagesArray = unzipSync(getImages.data);
-            // let arrayBuffer = unzipSync(new Uint8Array(getImages.data));
-            // console.log(JSON.parse(String.fromCharCode.apply(arrayBuffer)));
         }
     }, [getImages.data]);
-    // console.log('imagesArray', imagesArray);
-
-    // setImages(imagesArray.);
-
-    // useEffect(() => {
-    //     const extractImages = async () => {
-    //         setIsLoading(true);
-    //         try {
-    //             const imageZip = await getImages.data;
-    //             const extractedImages = await unzipFile(imageZip);
-    //             setImages(Object.values(extractedImages));
-    //             console.log('Extract images', images);
-    //         } catch (error) {
-    //             console.error('Error extracting images:', error);
-    //         } finally {
-    //             setIsLoading(false);
-    //         }
-    //     };
-
-    //     if (getImages.isSuccess) {
-    //         extractImages();
-    //     }
-    // }, [getImages.data]);
-
-    // const imageZip = getImages.data;
-
-    // const imagesArray =  unzipFile(getImages.data);
-
-    // console.log('imagesArray', imagesArray);
-    // const extImages = async () => {
-    //     const imagesArray = await unzipFile(getImages.data);
-    //     setImages(imagesArray);
-    // };
-    // extImages();
-    // console.log('images', images);
-    // setImages();
-    // const extractImages = async () => {
-    //     const imagesArray = await unzipFile(imageZip);
-    //     setImages(imagesArray);
-    // };
-    // extractImages();
-
-    if (getImages.isLoading) return <div>Loading...</div>;
-    if (getImages.isError) return <>{`Error: ${String(getImages.error)}`}</>;
-
     return (
         <div className="relic_con">
             <div className="relic_left">
@@ -409,23 +350,14 @@ const Relic = () => {
                         />
                     </div>
                     <div className="relic_img_con">
-                        {isLoading ? (
-                            <p>Loading ...</p>
-                        ) : (
-                            images.length > 0 && (
-                                // ) : images.length > 0 ? (
-                                <img
-                                    // src={images[currentImageIndex]}
-                                    // src={`data:image/png;base64, '${image}`}
-                                    src={`data:image/png;base64, ${images[currentImageIndex]}`}
-                                    alt={`Relic Image ${currentImageIndex + 1}`}
-                                    // src='/vert.jpg'
-                                />
-                            )
+                        {getImages.isLoading && <p>Loading ...</p>}
+                        {getImages.isError && <p>{String(getImages.error)}</p>}
+                        {images.length > 0 && (
+                            <img
+                                src={`data:image/png;base64, ${images[currentImageIndex]}`}
+                                alt={`Relic Image ${currentImageIndex + 1}`}
+                            />
                         )}
-                        {/* // : (
-                        //     <p>No Images found</p>
-                        // )} */}
                     </div>
 
                     <div className="relic_pic_nav">
