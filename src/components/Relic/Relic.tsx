@@ -71,63 +71,37 @@ interface Relic {
     categoryDTOs: categoryDTOs[];
 }
 
-const unzipFile = async (zipFile: any) => {
-    try {
-        const new_zip = new JSZip();
-        const images: any = await new_zip
-            .loadAsync(zipFile)
-            .then((zip) => {
-                let promises = Object.keys(zip.files).map(async (fileName) => {
-                    const file = zip.files[fileName];
-                    const data = await file.async('blob');
-                    return { name: fileName, data };
-                });
-                return Promise.all(promises);
-            })
-            .then((files) => {
-                // console.log('files', files);
-                return files.reduce((acc, file) => {
-                    acc[file.name] = file.data;
-                    return acc;
-                }, {} as any);
-                // return files;
-            });
-        console.log('images', images);
-        return images;
-    } catch (error) {
-        console.error('Error unzipping file:', error);
-        return [];
-    }
-};
-
 const Relic = () => {
     const navigate = useNavigate();
     const params = useParams();
     // const [item, setItem] = useState<Relic | null>(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [images, setImages] = useState<any[]>([]);
+    const [imageNames, setImageNames] = useState<string[]>([]);
+    const relicId = Number(params.relicsid);
+
 //   const [isLoading, setIsLoading] = useState(false);
 //    const [images, setImages] = useState<any[]>([]);
 //    const relicId = Number(params.relicsid);
     const [categories, setCategories] = useState<categoryDTOs[]>([]);
 
-    useEffect(() => {
-        if (item) {
-            setCategories(item.categoryDTOs ?? []);
-        }
-    }, [item]);
+//    useEffect(() => {
+//        if (item) {
+//            setCategories(item.categoryDTOs ?? []);
+//        }
+//    }, [item]);
+
 
     const getImages = useQuery({
         queryKey: ['relicImages', relicId],
         queryFn: () => RelicAPI.getRelicFiles(relicId),
-        staleTime: Infinity,
-        retry: false,
+        // staleTime: Infinity,
+        // retry: false,
     });
 
     const getRelic = useQuery({
         queryKey: ['relic', relicId],
         queryFn: () => RelicAPI.fetchDetails(relicId),
-        staleTime: Infinity,
-        retry: false,
     });
 
     const item = getRelic.data;
@@ -150,10 +124,7 @@ const Relic = () => {
     const goBack = () => {
         navigate(-1);
     };
-    const placeholderImages = [
-        '/assets/images/dima_tall.png',
-        '/assets/images/dima_wide.jpg',
-    ];
+
     const handlePrevImage = () => {
         setCurrentImageIndex((prevIndex) => Math.max(prevIndex - 1, 0));
     };
@@ -161,7 +132,7 @@ const Relic = () => {
     const handleNextImage = () => {
         setCurrentImageIndex((prevIndex) =>
             //   Math.min(prevIndex + 1, item?.imageUrl.length - 1 || 0)
-            Math.min(prevIndex + 1, placeholderImages.length - 1)
+            Math.min(prevIndex + 1, imageNames.length - 1)
         );
     };
 
@@ -182,73 +153,42 @@ const Relic = () => {
         }
     }
 
-    if (getImages.isLoading) return <div>Loading...</div>;
-    if (getImages.isError) return <>{`Error: ${String(getImages.error)}`}</>;
+    useEffect(() => {
+        if (getImages.isSuccess) {
+            // console.log('getImages', getImages.data);
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                // console.log('target', e?.target?.result);
+                // console.log('reader', reader.result);
+                // const blobData = e?.target?.result;
 
-    if (getImages.isSuccess) {
-        console.log('getImages', getImages.data);
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            console.log('target', e?.target?.result);
-            console.log('reader', reader.result);
-            // const blobData = e?.target?.result;
-
-            const arrayBuffer = new Uint8Array(reader.result as ArrayBuffer);
-            const imagesArray = unzipSync(arrayBuffer);
-            console.log('imagesArray', imagesArray);
-        };
-        reader.onerror = function (e) {
-            console.error('Error reading file:', e?.target?.error);
-        };
-        reader.readAsArrayBuffer(getImages.data);
-        // reader.readAsBinaryString(getImages.data);
-        // const imagesArray = unzipSync(getImages.data);
-        // let arrayBuffer = unzipSync(new Uint8Array(getImages.data));
-        // console.log(JSON.parse(String.fromCharCode.apply(arrayBuffer)));
-    }
-
-    // console.log('imagesArray', imagesArray);
-
-    // setImages(imagesArray.);
-
-    // useEffect(() => {
-    //     const extractImages = async () => {
-    //         setIsLoading(true);
-    //         try {
-    //             const imageZip = await getImages.data;
-    //             const extractedImages = await unzipFile(imageZip);
-    //             setImages(Object.values(extractedImages));
-    //             console.log('Extract images', images);
-    //         } catch (error) {
-    //             console.error('Error extracting images:', error);
-    //         } finally {
-    //             setIsLoading(false);
-    //         }
-    //     };
-
-    //     if (getImages.isSuccess) {
-    //         extractImages();
-    //     }
-    // }, [getImages.data]);
-
-    // const imageZip = getImages.data;
-
-    // const imagesArray =  unzipFile(getImages.data);
-
-    // console.log('imagesArray', imagesArray);
-    // const extImages = async () => {
-    //     const imagesArray = await unzipFile(getImages.data);
-    //     setImages(imagesArray);
-    // };
-    // extImages();
-    // console.log('images', images);
-    // setImages();
-    // const extractImages = async () => {
-    //     const imagesArray = await unzipFile(imageZip);
-    //     setImages(imagesArray);
-    // };
-    // extractImages();
-
+                const arrayBuffer = new Uint8Array(
+                    reader.result as ArrayBuffer
+                );
+                const imagesArray = unzipSync(arrayBuffer);
+                console.log('imagesArray', imagesArray);
+                let keys: any[] = [];
+                for (const key in imagesArray) {
+                    keys.push(key);
+                    setImages((prevImages) => [
+                        ...prevImages,
+                        btoa(
+                            String.fromCharCode.apply(
+                                null,
+                                Array.from(new Uint8Array(imagesArray[key]))
+                            )
+                        ),
+                    ]);
+                }
+                setImageNames(keys);
+                console.log('Image names-keys', imageNames);
+            };
+            reader.onerror = function (e) {
+                console.error('Error reading file:', e?.target?.error);
+            };
+            reader.readAsArrayBuffer(getImages.data);
+        }
+    }, [getImages.data]);
     return (
         <div className="relic_con">
             <div className="relic_left">
@@ -431,28 +371,22 @@ const Relic = () => {
                         />
                     </div>
                     <div className="relic_img_con">
-                        {isLoading ? (
-                            <p>Loading ...</p>
-                        ) : images.length > 0 ? (
+                        {getImages.isLoading && <p>Loading ...</p>}
+                        {getImages.isError && <p>{String(getImages.error)}</p>}
+                        {images.length > 0 && (
                             <img
-                                // src={images[currentImageIndex]}
-                                src={images[currentImageIndex]}
-                                // src={item.imageUrl[currentImageIndex]}
+                                src={`data:image/png;base64, ${images[currentImageIndex]}`}
                                 alt={`Relic Image ${currentImageIndex + 1}`}
-                                // src='/vert.jpg'
                             />
-                        ) : (
-                            <p>No Images found</p>
                         )}
                     </div>
 
                     <div className="relic_pic_nav">
                         <img
-                            className={`arrow next ${currentImageIndex === placeholderImages.length - 1 ? 'relic_disabled' : ''}`}
+                            className={`arrow next ${currentImageIndex === imageNames.length - 1 ? 'relic_disabled' : ''}`}
                             onClick={handleNextImage}
                             src={
-                                currentImageIndex ===
-                                placeholderImages.length - 1
+                                currentImageIndex === imageNames.length - 1
                                     ? '/icons/next_arrow_relic_d.svg'
                                     : '/icons/next_arrow_relic.svg'
                             }
@@ -474,13 +408,13 @@ const Relic = () => {
                             />
                         </div>
                         <div
-                            className={`arrow next ${currentImageIndex === placeholderImages.length - 1 ? 'relic_disabled' : ''}`}
+                            // className={`arrow next ${currentImageIndex === imageNames.length - 1 ? 'relic_disabled' : ''}`}
+                            className={`arrow next ${currentImageIndex === imageNames.length - 1 ? '' : ''}`}
                             onClick={handleNextImage}
                         >
                             <img
                                 src={
-                                    currentImageIndex ===
-                                    placeholderImages.length - 1
+                                    currentImageIndex === imageNames.length - 1
                                         ? '/icons/next_arrow_relic_d.svg'
                                         : '/icons/next_arrow_relic.svg'
                                 }

@@ -28,7 +28,7 @@ import {
 import Modal from 'react-modal';
 import { DataTablePagination } from './DataTablePagination';
 import { DataTableToolbar } from './DataTableToolbar';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
 import ReportAPI from '../../../src/app/api/Report/report';
 
 interface DataTableProps<TData, TValue> {
@@ -59,6 +59,17 @@ export function DataTable<TData, TValue>({
                 pagination.pageSize
             ),
         placeholderData: keepPreviousData,
+    });
+
+    const getReport = useMutation({
+        mutationFn: async (reportId: number) =>
+            await ReportAPI.getReport(reportId),
+        onSuccess: (data) => {
+            console.log('Report fetched', data);
+        },
+        onError: (error) => {
+            console.error('Error fetching report', error);
+        },
     });
 
     const selectFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
@@ -139,6 +150,9 @@ export function DataTable<TData, TValue>({
                                     className="hover:bg-gray-50 cursor-pointer"
                                     onClick={() => {
                                         console.log(row.getValue('reportId'));
+                                        getReport.mutate(
+                                            row.getValue('reportId')
+                                        );
                                     }}
                                     // className='odd:bg-gray-50'
                                 >

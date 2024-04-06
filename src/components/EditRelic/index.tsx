@@ -40,7 +40,7 @@ import {
 import { RelicStatusEnum } from '../../enums/relicstatus';
 import { useAtom } from 'jotai';
 import { filesAtom, selectedPropertiesAtom } from '../../stores/atoms';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import RelicAPI from '../../../src/app/api/Relic/relic';
 
 const relicFormSchema = z
@@ -80,6 +80,7 @@ const cleanUpData = (data: any) => {
 };
 
 export const EditRelic = () => {
+    const queryClient = useQueryClient();
     const [files, setFiles] = useAtom(filesAtom);
     const addRelic = useMutation({
         mutationFn: RelicAPI.createRelic,
@@ -96,6 +97,7 @@ export const EditRelic = () => {
             await RelicAPI.uploadRelicFile(relicId, file),
         onSuccess: () => {
             console.log('File uploaded');
+            queryClient.invalidateQueries({ queryKey: ['relicImages'] });
         },
         onError: (error) => {
             console.log(error);
