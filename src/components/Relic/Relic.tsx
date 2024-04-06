@@ -74,9 +74,13 @@ interface Relic {
 const Relic = () => {
     const navigate = useNavigate();
     const params = useParams();
-    // const [item, setItem] = useState<Relic | null>(null);
+    const [item, setItem] = useState<Relic | null>(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    const [isLoading, setIsLoading] = useState(false);
     const [images, setImages] = useState<any[]>([]);
+    const relicId = Number(params.relicsid);
+
     const [imageNames, setImageNames] = useState<string[]>([]);
     const relicId = Number(params.relicsid);
 
@@ -104,22 +108,22 @@ const Relic = () => {
         queryFn: () => RelicAPI.fetchDetails(relicId),
     });
 
-    const item = getRelic.data;
-    // setItem(getRelic.data);
-    // useEffect(() => {
-    //     const fetchItemDetails = async () => {
-    //         try {
-    //             const response = await RelicAPI.fetchDetails(
-    //                 Number(params.relicsid)
-    //             );
-    //             console.log('Request Details:', response);
-    //             setItem(response);
-    //         } catch (error) {
-    //             console.error('Error fetching item details:', error);
-    //         }
-    //     };
-    //     fetchItemDetails();
-    // }, [params.relicsid]);
+  
+    setItem(getRelic.data);
+    useEffect(() => {
+        const fetchItemDetails = async () => {
+            try {
+                const response = await RelicAPI.fetchDetails(
+                    Number(params.relicsid)
+                );
+                console.log('Request Details:', response);
+                setItem(response);
+            } catch (error) {
+                console.error('Error fetching item details:', error);
+            }
+        };
+        fetchItemDetails();
+    }, [params.relicsid]);
 
     const goBack = () => {
         navigate(-1);
@@ -203,9 +207,15 @@ const Relic = () => {
                 <h3>{renderFieldValue(item?.name)}</h3>
                 <div>
                     <h6>Категорія:</h6>
-                    {categories.length === 0
-                        ? renderFieldValue(null)
-                        : <p>{categories.map(category => category.name).join(', ')}</p>}
+                    {categories.length === 0 ? (
+                        renderFieldValue(null)
+                    ) : (
+                        <p>
+                            {categories
+                                .map((category) => category.name)
+                                .join(', ')}
+                        </p>
+                    )}
                 </div>
                 <div className="relic_col">
                     <h6>Колекція:</h6>
@@ -262,11 +272,15 @@ const Relic = () => {
                 </div>
                 <div>
                     <h6>Страхова вартість:</h6>
-                    <p>{renderFieldValue(item?.relicInfoDTO?.insuranceValue)}</p>
+                    <p>
+                        {renderFieldValue(item?.relicInfoDTO?.insuranceValue)}
+                    </p>
                 </div>
                 <div>
                     <h6>Оціночна вартість:</h6>
-                    <p>{renderFieldValue(item?.relicInfoDTO?.appraisedValue)}</p>
+                    <p>
+                        {renderFieldValue(item?.relicInfoDTO?.appraisedValue)}
+                    </p>
                 </div>
 
                 <div className="relic_divider" />
