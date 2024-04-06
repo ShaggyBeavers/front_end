@@ -13,8 +13,6 @@ export interface reportData {
 }
 
 const ReportAPI = {
-    getAllReports: (page: number, size: number) =>
-        authAPi.get(`api/report/?page=${page}&size=${size}`),
     createReport: (values: {}) => authAPi.post('api/report/', values),
     getAllReports: (page: number, size: number) =>
         authAPi.get(`api/report/?page=${page}&size=${size}`),

@@ -28,12 +28,29 @@ import {
 import Modal from 'react-modal';
 import { DataTablePagination } from './DataTablePagination';
 import { DataTableToolbar } from './DataTableToolbar';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
 import ReportAPI from '../../../src/app/api/Report/report';
+import Report from '../Report/report';
+import { useEffect } from 'react';
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
+}
+
+interface Report {
+    userEmail: string;
+    userId: string;
+    submissionDate: string;
+    mapLocation: string;
+    description: string;
+    status: string;
+    comment: string;
+    infoReferences: string;
+    name: string;
+    imageUrl: string;
+    categoryDTOs: { id: number; name: string }[];
+    regionId: number;
 }
 
 export function DataTable<TData, TValue>({
@@ -50,7 +67,34 @@ export function DataTable<TData, TValue>({
         pageIndex: 0,
         pageSize: 5,
     });
+    ///
 
+    const [isModalOpen, setIsModalOpen] = React.useState(false);
+    const [selectedReport, setSelectedReport] = React.useState<Report | null>(
+        null
+    );
+
+    useEffect(() => {
+        console.log(selectedReport);
+    }, [selectedReport]);
+    
+    const getReport = useMutation({
+        mutationFn: async (reportId: number) =>
+            await ReportAPI.getReport(reportId),
+        onSuccess: (response: any) => {
+            console.log('Report fetched', data);
+            setSelectedReport(response.data);
+            setIsModalOpen(true);
+        },
+        onError: (error: any) => {
+            console.error('Error fetching report', error);
+        },
+    });
+
+    const handleRowClick = async (reportId: number) => {
+        getReport.mutate(reportId);
+    };
+    ///
     const reports = useQuery({
         queryKey: ['reports', pagination.pageIndex, pagination.pageSize],
         queryFn: async () =>
@@ -137,9 +181,9 @@ export function DataTable<TData, TValue>({
                                         row.getIsSelected() && 'selected'
                                     }
                                     className="hover:bg-gray-50 cursor-pointer"
-                                    onClick={() => {
-                                        console.log(row.getValue('reportId'));
-                                    }}
+                                    onClick={() =>
+                                        handleRowClick(row.getValue('reportId'))
+                                    }
                                     // className='odd:bg-gray-50'
                                 >
                                     {row.getVisibleCells().map((cell) => (
@@ -169,6 +213,37 @@ export function DataTable<TData, TValue>({
                 </Table>
             </div>
             <DataTablePagination table={table} />
+
+            <Modal
+                isOpen={isModalOpen}
+                onRequestClose={() => setIsModalOpen(false)}
+                className="fixed inset-0 z-50 flex items-center justify-center"
+                overlayClassName="fixed inset-0 bg-gray-500 bg-opacity-75"
+            >
+                <div className="bg-white rounded-lg p-6 w-full max-w-md">
+                    <h2 className="text-xl font-bold mb-4">Report Details</h2>
+                    {selectedReport && (
+                        <div>
+                            <p>User Email: {selectedReport.userEmail}</p>
+                            <p>User ID: {selectedReport.userId}</p>
+                            <p>
+                                Submission Date: {selectedReport.submissionDate}
+                            </p>
+                            <p>Map Location: {selectedReport.mapLocation}</p>
+                            <p>Description: {selectedReport.description}</p>
+                            <p>Status: {selectedReport.status}</p>
+                            <p>Comment: {selectedReport.comment}</p>
+                            {/* Display other fields as needed */}
+                        </div>
+                    )}
+                    <button
+                        onClick={() => setIsModalOpen(false)}
+                        className="bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 mt-4"
+                    >
+                        Close
+                    </button>
+                </div>
+            </Modal>
         </div>
     );
 }
