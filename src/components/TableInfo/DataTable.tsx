@@ -105,6 +105,17 @@ export function DataTable<TData, TValue>({
         placeholderData: keepPreviousData,
     });
 
+    const getReport = useMutation({
+        mutationFn: async (reportId: number) =>
+            await ReportAPI.getReport(reportId),
+        onSuccess: (data) => {
+            console.log('Report fetched', data);
+        },
+        onError: (error) => {
+            console.error('Error fetching report', error);
+        },
+    });
+
     const selectFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
         const selectedValues = value;
         const values: any = new Set(row.getValue(columnId) as string[]);
@@ -184,6 +195,12 @@ export function DataTable<TData, TValue>({
                                     onClick={() =>
                                         handleRowClick(row.getValue('reportId'))
                                     }
+//                                    onClick={() => {
+//                                        console.log(row.getValue('reportId'));
+//                                        getReport.mutate(
+//                                            row.getValue('reportId')
+//                                        );
+//                                    }}
                                     // className='odd:bg-gray-50'
                                 >
                                     {row.getVisibleCells().map((cell) => (
