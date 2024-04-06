@@ -32,6 +32,7 @@ import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
 import ReportAPI from '../../../src/app/api/Report/report';
 import Report from '../Report/report';
 import { useEffect } from 'react';
+import { Button } from '../ui/button';
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -65,7 +66,7 @@ export function DataTable<TData, TValue>({
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [pagination, setPagination] = React.useState<PaginationState>({
         pageIndex: 0,
-        pageSize: 5,
+        pageSize: 10,
     });
     ///
 
@@ -248,12 +249,18 @@ export function DataTable<TData, TValue>({
                             {/* Display other fields as needed */}
                         </div>
                     )}
-                    <button
+                    <Button
+                        className="mt-4"
+                        onClick={() => setIsModalOpen(false)}
+                    >
+                        Закрити
+                    </Button>
+                    {/* <button
                         onClick={() => setIsModalOpen(false)}
                         className="bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 mt-4"
                     >
                         Close
-                    </button>
+                    </button> */}
                 </div>
             </Modal>
         </div>
