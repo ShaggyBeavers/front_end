@@ -168,50 +168,50 @@ const Relic = () => {
         }
     }
 
-    if (getImages.isLoading) return <div>Loading...</div>;
-    if (getImages.isError) return <>{`Error: ${String(getImages.error)}`}</>;
+    useEffect(() => {
+        if (getImages.isSuccess) {
+            console.log('getImages', getImages.data);
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                console.log('target', e?.target?.result);
+                console.log('reader', reader.result);
+                // const blobData = e?.target?.result;
 
-    if (getImages.isSuccess) {
-        console.log('getImages', getImages.data);
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            console.log('target', e?.target?.result);
-            console.log('reader', reader.result);
-            // const blobData = e?.target?.result;
+                const arrayBuffer = new Uint8Array(
+                    reader.result as ArrayBuffer
+                );
+                const imagesArray = unzipSync(arrayBuffer);
+                console.log('imagesArray', imagesArray);
+                let keys: any[] = [];
+                let values: any[] = [];
+                for (const key in imagesArray) {
+                    keys.push(key);
+                    setImages((prevImages) => [
+                        ...prevImages,
+                        btoa(
+                            String.fromCharCode.apply(
+                                null,
+                                Array.from(new Uint8Array(imagesArray[key]))
+                            )
+                        ),
+                    ]);
+                }
 
-            const arrayBuffer = new Uint8Array(reader.result as ArrayBuffer);
-            const imagesArray = unzipSync(arrayBuffer);
-            console.log('imagesArray', imagesArray);
-            let keys: any[] = [];
-            let values: any[] = [];
-            for (const key in imagesArray) {
-                keys.push(key);
-                // setImages((prevImages) => [
-                //     ...prevImages,
-                //     btoa(
-                //         String.fromCharCode.apply(
-                //             null,
-                //             Array.from(new Uint8Array(imagesArray[key]))
-                //         )
-                //     ),
-                // ]);
-            }
-
-            // console.log('images', images);
-            // const base64String =
-            // console.log('base64String', base64String);
-            // setImage(base64String);
-        };
-        reader.onerror = function (e) {
-            console.error('Error reading file:', e?.target?.error);
-        };
-        reader.readAsArrayBuffer(getImages.data);
-        // reader.readAsBinaryString(getImages.data);
-        // const imagesArray = unzipSync(getImages.data);
-        // let arrayBuffer = unzipSync(new Uint8Array(getImages.data));
-        // console.log(JSON.parse(String.fromCharCode.apply(arrayBuffer)));
-    }
-
+                // console.log('images', images);
+                // const base64String =
+                // console.log('base64String', base64String);
+                // setImage(base64String);
+            };
+            reader.onerror = function (e) {
+                console.error('Error reading file:', e?.target?.error);
+            };
+            reader.readAsArrayBuffer(getImages.data);
+            // reader.readAsBinaryString(getImages.data);
+            // const imagesArray = unzipSync(getImages.data);
+            // let arrayBuffer = unzipSync(new Uint8Array(getImages.data));
+            // console.log(JSON.parse(String.fromCharCode.apply(arrayBuffer)));
+        }
+    }, [getImages.data]);
     // console.log('imagesArray', imagesArray);
 
     // setImages(imagesArray.);
@@ -253,6 +253,9 @@ const Relic = () => {
     //     setImages(imagesArray);
     // };
     // extractImages();
+
+    if (getImages.isLoading) return <div>Loading...</div>;
+    if (getImages.isError) return <>{`Error: ${String(getImages.error)}`}</>;
 
     return (
         <div className="relic_con">
@@ -438,13 +441,12 @@ const Relic = () => {
                         {isLoading ? (
                             <p>Loading ...</p>
                         ) : (
-                            image && (
+                            images.length > 0 && (
                                 // ) : images.length > 0 ? (
                                 <img
                                     // src={images[currentImageIndex]}
                                     // src={`data:image/png;base64, '${image}`}
-                                    src={`data:image/png;base64, ${image}`}
-                                    // src={item.imageUrl[currentImageIndex]}
+                                    src={`data:image/png;base64, ${images[currentImageIndex]}`}
                                     alt={`Relic Image ${currentImageIndex + 1}`}
                                     // src='/vert.jpg'
                                 />
