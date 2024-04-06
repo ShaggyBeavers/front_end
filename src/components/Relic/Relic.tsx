@@ -63,57 +63,30 @@ interface Relic {
     lostRelicInfoDTO: LostRelicInfoDTO;
 }
 
-const unzipFile = async (zipFile: any) => {
-    try {
-        const new_zip = new JSZip();
-        const images: any = await new_zip
-            .loadAsync(zipFile)
-            .then((zip) => {
-                let promises = Object.keys(zip.files).map(async (fileName) => {
-                    const file = zip.files[fileName];
-                    const data = await file.async('blob');
-                    return { name: fileName, data };
-                });
-                return Promise.all(promises);
-            })
-            .then((files) => {
-                // console.log('files', files);
-                return files.reduce((acc, file) => {
-                    acc[file.name] = file.data;
-                    return acc;
-                }, {} as any);
-                // return files;
-            });
-        console.log('images', images);
-        return images;
-    } catch (error) {
-        console.error('Error unzipping file:', error);
-        return [];
-    }
-};
-
 const Relic = () => {
     const navigate = useNavigate();
     const params = useParams();
     // const [item, setItem] = useState<Relic | null>(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    let maxImageIndex = 0;
     const [isLoading, setIsLoading] = useState(false);
     const [images, setImages] = useState<any[]>([]);
+    const [imageNames, setImageNames] = useState<string[]>([]);
     const [image, setImage] = useState<any>(null);
     const relicId = Number(params.relicsid);
 
     const getImages = useQuery({
         queryKey: ['relicImages', relicId],
         queryFn: () => RelicAPI.getRelicFiles(relicId),
-        staleTime: Infinity,
-        retry: false,
+        // staleTime: Infinity,
+        // retry: false,
     });
 
     const getRelic = useQuery({
         queryKey: ['relic', relicId],
         queryFn: () => RelicAPI.fetchDetails(relicId),
-        staleTime: Infinity,
-        retry: false,
+        // staleTime: Infinity,
+        // retry: false,
     });
 
     const item = getRelic.data;
@@ -136,10 +109,7 @@ const Relic = () => {
     const goBack = () => {
         navigate(-1);
     };
-    const placeholderImages = [
-        '/assets/images/dima_tall.png',
-        '/assets/images/dima_wide.jpg',
-    ];
+
     const handlePrevImage = () => {
         setCurrentImageIndex((prevIndex) => Math.max(prevIndex - 1, 0));
     };
@@ -147,7 +117,7 @@ const Relic = () => {
     const handleNextImage = () => {
         setCurrentImageIndex((prevIndex) =>
             //   Math.min(prevIndex + 1, item?.imageUrl.length - 1 || 0)
-            Math.min(prevIndex + 1, placeholderImages.length - 1)
+            Math.min(prevIndex + 1, imageNames.length - 1)
         );
     };
 
@@ -183,7 +153,6 @@ const Relic = () => {
                 const imagesArray = unzipSync(arrayBuffer);
                 console.log('imagesArray', imagesArray);
                 let keys: any[] = [];
-                let values: any[] = [];
                 for (const key in imagesArray) {
                     keys.push(key);
                     setImages((prevImages) => [
@@ -196,7 +165,9 @@ const Relic = () => {
                         ),
                     ]);
                 }
-
+                setImageNames(keys);
+                // maxImageIndex = keys.length;
+                console.log('Image names-keys', imageNames);
                 // console.log('images', images);
                 // const base64String =
                 // console.log('base64String', base64String);
@@ -459,11 +430,10 @@ const Relic = () => {
 
                     <div className="relic_pic_nav">
                         <img
-                            className={`arrow next ${currentImageIndex === placeholderImages.length - 1 ? 'relic_disabled' : ''}`}
+                            className={`arrow next ${currentImageIndex === imageNames.length - 1 ? 'relic_disabled' : ''}`}
                             onClick={handleNextImage}
                             src={
-                                currentImageIndex ===
-                                placeholderImages.length - 1
+                                currentImageIndex === imageNames.length - 1
                                     ? '/icons/next_arrow_relic_d.svg'
                                     : '/icons/next_arrow_relic.svg'
                             }
@@ -485,13 +455,13 @@ const Relic = () => {
                             />
                         </div>
                         <div
-                            className={`arrow next ${currentImageIndex === placeholderImages.length - 1 ? 'relic_disabled' : ''}`}
+                            // className={`arrow next ${currentImageIndex === imageNames.length - 1 ? 'relic_disabled' : ''}`}
+                            className={`arrow next ${currentImageIndex === imageNames.length - 1 ? '' : ''}`}
                             onClick={handleNextImage}
                         >
                             <img
                                 src={
-                                    currentImageIndex ===
-                                    placeholderImages.length - 1
+                                    currentImageIndex === imageNames.length - 1
                                         ? '/icons/next_arrow_relic_d.svg'
                                         : '/icons/next_arrow_relic.svg'
                                 }
