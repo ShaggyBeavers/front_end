@@ -24,6 +24,8 @@ interface RelicInfoDTO {
     signatures: string;
     restoration: string;
     annotation: string;
+    appraisedValue: string;
+    insuranceValue: string;
 }
 
 interface RecoveredRelicInfoDTO {
@@ -38,6 +40,11 @@ interface LostRelicInfoDTO {
     lossTime: string;
     museumName: string;
     probableLocation: string;
+}
+
+interface categoryDTOs {
+    id: number;
+    name: string;
 }
 
 interface Relic {
@@ -61,6 +68,7 @@ interface Relic {
     relicInfoDTO: RelicInfoDTO;
     recoveredRelicInfoDTO: RecoveredRelicInfoDTO;
     lostRelicInfoDTO: LostRelicInfoDTO;
+    categoryDTOs: categoryDTOs[];
 }
 
 const Relic = () => {
@@ -71,6 +79,18 @@ const Relic = () => {
     const [images, setImages] = useState<any[]>([]);
     const [imageNames, setImageNames] = useState<string[]>([]);
     const relicId = Number(params.relicsid);
+
+//   const [isLoading, setIsLoading] = useState(false);
+//    const [images, setImages] = useState<any[]>([]);
+//    const relicId = Number(params.relicsid);
+    const [categories, setCategories] = useState<categoryDTOs[]>([]);
+
+//    useEffect(() => {
+//        if (item) {
+//            setCategories(item.categoryDTOs ?? []);
+//        }
+//    }, [item]);
+
 
     const getImages = useQuery({
         queryKey: ['relicImages', relicId],
@@ -183,8 +203,9 @@ const Relic = () => {
                 <h3>{renderFieldValue(item?.name)}</h3>
                 <div>
                     <h6>Категорія:</h6>
-                    <p>Мозаїка</p>
-                    {/* waiting for back */}
+                    {categories.length === 0
+                        ? renderFieldValue(null)
+                        : <p>{categories.map(category => category.name).join(', ')}</p>}
                 </div>
                 <div className="relic_col">
                     <h6>Колекція:</h6>
@@ -241,11 +262,11 @@ const Relic = () => {
                 </div>
                 <div>
                     <h6>Страхова вартість:</h6>
-                    <p>3 бублика</p>
+                    <p>{renderFieldValue(item?.relicInfoDTO?.insuranceValue)}</p>
                 </div>
                 <div>
                     <h6>Оціночна вартість:</h6>
-                    <p>3 бублика і булочка</p>
+                    <p>{renderFieldValue(item?.relicInfoDTO?.appraisedValue)}</p>
                 </div>
 
                 <div className="relic_divider" />
