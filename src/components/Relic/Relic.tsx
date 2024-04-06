@@ -99,6 +99,7 @@ const Relic = () => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [images, setImages] = useState<any[]>([]);
+    const [image, setImage] = useState<any>(null);
     const relicId = Number(params.relicsid);
 
     const getImages = useQuery({
@@ -181,6 +182,25 @@ const Relic = () => {
             const arrayBuffer = new Uint8Array(reader.result as ArrayBuffer);
             const imagesArray = unzipSync(arrayBuffer);
             console.log('imagesArray', imagesArray);
+            let keys: any[] = [];
+            let values: any[] = [];
+            for (const key in imagesArray) {
+                keys.push(key);
+                // setImages((prevImages) => [
+                //     ...prevImages,
+                //     btoa(
+                //         String.fromCharCode.apply(
+                //             null,
+                //             Array.from(new Uint8Array(imagesArray[key]))
+                //         )
+                //     ),
+                // ]);
+            }
+
+            // console.log('images', images);
+            // const base64String =
+            // console.log('base64String', base64String);
+            // setImage(base64String);
         };
         reader.onerror = function (e) {
             console.error('Error reading file:', e?.target?.error);
@@ -417,17 +437,22 @@ const Relic = () => {
                     <div className="relic_img_con">
                         {isLoading ? (
                             <p>Loading ...</p>
-                        ) : images.length > 0 ? (
-                            <img
-                                // src={images[currentImageIndex]}
-                                src={images[currentImageIndex]}
-                                // src={item.imageUrl[currentImageIndex]}
-                                alt={`Relic Image ${currentImageIndex + 1}`}
-                                // src='/vert.jpg'
-                            />
                         ) : (
-                            <p>No Images found</p>
+                            image && (
+                                // ) : images.length > 0 ? (
+                                <img
+                                    // src={images[currentImageIndex]}
+                                    // src={`data:image/png;base64, '${image}`}
+                                    src={`data:image/png;base64, ${image}`}
+                                    // src={item.imageUrl[currentImageIndex]}
+                                    alt={`Relic Image ${currentImageIndex + 1}`}
+                                    // src='/vert.jpg'
+                                />
+                            )
                         )}
+                        {/* // : (
+                        //     <p>No Images found</p>
+                        // )} */}
                     </div>
 
                     <div className="relic_pic_nav">
