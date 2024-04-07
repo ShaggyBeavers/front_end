@@ -157,18 +157,12 @@ const Relic = () => {
 
     useEffect(() => {
         if (getImages.isSuccess) {
-            // console.log('getImages', getImages.data);
             const reader = new FileReader();
             reader.onload = function (e) {
-                // console.log('target', e?.target?.result);
-                // console.log('reader', reader.result);
-                // const blobData = e?.target?.result;
-
                 const arrayBuffer = new Uint8Array(
                     reader.result as ArrayBuffer
                 );
                 const imagesArray = unzipSync(arrayBuffer);
-                console.log('imagesArray', imagesArray);
                 let keys: any[] = [];
                 for (const key in imagesArray) {
                     keys.push(key);
