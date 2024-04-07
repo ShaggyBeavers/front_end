@@ -3,6 +3,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 import React from 'react';
 import './register.css';
 import AuthAPI from '../../app/api/Account/Auth/auth';
+import { useNavigate } from 'react-router-dom';
 
 interface RegisterForm {
     firstName: string;
@@ -13,6 +14,7 @@ interface RegisterForm {
 }
 
 export default function Register() {
+    const navigate = useNavigate();
     const { register, handleSubmit, formState, getValues, reset } =
         useForm<RegisterForm>();
     const { errors } = formState;
@@ -23,6 +25,7 @@ export default function Register() {
             await AuthAPI.register(data);
             reset();
             setShowExistsMessage(false);
+            navigate('/login');
         } catch (error: any) {
             if (error.response.status && error.response.status === 409) {
                 reset();
