@@ -11,7 +11,6 @@ import RelicAPI from '../../app/api/Relic/relic';
 import CategoryAPI from '../../app/api/Category/category';
 import HistoricalPeriodAPI from '../../app/api/HistoricalPeriod/historicalPeriod';
 import TechniqueAPI from '../../app/api/Technique/technique';
-// import CollectionsAPI from '../../app/api/Collection/collection';
 import Relic from '../Relic/Relic';
 
 interface Photo {
@@ -54,7 +53,6 @@ export interface Filters {
     historicalPeriods: string[];
     statuses: string[];
     techniques: string[];
-    collections: string[];
     categories: string[];
     [key: string]: string[];
 }
@@ -103,7 +101,6 @@ const Catalogue = () => {
             historicalPeriods: [],
             statuses: [],
             techniques: [],
-            collections: [],
             categories: [],
         }
     );
@@ -154,7 +151,6 @@ const Catalogue = () => {
                 historicalPeriods: [],
                 statuses: [],
                 techniques: [],
-                collections: [],
             });
         }
     }, [location.search]);
@@ -244,34 +240,21 @@ const Catalogue = () => {
             }
         };
 
-        // const fetchCollections = async () => {
-        //     try {
-        //         const response = await CollectionsAPI.getCollections();
-        //         const collectionNames = response.map((item: { name: string }) => item.name);
-        //         setCollections(collectionNames);
-        //     } catch (error) {
-        //         console.error('Error fetching collections:', error);
-        //     }
-        // };
-
         fetchCategories();
         fetchHistoricalPeriods();
         fetchTechniques();
-        // fetchCollections();
     }, []);
 
     const filterTitles = [
         'Категорія',
         'Статус',
         'Історичний період',
-        'Колекція',
         'Техніка',
     ];
     const filterCategories = [
         'categories',
         'statuses',
         'historicalPeriods',
-        'collections',
         'techniques',
     ];
     const translatedTitles = filterCategories.map(
@@ -281,7 +264,6 @@ const Catalogue = () => {
     const [categories, setCategories] = useState<string[]>([]);
     const [historicalPeriods, setHistoricalPeriods] = useState<string[]>([]);
     const [techniques, setTechniques] = useState<string[]>([]);
-    const [collections, setCollections] = useState<string[]>([]);
     const statusOptions = [
         { value: 'DESTROYED', label: 'Знищено' },
         { value: 'STOLEN', label: 'Вкрадено' },
@@ -336,9 +318,6 @@ const Catalogue = () => {
                                                         : category ===
                                                             'techniques'
                                                           ? techniques
-                                                          : category ===
-                                                              'collections'
-                                                            ? collections
                                                             : []
                                             }
                                             selectedFilterOptions={
