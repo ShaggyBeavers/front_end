@@ -111,7 +111,7 @@ const Catalogue = () => {
     );
     const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
-    const donwloadImages = useMutation({
+    const downloadImages = useMutation({
         mutationFn: async (entityIds: number[]) => {
             await RelicAPI.getRelicFirstFile(entityIds);
         },
@@ -168,7 +168,9 @@ const Catalogue = () => {
 
     useEffect(() => {
         fetchItems(currentPage).then(() => {
-            getIdsFromItems(result.content);
+            const ids = getIdsFromItems(result.content);
+            const imageZip = downloadImages.mutate(ids);
+
         });
     }, [currentPage, navigate, selectedFilterOptions]);
 

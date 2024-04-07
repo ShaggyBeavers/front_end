@@ -26,7 +26,6 @@ export const AddSecondaryRelicForm = ({ form }: any) => {
                                 </FormLabel>
                                 <FormControl>
                                     <Input
-                                        type="number"
                                         placeholder="Введіть інвентарний номер реліквії"
                                         id="formerInventoryNumber"
                                         {...field}
@@ -84,7 +83,6 @@ export const AddSecondaryRelicForm = ({ form }: any) => {
                                 </FormLabel>
                                 <FormControl>
                                     <Input
-                                        type="number"
                                         placeholder="Введіть інвентарний номер реліквії"
                                         {...field}
                                     />
