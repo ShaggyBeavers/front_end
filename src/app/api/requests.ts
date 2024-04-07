@@ -73,7 +73,10 @@ const responseBody = (response: AxiosResponse) => response.data;
 
 const requests = {
     get: (url: string) => axios.get(url).then(responseBody),
-    getFile: (url:string) => axios.get(url, {responseType: 'blob'}).then(responseBody),
+    getFile: (url: string) =>
+        axios.get(url, { responseType: 'blob' }).then(responseBody),
+    getFileIds: (url: string, body: {}) =>
+        axios.get(url, body).then(responseBody),
     post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
     put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
     delete: (url: string) => axios.delete(url).then(responseBody),

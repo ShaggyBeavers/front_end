@@ -129,7 +129,7 @@ export default function Login() {
                             <button type="submit" id="log_btn">
                                 Увійти
                             </button>
-                            <button
+                            {/* <button
                                 type="button"
                                 onClick={() => login()}
                                 id="google_btn"
@@ -139,7 +139,7 @@ export default function Login() {
                                     src="./icons/google.svg"
                                     style={{ width: '20px' }}
                                 />
-                            </button>
+                            </button> */}
                         </div>
                     </form>
                 </div>

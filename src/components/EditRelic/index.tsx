@@ -1,8 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import { set, z } from 'zod';
 import AddMainRelic from '../AddMainRelic';
 import AddLostRelic from '../AddLostRelic';
 import AddReturnedRelic from '../AddReturnedRelic';
@@ -40,7 +40,7 @@ import {
 import { RelicStatusEnum } from '../../enums/relicstatus';
 import { useAtom } from 'jotai';
 import { filesAtom, selectedPropertiesAtom } from '../../stores/atoms';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import RelicAPI from '../../../src/app/api/Relic/relic';
 
 const relicFormSchema = z
@@ -80,22 +80,40 @@ const cleanUpData = (data: any) => {
 };
 
 export const EditRelic = () => {
+    const queryClient = useQueryClient();
     const [files, setFiles] = useAtom(filesAtom);
-    const addRelic = useMutation({
-        mutationFn: RelicAPI.createRelic,
-        onSuccess: () => {
-            console.log('Relic added. Now we can start adding photos');
-        },
-        onError: (error) => {
-            console.log(error);
-        },
-    });
-
     const uploadRelicFile = useMutation({
         mutationFn: async ({ relicId, file }: { relicId: number; file: any }) =>
             await RelicAPI.uploadRelicFile(relicId, file),
         onSuccess: () => {
             console.log('File uploaded');
+            queryClient.invalidateQueries({ queryKey: ['relicImages'] });
+        },
+        onError: (error) => {
+            console.log(error);
+        },
+        // retryDelay: 1000,
+        // retry: 3,
+    });
+
+    const formData = new FormData();
+    const [relicId, setRelicId] = useState<number>(0);
+    const addRelic = useMutation({
+        mutationFn: RelicAPI.createRelic,
+        onSuccess: (data) => {
+            console.log(
+                'Relic added. Now we can start adding photos to: ',
+                data.data
+            );
+            // files.forEach((file) => {
+            //     if (file?.file) {
+            //         formData.append('file', file.file);
+            //     }
+            // });
+            setRelicId(data.data);
+        },
+        onSettled: () => {
+            // uploadRelicFile.mutate({ relicId: relicId, file: formData });
         },
         onError: (error) => {
             console.log(error);
@@ -267,8 +285,6 @@ export const EditRelic = () => {
             }),
         };
 
-        // addRelic.mutate(relic);
-
         // add upload files to relicId 20
         const formData = new FormData();
         files.forEach((file) => {
@@ -276,8 +292,16 @@ export const EditRelic = () => {
                 formData.append('file', file.file);
             }
         });
+        addRelic
+            .mutateAsync(relic)
+            .then((data: any) => {
+                uploadRelicFile.mutate({ relicId: data.data, file: formData });
+            })
+            .catch((error: any) => {
+                console.log(error);
+            });
 
-        uploadRelicFile.mutate({ relicId: 20, file: formData });
+        // uploadRelicFile.mutate({ relicId: relicId, file: formData });
 
         toast('You submitted the following values:', {
             description: (

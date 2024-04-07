@@ -1,6 +1,7 @@
 import requests, { authAPi } from '../requests';
 import { RelicFilterRequest, RelicDTO } from '../../../../src/types/relic';
 import { RelicStatusEnum } from '../../../../src/enums/relicstatus';
+import { number } from 'zod';
 
 const RelicAPI = {
     updateRelicFile: (relicId: number, file: string) =>
@@ -34,6 +35,8 @@ const RelicAPI = {
         requests.get(`api/relics/count-by-statuses?statuses=${statuses}`),
     deleteRelicFile: (relicId: number) =>
         authAPi.delete(`api/relics/file/delete/${relicId}`),
+    getRelicFirstFile: (entityIds: number[]) =>
+        requests.getFileIds('api/relics/files/download', entityIds),
 };
 
 export default RelicAPI;

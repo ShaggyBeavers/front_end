@@ -40,6 +40,7 @@ import { useEffect, useState } from 'react';
 import './DataTable.css';
 import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons';
 import RegionAPI from '../../../src/app/api/Region/region';
+import { Button } from '../ui/button';
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -207,22 +208,34 @@ export function DataTable<TData, TValue>({
                                         row.getIsSelected() && 'selected'
                                     }
                                     className="hover:bg-gray-50 cursor-pointer"
-                                    onClick={() =>
-                                        handleRowClick(row.getValue('reportId'))
-                                    }
-                                    // className='odd:bg-gray-50'
                                 >
-                                    {row.getVisibleCells().map((cell) => (
-                                        <TableCell
-                                            key={cell.id}
-                                            // className="first:rounded-l-2xl  last:rounded-r-2xl "
-                                        >
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
-                                            )}
-                                        </TableCell>
-                                    ))}
+                                    {row
+                                        .getVisibleCells()
+                                        .map((cell, index) => (
+                                            <TableCell
+                                                key={cell.id}
+                                                onClick={() => {
+                                                    if (
+                                                        index !==
+                                                        row.getVisibleCells()
+                                                            .length -
+                                                            1
+                                                    ) {
+                                                        handleRowClick(
+                                                            row.getValue(
+                                                                'reportId'
+                                                            )
+                                                        );
+                                                    }
+                                                }}
+                                                // className="first:rounded-l-2xl  last:rounded-r-2xl "
+                                            >
+                                                {flexRender(
+                                                    cell.column.columnDef.cell,
+                                                    cell.getContext()
+                                                )}
+                                            </TableCell>
+                                        ))}
                                 </TableRow>
                             ))
                         ) : (
