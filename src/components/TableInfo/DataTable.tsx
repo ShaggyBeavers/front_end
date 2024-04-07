@@ -28,12 +28,18 @@ import {
 import Modal from 'react-modal';
 import { DataTablePagination } from './DataTablePagination';
 import { DataTableToolbar } from './DataTableToolbar';
-import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
+import {
+    keepPreviousData,
+    useMutation,
+    useMutationState,
+    useQuery,
+} from '@tanstack/react-query';
 import ReportAPI from '../../../src/app/api/Report/report';
 import Report from '../Report/report';
 import { useEffect, useState } from 'react';
 import './DataTable.css';
 import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons';
+import RegionAPI from '../../../src/app/api/Region/region';
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -75,6 +81,11 @@ export function DataTable<TData, TValue>({
     const [selectedReport, setSelectedReport] = React.useState<Report | null>(
         null
     );
+
+    const getRegionById = useMutation({
+        mutationFn: async (regionId: number) =>
+            await RegionAPI.getRegionById(regionId),
+    });
 
     const getReport = useMutation({
         mutationFn: async (reportId: number) =>
@@ -242,53 +253,49 @@ export function DataTable<TData, TValue>({
                                 <h2 className="text-xl font-bold mb-4">
                                     Деталі репорту
                                 </h2>
-                                <p>
+                                {/* <p>
                                     <span className="font-bold">
                                         User Email:{' '}
                                     </span>{' '}
                                     test email
-                                    {/* {selectedReport.userEmail} */}
-                                </p>
+                                    {selectedReport.userEmail}
+                                </p> */}
                                 <p>
                                     <span className="font-bold">User ID: </span>{' '}
-                                    test id
-                                    {/* {selectedReport.userId} */}
+                                    {selectedReport.userId || '-'}
                                 </p>
-                                <p>
-                                    <span className="font-bold">Назва:</span> jcdnsc
-                                    {/* {selectedReport.name} */}
+                                <p className="break-word">
+                                    <span className="font-bold">Назва:</span>{' '}
+                                    {selectedReport.name || '-'}
                                 </p>
                                 <p>
                                     <span className="font-bold">
                                         Категорія:
                                     </span>{' '}
-                                    cdsjcndsk
-                                    {/* {selectedReport.categoryDTOs} */}
+                                    {/* cdsjcndsk */}
+                                    {selectedReport.categoryDTOs
+                                        .map((category) => category.name)
+                                        .join(', ') || '-'}
                                 </p>
-                                <p>
+                                {/* <p>
                                     <span className="font-bold">Регіон:</span>{' '}
-                                    chjdsc dsjkbnc cjsbndjcsn csn ksdjncjksnc
-                                    csjcskdjckjs sdcnskdjd рсівов
-                                    {/* {selectedReport.regionId} */}
-                                </p>
+                                    {selectedReport.regionId || '-'}
+                                </p> */}
                                 <p>
                                     <span className="font-bold">Опис: </span>{' '}
-                                    cdffd
-                                    {/* {selectedReport.description} */}
+                                    {selectedReport.description || '-'}
                                 </p>
                                 <p>
                                     <span className="font-bold">
                                         Шляхи втрати:
                                     </span>{' '}
-                                    nc dscdd
-                                    {/* {selectedReport.infoReferences} */}
+                                    {selectedReport.infoReferences || '-'}
                                 </p>
                                 <p>
                                     <span className="font-bold">
                                         Ймовірне місце розсташування:
                                     </span>{' '}
-                                    nc dscdd ncjvsdncjsdncjnajdcn jsndcjksdncksd
-                                    {/* {selectedReport.mapLocation} */}
+                                    {selectedReport.mapLocation || '-'}
                                 </p>
                             </div>
                             <div className="report-modal-right">
