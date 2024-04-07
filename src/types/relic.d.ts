@@ -57,6 +57,5 @@ interface RelicFilterRequest {
     historicalPeriods: string[];
     statuses: string[];
     techniques: string[];
-    collections: string[];
     categories: string[];
 }
