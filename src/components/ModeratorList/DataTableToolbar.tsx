@@ -11,6 +11,8 @@ import { DataTableFacetedFilter } from './DataTableFacetedFilter';
 import { options } from '../../types/filters';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
+import ProtectedItems from '../ProtectedItems';
+import { RoleEnum } from '../../../src/enums/roles';
 
 interface DataTableToolbarProps<TData> {
     table: Table<TData>;
@@ -92,23 +94,31 @@ export function DataTableToolbar<TData>({
                     }
                     className="h-8 w-[150px] lg:w-[250px]"
                 />
-                {isRegMod ? (
-                    <Button
-                        variant="default"
-                        onClick={handleModClick}
-                        className="h-8 px-2 lg:px-3"
-                    >
-                        Модератори
-                    </Button>
-                ) : (
-                    <Button
-                        variant="default"
-                        onClick={handleRegModClick}
-                        className="h-8 px-2 lg:px-3"
-                    >
-                        Рег. Модератори
-                    </Button>
-                )}
+                <ProtectedItems
+                    role={[
+                        RoleEnum.ADMIN,
+                        RoleEnum.REGIONAL_MODERATOR,
+                        RoleEnum.MODERATOR,
+                    ]}
+                >
+                    {isRegMod ? (
+                        <Button
+                            variant="default"
+                            onClick={handleModClick}
+                            className="h-8 px-2 lg:px-3"
+                        >
+                            Модератори
+                        </Button>
+                    ) : (
+                        <Button
+                            variant="default"
+                            onClick={handleRegModClick}
+                            className="h-8 px-2 lg:px-3"
+                        >
+                            Рег. Модератори
+                        </Button>
+                    )}
+                </ProtectedItems>
                 {table.getColumn('regions') && (
                     <DataTableFacetedFilter
                         column={table.getColumn('regions')}

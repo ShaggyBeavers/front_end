@@ -28,10 +28,18 @@ import {
 import Modal from 'react-modal';
 import { DataTablePagination } from './DataTablePagination';
 import { DataTableToolbar } from './DataTableToolbar';
-import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
+import {
+    keepPreviousData,
+    useMutation,
+    useMutationState,
+    useQuery,
+} from '@tanstack/react-query';
 import ReportAPI from '../../../src/app/api/Report/report';
 import Report from '../Report/report';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import './DataTable.css';
+import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons';
+import RegionAPI from '../../../src/app/api/Region/region';
 import { Button } from '../ui/button';
 
 interface DataTableProps<TData, TValue> {
@@ -75,9 +83,10 @@ export function DataTable<TData, TValue>({
         null
     );
 
-    useEffect(() => {
-        console.log(selectedReport);
-    }, [selectedReport]);
+    const getRegionById = useMutation({
+        mutationFn: async (regionId: number) =>
+            await RegionAPI.getRegionById(regionId),
+    });
 
     const getReport = useMutation({
         mutationFn: async (reportId: number) =>
@@ -94,6 +103,23 @@ export function DataTable<TData, TValue>({
 
     const handleRowClick = async (reportId: number) => {
         getReport.mutate(reportId);
+    };
+
+    const [currentPictureIndex, setCurrentPictureIndex] = useState(0);
+    const pictures = [
+        '/assets/images/dima_tall.png',
+        '/assets/images/dima_wide.jpg',
+    ];
+    const handlePreviousPicture = () => {
+        if (currentPictureIndex > 0) {
+            setCurrentPictureIndex(currentPictureIndex - 1);
+        }
+    };
+
+    const handleNextPicture = () => {
+        if (currentPictureIndex < pictures.length - 1) {
+            setCurrentPictureIndex(currentPictureIndex + 1);
+        }
     };
     ///
     const reports = useQuery({
@@ -233,35 +259,92 @@ export function DataTable<TData, TValue>({
                 className="fixed inset-0 z-50 flex items-center justify-center"
                 overlayClassName="fixed inset-0 bg-gray-500 bg-opacity-75"
             >
-                <div className="bg-white rounded-lg p-6 w-full max-w-md">
-                    <h2 className="text-xl font-bold mb-4">Report Details</h2>
-                    {selectedReport && (
-                        <div>
-                            <p>User Email: {selectedReport.userEmail}</p>
-                            <p>User ID: {selectedReport.userId}</p>
-                            <p>
-                                Submission Date: {selectedReport.submissionDate}
-                            </p>
-                            <p>Map Location: {selectedReport.mapLocation}</p>
-                            <p>Description: {selectedReport.description}</p>
-                            <p>Status: {selectedReport.status}</p>
-                            <p>Comment: {selectedReport.comment}</p>
-                            {/* Display other fields as needed */}
+                {selectedReport && (
+                    <div className="bg-white rounded-lg p-6 w-full max-w-2xl mx-6">
+                        <div className="report-modal">
+                            <div className="report-modal-left">
+                                <h2 className="text-xl font-bold mb-4">
+                                    Деталі репорту
+                                </h2>
+                                {/* <p>
+                                    <span className="font-bold">
+                                        User Email:{' '}
+                                    </span>{' '}
+                                    test email
+                                    {selectedReport.userEmail}
+                                </p> */}
+                                <p>
+                                    <span className="font-bold">User ID: </span>{' '}
+                                    {selectedReport.userId || '-'}
+                                </p>
+                                <p className="break-word">
+                                    <span className="font-bold">Назва:</span>{' '}
+                                    {selectedReport.name || '-'}
+                                </p>
+                                <p>
+                                    <span className="font-bold">
+                                        Категорія:
+                                    </span>{' '}
+                                    {/* cdsjcndsk */}
+                                    {selectedReport.categoryDTOs
+                                        .map((category) => category.name)
+                                        .join(', ') || '-'}
+                                </p>
+                                {/* <p>
+                                    <span className="font-bold">Регіон:</span>{' '}
+                                    {selectedReport.regionId || '-'}
+                                </p> */}
+                                <p>
+                                    <span className="font-bold">Опис: </span>{' '}
+                                    {selectedReport.description || '-'}
+                                </p>
+                                <p>
+                                    <span className="font-bold">
+                                        Шляхи втрати:
+                                    </span>{' '}
+                                    {selectedReport.infoReferences || '-'}
+                                </p>
+                                <p>
+                                    <span className="font-bold">
+                                        Ймовірне місце розсташування:
+                                    </span>{' '}
+                                    {selectedReport.mapLocation || '-'}
+                                </p>
+                            </div>
+                            <div className="report-modal-right">
+                                <img
+                                    className="modal-image"
+                                    src={pictures[currentPictureIndex]}
+                                />
+                                <div className="report-modal-btns">
+                                    <button
+                                        className="arrow-button"
+                                        onClick={handlePreviousPicture}
+                                        disabled={currentPictureIndex === 0}
+                                    >
+                                        <ChevronLeftIcon />
+                                    </button>
+                                    <button
+                                        className="arrow-button"
+                                        onClick={handleNextPicture}
+                                        disabled={
+                                            currentPictureIndex ===
+                                            pictures.length - 1
+                                        }
+                                    >
+                                        <ChevronRightIcon />
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                    )}
-                    <Button
-                        className="mt-4"
-                        onClick={() => setIsModalOpen(false)}
-                    >
-                        Закрити
-                    </Button>
-                    {/* <button
-                        onClick={() => setIsModalOpen(false)}
-                        className="bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 mt-4"
-                    >
-                        Close
-                    </button> */}
-                </div>
+                        <button
+                            onClick={() => setIsModalOpen(false)}
+                            className="bg-black text-white rounded-lg px-4 py-2 mt-6"
+                        >
+                            Закрити
+                        </button>
+                    </div>
+                )}
             </Modal>
         </div>
     );
