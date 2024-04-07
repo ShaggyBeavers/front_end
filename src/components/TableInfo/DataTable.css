@@ -1,0 +1,53 @@
+
+.report-modal {
+    display: flex;
+    max-height: 22rem;
+    overflow-y: auto;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.report-modal-left {
+    max-width: 250px;
+    padding-right: 20px; 
+    display: flex;
+    flex-direction: column;
+    gap:0.3rem;
+}
+
+.report-modal-right {
+    display: flex;
+    max-width: 250px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.report-modal-btns{
+    display: flex;
+    gap:1rem;
+    margin-top: 1rem;
+}
+
+.arrow-button svg {
+    width: 40px; 
+    height: 40px; 
+}
+
+.arrow-button[disabled] {
+    color: #dadada;
+}
+
+.modal-image {
+    max-width: 100%;
+    max-height: 270px;
+}
+
+@media (max-width: 800px) {
+    .arrow-button svg {
+        width: 35px; 
+        height: 35px; 
+    }
+}
