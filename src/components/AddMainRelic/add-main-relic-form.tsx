@@ -160,7 +160,12 @@ const AddMainRelic = ({ form }: any) => {
                         name="name"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor="name">Назва</FormLabel>
+                                <FormLabel
+                                    htmlFor="name"
+                                    className="flex flex-row"
+                                >
+                                    Назва <div className="text-red-500">*</div>
+                                </FormLabel>
                                 <FormControl>
                                     <Input
                                         placeholder="Ім'я реліквії"
@@ -327,8 +332,12 @@ const AddMainRelic = ({ form }: any) => {
                         name="quantity"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor="quantity">
-                                    Кількість
+                                <FormLabel
+                                    htmlFor="quantity"
+                                    className="flex flex-row"
+                                >
+                                    Кількість{' '}
+                                    <div className="text-red-500">*</div>
                                 </FormLabel>
                                 <FormControl>
                                     <Input
