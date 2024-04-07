@@ -7,6 +7,7 @@ import { infiniteQueryOptions, useQuery } from '@tanstack/react-query';
 import { set } from 'zod';
 import { gzipSync, decompressSync, unzipSync, unzip } from 'fflate';
 import { Buffer } from 'buffer';
+import { imageProcessing } from '../../../src/lib/imageFunc';
 
 interface RelicPropertyDTO {
     name: string;
@@ -155,6 +156,7 @@ const Relic = () => {
 
     useEffect(() => {
         if (getImages.isSuccess) {
+            // imageProcessing({ setImages, data: getImages.data });
             const reader = new FileReader();
             reader.onload = function (e) {
                 const arrayBuffer = new Uint8Array(

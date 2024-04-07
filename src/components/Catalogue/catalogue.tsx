@@ -119,6 +119,14 @@ const Catalogue = () => {
 
     const totalPages = 9; //temporarily hardcoded
 
+    // const fetchRelics = useMutation({
+    //     mutationFn: (
+    //         page: number,
+    //         pageSize: number,
+    //         selectedFilterOptions: any
+    //     ) => RelicAPI.filterRelics(page, pageSize, selectedFilterOptions),
+    // });
+
     const fetchItems = async (page: number) => {
         try {
             //FOR STYLING
@@ -136,8 +144,8 @@ const Catalogue = () => {
             );
             // setItems(response.content);  FOR STYLING
             setResult(response);
-            console.log(response, 'Items fetched succesfully');
-            console.log(response.content);
+            // console.log(response, 'Items fetched succesfully');
+            // console.log(response.content);
         } catch (error) {
             console.error('Error fetching items:', error);
         }
@@ -168,9 +176,13 @@ const Catalogue = () => {
 
     useEffect(() => {
         fetchItems(currentPage).then(() => {
+            // console.log('fetching items', result.content);
             const ids = getIdsFromItems(result.content);
+            const test = result.content.map((item) => console.log(item));
+            console.log(test, 'test');
+            console.log('ids', ids);
             const imageZip = downloadImages.mutate(ids);
-
+            console.log(imageZip, 'image zip');
         });
     }, [currentPage, navigate, selectedFilterOptions]);
 
@@ -333,7 +345,7 @@ const Catalogue = () => {
                                                         : category ===
                                                             'techniques'
                                                           ? techniques
-                                                            : []
+                                                          : []
                                             }
                                             selectedFilterOptions={
                                                 selectedFilterOptions

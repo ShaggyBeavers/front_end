@@ -33,32 +33,3 @@ export const checkAuthRole = (roles: string[]) => {
     const user = token.state.user;
     return roles.includes(user.role);
 };
-
-export const unzipFile = async (zipFile: any) => {
-    try {
-        const new_zip = new JSZip();
-        const images: any = await new_zip
-            .loadAsync(zipFile)
-            .then((zip) => {
-                let promises = Object.keys(zip.files).map(async (fileName) => {
-                    const file = zip.files[fileName];
-                    const data = await file.async('blob');
-                    return { name: fileName, data };
-                });
-                return Promise.all(promises);
-            })
-            .then((files) => {
-                // console.log('files', files);
-                return files.reduce((acc, file) => {
-                    acc[file.name] = file.data;
-                    return acc;
-                }, {} as any);
-                // return files;
-            });
-        console.log('images', images);
-        return images;
-    } catch (error) {
-        console.error('Error unzipping file:', error);
-        return [];
-    }
-};
