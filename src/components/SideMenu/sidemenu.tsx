@@ -29,7 +29,10 @@ interface SideMenuProps {
 
 const SideMenu: React.FC<SideMenuProps> = ({ currentPage }) => {
     const navigate = useNavigate();
-
+    const [isModOpen, setIsModOpen] = useState(false);
+    const closeModal = () => {
+        handleModal('addModerator', false);
+    };
     const [modals, setModals] = useState<IModal>({
         settings: {
             isOpen: false,
@@ -43,7 +46,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ currentPage }) => {
         },
         addModerator: {
             isOpen: false,
-            content: <AddModeratorModal />,
+            content: <AddModeratorModal closeModal={closeModal}/>,
             styles: 'add-moderator-window',
         },
         moderatorsList: {

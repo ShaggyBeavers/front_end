@@ -13,6 +13,7 @@ import HistoricalPeriodAPI from '../../app/api/HistoricalPeriod/historicalPeriod
 import TechniqueAPI from '../../app/api/Technique/technique';
 // import CollectionsAPI from '../../app/api/Collection/collection';
 import Relic from '../Relic/Relic';
+import { useMutation } from '@tanstack/react-query';
 
 interface Photo {
     //FOR STYLING
@@ -61,6 +62,10 @@ export interface Filters {
 
 const PAGE_SIZE = 18;
 
+const getIdsFromItems = (items: Relic[]) => {
+    return items.map((item) => item.id);
+};
+
 const Catalogue = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -108,6 +113,12 @@ const Catalogue = () => {
         }
     );
     const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+
+    const donwloadImages = useMutation({
+        mutationFn: async (entityIds: number[]) => {
+            await RelicAPI.getRelicFirstFile(entityIds);
+        },
+    });
 
     const totalPages = 9; //temporarily hardcoded
 
@@ -160,7 +171,9 @@ const Catalogue = () => {
     }, [location.search]);
 
     useEffect(() => {
-        fetchItems(currentPage);
+        fetchItems(currentPage).then(() => {
+            getIdsFromItems(result.content);
+        });
     }, [currentPage, navigate, selectedFilterOptions]);
 
     const paginate = (pageNumber: number) => {
@@ -293,7 +306,7 @@ const Catalogue = () => {
     };
 
     const applyFilters = () => {
-        console.log('yes,hell');
+        // console.log('yes,hell');
         fetchItems(currentPage);
     };
 
@@ -367,9 +380,7 @@ const Catalogue = () => {
                                         to={`/catalogue/${item.id}`}
                                         className="cat-item"
                                     >
-                                        <img
-                                            src={item.imageUrl}
-                                        />
+                                        <img src={item.imageUrl} />
                                         <div className="cat-item-title">
                                             <p>{item.name}</p>
                                         </div>

@@ -5,17 +5,17 @@ import { RelicStatusEnum } from '../../../src/enums/relicstatus';
 
 const BannerLanding = () => {
     const countRelicsByStolen = useQuery({
-        queryKey: ['countRelicsByStatus'],
+        queryKey: ['countRelicsByStolen'],
         queryFn: async () =>
             await RelicAPI.countRelicsByStatuses([RelicStatusEnum.STOLEN]),
     });
     const countRelicsByDestroyed = useQuery({
-        queryKey: ['countRelicsByStatus'],
+        queryKey: ['countRelicsByDestroyed'],
         queryFn: async () =>
             await RelicAPI.countRelicsByStatuses([RelicStatusEnum.DESTROYED]),
     });
     const countRelicsByReturned = useQuery({
-        queryKey: ['countRelicsByStatus'],
+        queryKey: ['countRelicsByReturned'],
         queryFn: async () =>
             await RelicAPI.countRelicsByStatuses([RelicStatusEnum.RETURNED]),
     });

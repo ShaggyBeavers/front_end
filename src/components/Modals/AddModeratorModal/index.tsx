@@ -12,7 +12,7 @@ import CategoryAPI from '../../../../src/app/api/Category/category';
 import { convertTermToOptions, Option } from '../../../../src/lib/utils';
 import AdminAPI from '../../../../src/app/api/Admin/admin';
 
-const AddModeratorModal = () => {
+const AddModeratorModal = (props: any) => {
     const { handleSubmit, control } = useForm();
     const users = useQuery({
         queryKey: ['users'],
@@ -66,6 +66,9 @@ const AddModeratorModal = () => {
         // addModerator.mutate(nFormData);
         if (regModerator) AdminAPI.addRegionalModerator(nFormData);
         else addModerator.mutate(nFormData);
+
+        props.closeModal();
+        // cleanup the form
 
         toast('Успішно додано модератора', {
             description: (
@@ -351,6 +354,14 @@ const AddModeratorModal = () => {
                             // console.log('add moderator');
                         }}
                     />
+                    {/* <DefaultButton
+                        height={40}
+                        width={180}
+                        bgcolor="black"
+                        color="white"
+                        text="Закрити"
+                        action={() => props.closeModal()}
+                    /> */}
                 </div>
             </form>
         </>

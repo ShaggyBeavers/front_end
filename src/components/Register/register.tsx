@@ -24,7 +24,7 @@ export default function Register() {
             reset();
             setShowExistsMessage(false);
         } catch (error: any) {
-            if (error.response.status && error.response.status=== 409) {
+            if (error.response.status && error.response.status === 409) {
                 reset();
                 setShowExistsMessage(true);
             } else {
@@ -150,7 +150,7 @@ export default function Register() {
                             <button type="submit" id="log_btn">
                                 Зареєструватись
                             </button>
-                            <button
+                            {/* <button
                                 type="button"
                                 onClick={() => login()}
                                 id="google_btn"
@@ -160,7 +160,7 @@ export default function Register() {
                                     src="./icons/google.svg"
                                     style={{ width: '20px' }}
                                 />
-                            </button>
+                            </button> */}
                         </div>
                     </form>
                 </div>
