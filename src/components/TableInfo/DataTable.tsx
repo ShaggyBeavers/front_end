@@ -55,6 +55,7 @@ interface Report {
     description: string;
     status: string;
     comment: string;
+    regionDTO?: { id: number; name: string };
     infoReferences: string;
     name: string;
     imageUrl: string;
@@ -290,10 +291,10 @@ export function DataTable<TData, TValue>({
                                         .map((category) => category.name)
                                         .join(', ') || '-'}
                                 </p>
-                                {/* <p>
+                                <p>
                                     <span className="font-bold">Регіон:</span>{' '}
-                                    {selectedReport.regionId || '-'}
-                                </p> */}
+                                    {selectedReport.regionDTO?.name || '-'}
+                                </p>
                                 <p>
                                     <span className="font-bold">Опис: </span>{' '}
                                     {selectedReport.description || '-'}

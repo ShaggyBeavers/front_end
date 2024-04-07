@@ -155,10 +155,8 @@ const Relic = () => {
 
     useEffect(() => {
         if (getImages.isSuccess) {
-            // console.log('getImages', getImages.data);
             const reader = new FileReader();
             reader.onload = function (e) {
-                // const arrayBuffer = reader.result;
                 const arrayBuffer = new Uint8Array(
                     reader.result as ArrayBuffer
                 );
@@ -170,16 +168,7 @@ const Relic = () => {
                         'base64'
                     );
 
-                    setImages((prevImages) => [
-                        ...prevImages,
-                        newImage,
-                        // btoa(
-                        //     String.fromCharCode.apply(
-                        //         null,
-                        //         Array.from(new Uint8Array(imagesArray[key]))
-                        //     )
-                        // ),
-                    ]);
+                    setImages((prevImages) => [...prevImages, newImage]);
                 }
                 setImageNames(keys);
             };
@@ -189,6 +178,7 @@ const Relic = () => {
             reader.readAsArrayBuffer(getImages.data);
         }
     }, [getImages.data]);
+
     return (
         <div className="relic_con">
             <div className="relic_left">

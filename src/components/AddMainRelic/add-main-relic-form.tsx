@@ -819,7 +819,7 @@ const AddMainRelic = ({ form }: any) => {
                                                 field.onChange(files);
                                                 updateFile(files);
                                             }}
-                                            maxFileSize={1 * 1024 * 1024}
+                                            maxFileSize={10 * 1024 * 1024}
                                             maxFiles={10}
                                             accept="image/*"
                                             value={files}
@@ -846,7 +846,7 @@ const AddMainRelic = ({ form }: any) => {
                                             footerConfig={{
                                                 customMessage: (
                                                     <>
-                                                        Макс. розмір файлу: 1Mб,
+                                                        Макс. розмір файлу: 10Mб,
                                                         Файлів: 10
                                                     </>
                                                 ),
