@@ -35,8 +35,8 @@ const RelicAPI = {
         requests.get(`api/relics/count-by-statuses?statuses=${statuses}`),
     deleteRelicFile: (relicId: number) =>
         authAPi.delete(`api/relics/file/delete/${relicId}`),
-    getRelicFirstFile: (entityIds: number[]) =>
-        requests.getFileIds('api/relics/files/download', entityIds),
+    getRelicFirstFile: (values: { entityIds: number[] }) =>
+        requests.getFileIds('api/relics/files/download', values),
 };
 
 export default RelicAPI;

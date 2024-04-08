@@ -4,6 +4,7 @@ import { get } from 'http';
 import { config } from 'process';
 import { useAuthStore } from '../../stores/AuthStore';
 import { useNavigate } from 'react-router-dom';
+import { object } from 'zod';
 
 // const BASE_URL = 'http://localhost:8081/';
 const BASE_URL = process.env.REACT_APP_API_URL;
@@ -76,7 +77,7 @@ const requests = {
     getFile: (url: string) =>
         axios.get(url, { responseType: 'blob' }).then(responseBody),
     getFileIds: (url: string, body: {}) =>
-        axios.get(url, body).then(responseBody),
+        axios.post(url, body, { responseType: 'blob' }).then(responseBody),
     post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
     put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
     delete: (url: string) => axios.delete(url).then(responseBody),

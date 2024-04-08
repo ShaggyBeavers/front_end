@@ -12,7 +12,10 @@ import CategoryAPI from '../../app/api/Category/category';
 import HistoricalPeriodAPI from '../../app/api/HistoricalPeriod/historicalPeriod';
 import TechniqueAPI from '../../app/api/Technique/technique';
 import Relic from '../Relic/Relic';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { array } from 'zod';
+import { unzipSync } from 'fflate';
+import { Buffer } from 'buffer';
 
 interface Photo {
     //FOR STYLING
@@ -58,6 +61,11 @@ export interface Filters {
     [key: string]: string[];
 }
 
+interface ImageId {
+    id: number;
+    image: string;
+}
+
 const PAGE_SIZE = 18;
 
 const getIdsFromItems = (items: Relic[]) => {
@@ -70,6 +78,7 @@ const Catalogue = () => {
     const [notFound, setNotFound] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [ids, setIds] = useState<ImageId[]>([]);
     // const [items, setItems] = useState<Photo[]>([]);   FOR STYLING
     const [result, setResult] = useState<GetAllRelicsResponse>({
         totalPages: 0,
@@ -112,10 +121,28 @@ const Catalogue = () => {
     );
     const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
-    const downloadImages = useMutation({
-        mutationFn: async (entityIds: number[]) => {
-            await RelicAPI.getRelicFirstFile(entityIds);
+    // const downloadImages = useQuery({
+    //     queryKey: ['relicImages', ids],
+    //     queryFn: async () =>
+    //         await RelicAPI.getRelicFirstFile({ entityIds: ids }),
+    //     // refetchInterval: 10000,
+    //     // retry: false,
+    // });
+    const {
+        data: downloadData,
+        isSuccess: isDownloadSuccesm,
+        mutate: downloadImages,
+        mutateAsync: downloadImagesAsync,
+    } = useMutation({
+        mutationFn: async (entityIds: number[]) =>
+            await RelicAPI.getRelicFirstFile({ entityIds: entityIds }),
+        onSuccess: (data) => {
+            console.log('downloadImages', typeof data);
         },
+        onError: (error) => {
+            console.error('Error downloading images:', error);
+        },
+        retry: false,
     });
 
     const fetchData = async (page: number) => {
@@ -130,19 +157,55 @@ const Catalogue = () => {
                 selectedFilterOptions
             );
             setResult(response);
+            const idsList = getIdsFromItems(response.content);
+            setIds(idsList.map((id) => ({ id: id, image: '' })));
+            console.log('ids', ids);
+            if (ids.length > 0) {
+                // downloadImages(ids);
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const arrayBuffer = new Uint8Array(
+                        reader.result as ArrayBuffer
+                    );
+
+                    const imagesArray = unzipSync(arrayBuffer);
+                    let tmp: ImageId[] = [];
+                    for (const key in imagesArray) {
+                        for (const key in imagesArray) {
+                            const modifiedKey: number = Number(
+                                key.substring(0, key.indexOf('_'))
+                            );
+                            tmp.push({
+                                id: modifiedKey,
+                                image: Buffer.from(imagesArray[key]).toString(
+                                    'base64'
+                                ),
+                            });
+                        }
+                    }
+                    setIds(tmp);
+                };
+
+                reader.onerror = (e) => {
+                    console.error('Error reading file:', e);
+                };
+
+                downloadImagesAsync(idsList).then((data) => {
+                    reader.readAsArrayBuffer(data);
+                });
+            }
             setTotalPages(response.totalPages);
         } catch (error) {
             console.error('Error fetching items:', error);
             setNotFound(true);
         }
     };
+
     useEffect(() => {
-        console.log(location.search)
         const searchParams = new URLSearchParams(location.search);
         const pageParam = searchParams.get('page');
         const categoryParam = searchParams.get('category');
         const pageNumber = pageParam ? parseInt(pageParam, 10) : 1;
-        console.log(pageNumber)
 
         setCurrentPage(pageNumber);
 
@@ -158,10 +221,9 @@ const Catalogue = () => {
         fetchData(pageNumber);
     }, [location.search]);
 
+    // fetch data on page or filter change
     useEffect(() => {
-        fetchData(currentPage).then(() => {
-            getIdsFromItems(result.content);
-        });
+        fetchData(currentPage);
     }, [currentPage, navigate, selectedFilterOptions]);
 
     const paginate = (pageNumber: number) => {
@@ -281,7 +343,13 @@ const Catalogue = () => {
 
     const applyFilters = () => {
         // console.log('yes,hell');
-        fetchData(currentPage);
+        fetchData(currentPage).then(() => {
+            // const ids = getIdsFromItems(result.content);
+            // console.log(ids);
+        });
+
+        const ids = getIdsFromItems(result.content);
+        console.log('filters', ids);
     };
 
     return (
@@ -343,6 +411,7 @@ const Catalogue = () => {
                     </div>
                     <div className="cat_right">
                         <Search />
+
                         <div className="cat-items-container">
                             {result &&
                                 result.content.map((item) => (
@@ -351,7 +420,13 @@ const Catalogue = () => {
                                         to={`/catalogue/${item.id}`}
                                         className="cat-item"
                                     >
-                                        <img src={item.imageUrl} />
+                                        {/* <img src={item.imageUrl} /> */}
+                                        {ids.find((id) => id.id === item.id)
+                                            ?.image && (
+                                            <img
+                                                src={`data:image/png;base64,${ids.find((id) => id.id === item.id)?.image}`}
+                                            />
+                                        )}
                                         <div className="cat-item-title">
                                             <p>{item.name}</p>
                                         </div>
