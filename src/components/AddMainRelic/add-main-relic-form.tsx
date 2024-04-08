@@ -160,7 +160,12 @@ const AddMainRelic = ({ form }: any) => {
                         name="name"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor="name">Назва</FormLabel>
+                                <FormLabel
+                                    htmlFor="name"
+                                    className="flex flex-row"
+                                >
+                                    Назва <div className="text-red-500">*</div>
+                                </FormLabel>
                                 <FormControl>
                                     <Input
                                         placeholder="Ім'я реліквії"
@@ -327,8 +332,12 @@ const AddMainRelic = ({ form }: any) => {
                         name="quantity"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor="quantity">
-                                    Кількість
+                                <FormLabel
+                                    htmlFor="quantity"
+                                    className="flex flex-row"
+                                >
+                                    Кількість{' '}
+                                    <div className="text-red-500">*</div>
                                 </FormLabel>
                                 <FormControl>
                                     <Input
@@ -819,7 +828,7 @@ const AddMainRelic = ({ form }: any) => {
                                                 field.onChange(files);
                                                 updateFile(files);
                                             }}
-                                            maxFileSize={1 * 1024 * 1024}
+                                            maxFileSize={10 * 1024 * 1024}
                                             maxFiles={10}
                                             accept="image/*"
                                             value={files}
@@ -846,8 +855,8 @@ const AddMainRelic = ({ form }: any) => {
                                             footerConfig={{
                                                 customMessage: (
                                                     <>
-                                                        Макс. розмір файлу: 1Mб,
-                                                        Файлів: 10
+                                                        Макс. розмір файлу:
+                                                        10Mб, Файлів: 10
                                                     </>
                                                 ),
                                             }}
