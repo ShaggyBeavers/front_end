@@ -1,6 +1,6 @@
 import './category.css';
 
-const Category = ({ title, picture }: { title: string,picture:string }) => {console.log({picture})
+const Category = ({ title, picture }: { title: string; picture: string }) => {
     return (
         <div className="cat_card">
             <h4>{title}</h4>

@@ -261,7 +261,7 @@ export function DataTable<TData, TValue>({
                 overlayClassName="fixed inset-0 bg-gray-500 bg-opacity-75"
             >
                 {selectedReport && (
-                    <div className="bg-white rounded-lg p-6 w-full max-w-2xl mx-6">
+                    <div className="bg-white rounded-lg p-6  max-w-2xl mx-6">
                         <div className="report-modal">
                             <div className="report-modal-left">
                                 <h2 className="text-xl font-bold mb-4">
@@ -312,7 +312,7 @@ export function DataTable<TData, TValue>({
                                     {selectedReport.mapLocation || '-'}
                                 </p>
                             </div>
-                            <div className="report-modal-right">
+                            {/* <div className="report-modal-right">
                                 <img
                                     className="modal-image"
                                     src={pictures[currentPictureIndex]}
@@ -336,7 +336,7 @@ export function DataTable<TData, TValue>({
                                         <ChevronRightIcon />
                                     </button>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                         <button
                             onClick={() => setIsModalOpen(false)}

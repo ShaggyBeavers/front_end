@@ -855,8 +855,8 @@ const AddMainRelic = ({ form }: any) => {
                                             footerConfig={{
                                                 customMessage: (
                                                     <>
-                                                        Макс. розмір файлу: 10Mб,
-                                                        Файлів: 10
+                                                        Макс. розмір файлу:
+                                                        10Mб, Файлів: 10
                                                     </>
                                                 ),
                                             }}

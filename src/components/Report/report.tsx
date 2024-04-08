@@ -17,6 +17,7 @@ export default function Report() {
     const [selectedCategories, setSelectedCategories] = useState<
         { value: string; id: number }[]
     >([]);
+    const [photos, setPhotos] = useState<any[]>([]);
     const [selectedRegion, setSelectedRegion] = useState<{
         value: string;
         id: number;
@@ -229,7 +230,10 @@ export default function Report() {
                                     <label htmlFor="location">
                                         Ймовірне місце розташування:
                                     </label>
-                                    <label > <p>(опційно)</p></label>
+                                    <label>
+                                        {' '}
+                                        <p>(опційно)</p>
+                                    </label>
                                     <input
                                         type="text"
                                         placeholder="Введіть місце розташування"
