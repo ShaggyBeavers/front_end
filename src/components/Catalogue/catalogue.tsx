@@ -69,6 +69,7 @@ const Catalogue = () => {
     const location = useLocation();
     const [notFound, setNotFound] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
     // const [items, setItems] = useState<Photo[]>([]);   FOR STYLING
     const [result, setResult] = useState<GetAllRelicsResponse>({
         totalPages: 0,
@@ -117,54 +118,36 @@ const Catalogue = () => {
         },
     });
 
-    const totalPages = 9; //temporarily hardcoded
-
-    // const fetchRelics = useMutation({
-    //     mutationFn: (
-    //         page: number,
-    //         pageSize: number,
-    //         selectedFilterOptions: any
-    //     ) => RelicAPI.filterRelics(page, pageSize, selectedFilterOptions),
-    // });
-
-    const fetchItems = async (page: number) => {
+    const fetchData = async (page: number) => {
         try {
-            //FOR STYLING
+            //  FOR STYLING
             // const response = await axios.get<Photo[]>(
             //     `https://jsonplaceholder.typicode.com/photos?_page=${page}&_limit=${PAGE_SIZE}` //request is under,this is just to display styling
             // );
-            console.log(
-                selectedFilterOptions,
-                ': selected filter options before fetch'
-            );
             const response = await RelicAPI.filterRelics(
                 page - 1,
                 PAGE_SIZE,
                 selectedFilterOptions
             );
-            // setItems(response.content);  FOR STYLING
             setResult(response);
-            // console.log(response, 'Items fetched succesfully');
-            // console.log(response.content);
+            setTotalPages(response.totalPages);
         } catch (error) {
             console.error('Error fetching items:', error);
+            setNotFound(true);
         }
     };
-
     useEffect(() => {
+        console.log(location.search)
         const searchParams = new URLSearchParams(location.search);
         const pageParam = searchParams.get('page');
         const categoryParam = searchParams.get('category');
         const pageNumber = pageParam ? parseInt(pageParam, 10) : 1;
-        if (pageNumber >= 1 && pageNumber <= totalPages) {
-            setCurrentPage(pageNumber);
-        } else {
-            setNotFound(true);
-        }
+        console.log(pageNumber)
+
+        setCurrentPage(pageNumber);
 
         if (categoryParam) {
             const categoriesArray = categoryParam.split(',');
-            console.log(categoriesArray, 'category param array');
             setSelectedFilterOptions({
                 categories: categoriesArray,
                 historicalPeriods: [],
@@ -172,17 +155,12 @@ const Catalogue = () => {
                 techniques: [],
             });
         }
+        fetchData(pageNumber);
     }, [location.search]);
 
     useEffect(() => {
-        fetchItems(currentPage).then(() => {
-            // console.log('fetching items', result.content);
-            const ids = getIdsFromItems(result.content);
-            const test = result.content.map((item) => console.log(item));
-            console.log(test, 'test');
-            console.log('ids', ids);
-            const imageZip = downloadImages.mutate(ids);
-            console.log(imageZip, 'image zip');
+        fetchData(currentPage).then(() => {
+            getIdsFromItems(result.content);
         });
     }, [currentPage, navigate, selectedFilterOptions]);
 
@@ -303,7 +281,7 @@ const Catalogue = () => {
 
     const applyFilters = () => {
         // console.log('yes,hell');
-        fetchItems(currentPage);
+        fetchData(currentPage);
     };
 
     return (
