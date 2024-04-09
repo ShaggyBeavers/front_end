@@ -184,20 +184,6 @@ const Catalogue = () => {
             if (ids.length > 0) {
                 // downloadImages(ids);
                 const reader = new FileReader();
-                // reader.onload = (e) => {
-                //     const arrayBuffer = reader.result as ArrayBuffer;
-                //     const imagesArray = unzipSync(new Uint8Array(arrayBuffer));
-                //     const tmp: ImageId[] = Object.entries(imagesArray).map(
-                //         ([key, value]) => {
-                //             const modifiedKey = parseInt(key, 10);
-                //             return {
-                //                 id: modifiedKey,
-                //                 image: Buffer.from(value).toString('base64'),
-                //             };
-                //         }
-                //     );
-                //     setIds(tmp);
-                // };
 
                 reader.onload = (e) => {
                     const arrayBuffer = reader.result as ArrayBuffer;
@@ -249,28 +235,6 @@ const Catalogue = () => {
 
                     setIds(tmp);
                 };
-                // reader.onload = (e) => {
-                //     const arrayBuffer = new Uint8Array(
-                //         reader.result as ArrayBuffer
-                //     );
-
-                //     const imagesArray = unzipSync(arrayBuffer);
-                //     let tmp: ImageId[] = [];
-                //     for (const key in imagesArray) {
-                //         for (const key in imagesArray) {
-                //             const modifiedKey: number = Number(
-                //                 key.substring(0, key.indexOf('_'))
-                //             );
-                //             tmp.push({
-                //                 id: modifiedKey,
-                //                 image: Buffer.from(imagesArray[key]).toString(
-                //                     'base64'
-                //                 ),
-                //             });
-                //         }
-                //     }
-                //     setIds(tmp);
-                // };
 
                 reader.onerror = (e) => {
                     console.error('Error reading file:', e);
@@ -429,13 +393,7 @@ const Catalogue = () => {
 
     const applyFilters = () => {
         // console.log('yes,hell');
-        fetchData(currentPage).then(() => {
-            // const ids = getIdsFromItems(result.content);
-            // console.log(ids);
-        });
-
-        const ids = getIdsFromItems(result.content);
-        console.log('filters', ids);
+        fetchData(currentPage)
     };
 
     const containerRef = useRef(null);
