@@ -73,7 +73,6 @@ interface Relic {
 const Relic = () => {
     const navigate = useNavigate();
     const params = useParams();
-    // const [item, setItem] = useState<Relic | null>(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     const [isLoading, setIsLoading] = useState(false);
@@ -85,13 +84,6 @@ const Relic = () => {
     //   const [isLoading, setIsLoading] = useState(false);
     //    const [images, setImages] = useState<any[]>([]);
     //    const relicId = Number(params.relicsid);
-    const [categories, setCategories] = useState<categoryDTOs[]>([]);
-
-    //    useEffect(() => {
-    //        if (item) {
-    //            setCategories(item.categoryDTOs ?? []);
-    //        }
-    //    }, [item]);
 
     const getImages = useQuery({
         queryKey: ['relicImages', relicId],
@@ -105,22 +97,7 @@ const Relic = () => {
         queryFn: () => RelicAPI.fetchDetails(relicId),
     });
 
-    // setItem(getRelic.data);
     const item = getRelic.data;
-    // useEffect(() => {
-    //     const fetchItemDetails = async () => {
-    //         try {
-    //             const response = await RelicAPI.fetchDetails(
-    //                 Number(params.relicsid)
-    //             );
-    //             console.log('Request Details:', response);
-    //             setItem(response);
-    //         } catch (error) {
-    //             console.error('Error fetching item details:', error);
-    //         }
-    //     };
-    //     fetchItemDetails();
-    // }, [params.relicsid]);
 
     const goBack = () => {
         navigate(-1);
@@ -196,15 +173,11 @@ const Relic = () => {
                 <h3>{renderFieldValue(item?.name)}</h3>
                 <div>
                     <h6>Категорія:</h6>
-                    {categories.length === 0 ? (
-                        renderFieldValue(null)
-                    ) : (
-                        <p>
-                            {categories
-                                .map((category) => category.name)
-                                .join(', ')}
-                        </p>
-                    )}
+                    {item?.categoryDTOs?.length === 0
+                        ? renderFieldValue(null)
+                        : item?.categoryDTOs
+                              .map((category: categoryDTOs) => category.name)
+                              .join(', ')}
                 </div>
                 <div className="relic_col">
                     <h6>Колекція:</h6>
@@ -241,8 +214,7 @@ const Relic = () => {
                 <div className="relic_divider" />
 
                 <h4>Вторинна інформація</h4>
-                {/* waiting for back */}
-
+                
                 <div>
                     <h6>Первинний інвентарний номер:</h6>
                     <p>{renderFieldValue(item?.formerInventoryNumber)}</p>

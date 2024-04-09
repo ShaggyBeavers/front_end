@@ -1,8 +1,9 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useGoogleLogin } from '@react-oauth/google';
-import React from 'react';
+// import { useGoogleLogin } from '@react-oauth/google';
+import React, { useState } from 'react';
 import './register.css';
 import AuthAPI from '../../app/api/Account/Auth/auth';
+import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
 interface RegisterForm {
@@ -18,28 +19,58 @@ export default function Register() {
     const { register, handleSubmit, formState, getValues, reset } =
         useForm<RegisterForm>();
     const { errors } = formState;
-    const [showExistsMessage, setShowExistsMessage] = React.useState(false);
+    const [showExistsMessage, setShowExistsMessage] = useState(false);
+    const [passwordRequirements, setPasswordRequirements] = useState<{
+        length: boolean | null;
+        number: boolean | null;
+        uppercase: boolean | null;
+    }>({
+        length: null,
+        number: null,
+        uppercase: null,
+    });
 
-    const submitForm: SubmitHandler<RegisterForm> = async (data) => {
-        try {
-            await AuthAPI.register(data);
-            reset();
-            setShowExistsMessage(false);
-            navigate('/login');
-        } catch (error: any) {
-            if (error.response.status && error.response.status === 409) {
-                reset();
-                setShowExistsMessage(true);
-            } else {
-                console.log(error);
-                setShowExistsMessage(false);
-            }
-        }
+    const resetFormState = (showExists = false) => {
+        reset();
+        setShowExistsMessage(showExists);
+        setPasswordRequirements({
+            length: null,
+            number: null,
+            uppercase: null,
+        });
     };
 
-    const login = useGoogleLogin({
-        onSuccess: (tokenResponse) => console.log(tokenResponse),
+    const mutation = useMutation({
+        mutationFn: (data: RegisterForm) => AuthAPI.register(data),
+        onSuccess: () => {
+            resetFormState();
+            navigate('/login');
+        },
+        onError: (error: any) => {
+            console.log(error);
+            if (error.response && error.response.status === 409) {
+                resetFormState(true);
+            } else {
+                resetFormState();
+            }
+        },
     });
+
+    const submitForm: SubmitHandler<RegisterForm> = (data) => {
+        mutation.mutate(data);
+    };
+    // const login = useGoogleLogin({
+    //     onSuccess: (tokenResponse) => console.log(tokenResponse),
+    // });
+
+    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const password = e.target.value;
+        setPasswordRequirements({
+            length: password.length >= 8,
+            number: /\d/.test(password),
+            uppercase: /[A-Z]/.test(password),
+        });
+    };
 
     return (
         <div className="register">
@@ -126,6 +157,7 @@ export default function Register() {
                                     },
                                 })}
                                 placeholder="введіть пароль"
+                                onChange={handlePasswordChange}
                             />
                             <p>{errors.password?.message as string}</p>
                         </div>
@@ -175,23 +207,31 @@ export default function Register() {
                         </p>
                     </div>
                 )}
-
-                {errors.password && (
+                {passwordRequirements.length !== null && (
                     <div className="password_message">
-                        <p>Вимоги до пароля:</p>
-                        <ul>
-                            <li>
-                                <p style={{ color: '#19BE6F' }}>8 символів</p>
-                            </li>
-                            <li>
-                                <p style={{ color: 'red' }}>1 число</p>
-                            </li>
-                            <li>
-                                <p style={{ color: 'red' }}>
-                                    1 буква у верхньому регістрі
-                                </p>
-                            </li>
-                        </ul>
+                        <p>Вимоги до пароля</p>
+                        {Object.entries(passwordRequirements).map(
+                            ([requirement, fulfilled]) => (
+                                <div key={requirement}>
+                                    <p
+                                        style={{
+                                            color: fulfilled
+                                                ? '#19BE6F'
+                                                : 'red',
+                                        }}
+                                    >
+                                        <span style={{ color: 'black' }}>
+                                            &#8226;
+                                        </span>
+                                        {requirement === 'length'
+                                            ? ' 8 символів'
+                                            : requirement === 'number'
+                                              ? ' 1 число'
+                                              : ' 1 буква у верхньому регістрі'}
+                                    </p>
+                                </div>
+                            )
+                        )}
                     </div>
                 )}
             </div>

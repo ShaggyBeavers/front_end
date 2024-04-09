@@ -206,7 +206,6 @@ const Catalogue = () => {
         const pageParam = searchParams.get('page');
         const categoryParam = searchParams.get('category');
         const pageNumber = pageParam ? parseInt(pageParam, 10) : 1;
-
         setCurrentPage(pageNumber);
 
         if (categoryParam) {
@@ -220,15 +219,15 @@ const Catalogue = () => {
         }
         fetchData(pageNumber);
     }, [location.search]);
-
-    // fetch data on page or filter change
+    
     useEffect(() => {
-        fetchData(currentPage);
-    }, [currentPage, navigate, selectedFilterOptions]);
+        fetchData(currentPage).then(() => {
+            getIdsFromItems(result.content);
+        });
+    }, [ navigate, selectedFilterOptions]);
 
     const paginate = (pageNumber: number) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
-            setCurrentPage(pageNumber);
             navigate(`?page=${pageNumber}`);
             scrollToTop();
         }
