@@ -28,13 +28,16 @@ const Categories = () => {
 
     return (
         <div className="categories" id="categories">
-            <Link to="/catalogue?page=1" className='cat_link_all'>Подивитись усі:</Link>
+            <Link to="/catalogue?page=1" className="cat_link_all">
+                Подивитись усі:
+            </Link>
             <div className="categories_con">
-                {categories.map((category) => (
+                {categories.map((category, idx) => (
                     <Link
                         to={`/catalogue?page=1&category=${encodeURIComponent(category.query)}`}
                     >
                         <Category
+                            key={idx}
                             title={category.title}
                             picture={category.pic}
                         />
