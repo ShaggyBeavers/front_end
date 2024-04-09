@@ -91,7 +91,7 @@
 .exists_message,
 .password_message {
     position: absolute;
-    top: 60%;
+    top: 65%;
     left: 100%;
     width: 12rem;
 }
@@ -106,8 +106,13 @@
     width: max-content;
 }
 
-.password_message ul {
-    margin-left: 1rem;
+.password_message {
+    display: flex;
+    flex-direction: column;
+}
+
+.password_message > :first-child {
+    margin-bottom: 0.2rem; 
 }
 
 .password_message p {
