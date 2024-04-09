@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import Search from '../Search/search';
@@ -12,16 +12,34 @@ import CategoryAPI from '../../app/api/Category/category';
 import HistoricalPeriodAPI from '../../app/api/HistoricalPeriod/historicalPeriod';
 import TechniqueAPI from '../../app/api/Technique/technique';
 import Relic from '../Relic/Relic';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import {
+    infiniteQueryOptions,
+    useMutation,
+    useQuery,
+} from '@tanstack/react-query';
 import { array } from 'zod';
+import { useWindowSize } from '@react-hook/window-size';
 import { unzipSync } from 'fflate';
 import { Buffer } from 'buffer';
+// import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
+import {
+    Masonry,
+    useContainerPosition,
+    useResizeObserver,
+    usePositioner,
+    MasonryScroller,
+} from 'masonic';
+import RelicItem from './relicItem';
 
 interface Photo {
     //FOR STYLING
     id: number;
     thumbnailUrl: string;
     title: string;
+}
+
+interface RelicWithDisplayImage extends Relic {
+    displayImage?: string;
 }
 
 interface GetAllRelicsResponse {
@@ -108,6 +126,10 @@ const Catalogue = () => {
         numberOfElements: 0,
         empty: true,
     });
+    const handleSetResult = (data: any) => {
+        setResult(data);
+    };
+
     const [selectedCategory, setSelectedCategory] = useState<string | null>(
         null
     );
@@ -159,30 +181,58 @@ const Catalogue = () => {
             setResult(response);
             const idsList = getIdsFromItems(response.content);
             setIds(idsList.map((id) => ({ id: id, image: '' })));
-            console.log('ids', ids);
             if (ids.length > 0) {
                 // downloadImages(ids);
                 const reader = new FileReader();
-                reader.onload = (e) => {
-                    const arrayBuffer = new Uint8Array(
-                        reader.result as ArrayBuffer
-                    );
 
-                    const imagesArray = unzipSync(arrayBuffer);
-                    let tmp: ImageId[] = [];
-                    for (const key in imagesArray) {
-                        for (const key in imagesArray) {
-                            const modifiedKey: number = Number(
-                                key.substring(0, key.indexOf('_'))
-                            );
-                            tmp.push({
-                                id: modifiedKey,
-                                image: Buffer.from(imagesArray[key]).toString(
-                                    'base64'
-                                ),
-                            });
-                        }
+                reader.onload = (e) => {
+                    const arrayBuffer = reader.result as ArrayBuffer;
+                    const imagesArray = unzipSync(new Uint8Array(arrayBuffer));
+                    const batchSize = 15; // Adjust the batch size as needed
+                    const tmp: ImageId[] = [];
+                    for (
+                        let i = 0;
+                        i < Object.keys(imagesArray).length;
+                        i += batchSize
+                    ) {
+                        const batch = Object.entries(imagesArray).slice(
+                            i,
+                            i + batchSize
+                        );
+                        tmp.push(
+                            ...batch.map(([key, value]) => {
+                                const modifiedKey = parseInt(key, 10);
+                                return {
+                                    id: modifiedKey,
+                                    image: Buffer.from(value).toString(
+                                        'base64'
+                                    ),
+                                };
+                            })
+                        );
                     }
+
+                    setResult((prevResult) => {
+                        const updatedContent = prevResult.content.map(
+                            (item) => {
+                                const matchingId = tmp.find(
+                                    (id) => id.id === item.id
+                                );
+                                if (matchingId) {
+                                    return {
+                                        ...item,
+                                        displayImage: matchingId.image,
+                                    };
+                                }
+                                return item;
+                            }
+                        );
+                        return {
+                            ...prevResult,
+                            content: updatedContent,
+                        };
+                    });
+
                     setIds(tmp);
                 };
 
@@ -221,10 +271,8 @@ const Catalogue = () => {
     }, [location.search]);
     
     useEffect(() => {
-        fetchData(currentPage).then(() => {
-            getIdsFromItems(result.content);
-        });
-    }, [ navigate, selectedFilterOptions]);
+        fetchData(currentPage);
+    }, [navigate, selectedFilterOptions]);
 
     const paginate = (pageNumber: number) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -342,14 +390,31 @@ const Catalogue = () => {
 
     const applyFilters = () => {
         // console.log('yes,hell');
-        fetchData(currentPage).then(() => {
-            // const ids = getIdsFromItems(result.content);
-            // console.log(ids);
-        });
-
-        const ids = getIdsFromItems(result.content);
-        console.log('filters', ids);
+        fetchData(currentPage)
     };
+
+    const containerRef = useRef(null);
+    const [windowWidth, windowHeight] = useWindowSize({
+        initialWidth: window.innerWidth,
+        initialHeight: window.innerHeight,
+    });
+    const { offset, width } = useContainerPosition(containerRef, [
+        windowWidth,
+        windowHeight,
+    ]);
+    const positioner = usePositioner(
+        {
+            // width: width * 0.7,
+            width: window.innerWidth * 0.5,
+            columnGutter: 20,
+            columnWidth: 120,
+            columnCount: 3,
+            // rowGutter: 15,
+        },
+        [result.content]
+    );
+
+    const resizeObserver = useResizeObserver(positioner);
 
     return (
         <>
@@ -358,6 +423,11 @@ const Catalogue = () => {
             ) : (
                 <div className="catalogue-container">
                     <div className="cat_left">
+                        <div className="cat_search">
+                            <Search setSearchData={handleSetResult} 
+                            page={0}
+                            size={20}/>
+                        </div>
                         <div className="cat_filter">
                             <div className="cat_photo">
                                 <h6>Фото</h6>
@@ -408,38 +478,38 @@ const Catalogue = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="cat_right">
-                        <Search />
-
-                        <div className="cat-items-container">
-                            {result &&
-                                result.content.map((item) => (
-                                    <Link
-                                        key={item.id}
-                                        to={`/catalogue/${item.id}`}
-                                        className="cat-item"
-                                    >
-                                        {/* <img src={item.imageUrl} /> */}
-                                        {ids.find((id) => id.id === item.id)
-                                            ?.image && (
-                                            <img
-                                                src={`data:image/png;base64,${ids.find((id) => id.id === item.id)?.image}`}
-                                            />
-                                        )}
-                                        <div className="cat-item-title">
-                                            <p>{item.name}</p>
-                                        </div>
-                                    </Link>
-                                ))}
+                    {/* <div className="cat_right"> */}
+                    <div className="w-full">
+                        {/* <div className="cat-items-container"> */}
+                        <div className="w-full">
+                            <MasonryScroller
+                                items={result.content}
+                                positioner={positioner}
+                                resizeObserver={resizeObserver}
+                                height={windowHeight}
+                                offset={offset}
+                                // columnGutter={5}
+                                // rowGutter={15}
+                                // columnCount={3}
+                                // columnWidth={140}
+                                overscanBy={Infinity}
+                                render={RelicItem}
+                            />
+                            {/* {result &&
+                                    result.content.map((item) => (
+                                        
+                                    ))} */}
                         </div>
 
-                        <Pagination
-                            totalPages={totalPages}
-                            currentPage={currentPage}
-                            onPageChange={paginate}
-                        />
-                        <div className="to_top" onClick={scrollToTop}>
-                            Перейти до гори
+                        <div className="flex flex-col items-center">
+                            <Pagination
+                                totalPages={totalPages}
+                                currentPage={currentPage}
+                                onPageChange={paginate}
+                            />
+                            <div className="to_top" onClick={scrollToTop}>
+                                Перейти до гори
+                            </div>
                         </div>
                         {isFilterModalOpen && (
                             <div
