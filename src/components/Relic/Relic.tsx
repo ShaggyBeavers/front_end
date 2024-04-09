@@ -5,10 +5,9 @@ import RelicAPI from '../../app/api/Relic/relic';
 import { infiniteQueryOptions, useQuery } from '@tanstack/react-query';
 // import { unzipFile } from '../../../src/lib/utils';
 import { set } from 'zod';
-import JSZip from 'jszip';
-// import * from 'uzip';
-import { gzipSync, decompressSync, unzipSync } from 'fflate';
-import { get } from 'http';
+import { gzipSync, decompressSync, unzipSync, unzip } from 'fflate';
+import { Buffer } from 'buffer';
+import { imageProcessing } from '../../../src/lib/imageFunc';
 
 interface RelicPropertyDTO {
     name: string;
@@ -134,33 +133,23 @@ const Relic = () => {
 
     useEffect(() => {
         if (getImages.isSuccess) {
-            // console.log('getImages', getImages.data);
+            // imageProcessing({ setImages, data: getImages.data });
             const reader = new FileReader();
             reader.onload = function (e) {
-                // console.log('target', e?.target?.result);
-                // console.log('reader', reader.result);
-                // const blobData = e?.target?.result;
-
                 const arrayBuffer = new Uint8Array(
                     reader.result as ArrayBuffer
                 );
                 const imagesArray = unzipSync(arrayBuffer);
-                console.log('imagesArray', imagesArray);
                 let keys: any[] = [];
                 for (const key in imagesArray) {
                     keys.push(key);
-                    setImages((prevImages) => [
-                        ...prevImages,
-                        btoa(
-                            String.fromCharCode.apply(
-                                null,
-                                Array.from(new Uint8Array(imagesArray[key]))
-                            )
-                        ),
-                    ]);
+                    const newImage = Buffer.from(imagesArray[key]).toString(
+                        'base64'
+                    );
+
+                    setImages((prevImages) => [...prevImages, newImage]);
                 }
                 setImageNames(keys);
-                console.log('Image names-keys', imageNames);
             };
             reader.onerror = function (e) {
                 console.error('Error reading file:', e?.target?.error);
@@ -168,6 +157,7 @@ const Relic = () => {
             reader.readAsArrayBuffer(getImages.data);
         }
     }, [getImages.data]);
+
     return (
         <div className="relic_con">
             <div className="relic_left">
