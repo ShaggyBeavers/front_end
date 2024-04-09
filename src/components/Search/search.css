@@ -7,7 +7,6 @@
 .search_input {
     padding: 0.8125rem 1.875rem 0.8125rem 1.5rem;
     flex: 1;
-    width: 100%;
     background:
         linear-gradient(white, white) padding-box,
         linear-gradient(to right, #bf98c6, #4b8bfa) border-box;

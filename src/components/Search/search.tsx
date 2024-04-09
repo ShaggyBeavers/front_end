@@ -25,18 +25,15 @@ const Search = ({ setSearchData, page, size }: any) => {
 
     return (
         <div className="search-container">
-            <form onSubmit={performSearch}>
+            <form onSubmit={performSearch} className="w-full">
                 <input
-                    className="search_input"
+                    className="search_input w-full"
                     type="text"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     placeholder="Знайти"
                 />
-                <button
-                    type="submit"
-                    className="search_btn"
-                >
+                <button type="submit" className="search_btn">
                     <img src="./icons/search.svg" />
                 </button>
             </form>
