@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
+import {
+    useNavigate,
+    useLocation,
+    Link,
+    useSearchParams,
+} from 'react-router-dom';
 import Search from '../Search/search';
 import './catalogue.css';
 import SwitchBtn from '../SwitchButton/switch_btn';
@@ -97,6 +102,7 @@ const Catalogue = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [ids, setIds] = useState<ImageId[]>([]);
+    const [searchParam, setSearchParam] = useSearchParams();
     // const [items, setItems] = useState<Photo[]>([]);   FOR STYLING
     const [result, setResult] = useState<GetAllRelicsResponse>({
         totalPages: 0,
@@ -159,7 +165,7 @@ const Catalogue = () => {
         mutationFn: async (entityIds: number[]) =>
             await RelicAPI.getRelicFirstFile({ entityIds: entityIds }),
         onSuccess: (data) => {
-            console.log('downloadImages', typeof data);
+            // console.log('downloadImages', typeof data);
         },
         onError: (error) => {
             console.error('Error downloading images:', error);
@@ -181,7 +187,7 @@ const Catalogue = () => {
             setResult(response);
             const idsList = getIdsFromItems(response.content);
             setIds(idsList.map((id) => ({ id: id, image: '' })));
-            if (ids.length > 0) {
+            if (idsList.length > 0) {
                 // downloadImages(ids);
                 const reader = new FileReader();
 
@@ -252,9 +258,9 @@ const Catalogue = () => {
     };
 
     useEffect(() => {
-        const searchParams = new URLSearchParams(location.search);
-        const pageParam = searchParams.get('page');
-        const categoryParam = searchParams.get('category');
+        // const searchParams = new URLSearchParams(location.search);
+        const pageParam = searchParam.get('page');
+        const categoryParam = searchParam.get('category');
         const pageNumber = pageParam ? parseInt(pageParam, 10) : 1;
         setCurrentPage(pageNumber);
 
@@ -269,7 +275,7 @@ const Catalogue = () => {
         }
         fetchData(pageNumber);
     }, [location.search]);
-    
+
     useEffect(() => {
         fetchData(currentPage);
     }, [navigate, selectedFilterOptions]);
@@ -390,7 +396,7 @@ const Catalogue = () => {
 
     const applyFilters = () => {
         // console.log('yes,hell');
-        fetchData(currentPage)
+        fetchData(currentPage);
     };
 
     const containerRef = useRef(null);
@@ -424,9 +430,11 @@ const Catalogue = () => {
                 <div className="catalogue-container">
                     <div className="cat_left">
                         <div className="cat_search">
-                            <Search setSearchData={handleSetResult} 
-                            page={0}
-                            size={20}/>
+                            <Search
+                                setSearchData={handleSetResult}
+                                page={0}
+                                size={20}
+                            />
                         </div>
                         <div className="cat_filter">
                             <div className="cat_photo">
