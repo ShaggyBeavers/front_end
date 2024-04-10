@@ -62,7 +62,7 @@ export default function Login() {
             setShowNotFoundMessage(false);
             navigate('/profile', { replace: true });
         } catch (error: any) {
-            if (error.response && error.response.status === 403) {
+            if (error.response && error.response.status === 401) {
                 reset();
                 setShowNotFoundMessage(true);
             } else {
@@ -145,7 +145,7 @@ export default function Login() {
                 </div>
                 {showNotFoundMessage && (
                     <div className="not_found_message">
-                        <p>Акаунт не знайдено. Перевірте введені дані</p>
+                        <p>Дані не коректні. Спробуйте ще раз.</p>
                     </div>
                 )}
             </div>

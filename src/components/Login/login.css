@@ -101,11 +101,20 @@
 
 .not_found_message {
     position: absolute;
-    top: 55%;
-    left: 95%;
+    top: 58%;
+    left: 102%;
+    text-align: left;
     width: 10rem;
 }
 
 .not_found_message p {
     color: red;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 600px) {
+    .not_found_message {
+        width: 8rem; 
+        top:54%;   
+    }
 }
