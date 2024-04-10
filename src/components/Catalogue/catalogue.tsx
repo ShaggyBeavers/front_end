@@ -16,6 +16,8 @@ import RelicAPI from '../../app/api/Relic/relic';
 import CategoryAPI from '../../app/api/Category/category';
 import HistoricalPeriodAPI from '../../app/api/HistoricalPeriod/historicalPeriod';
 import TechniqueAPI from '../../app/api/Technique/technique';
+import MuseumAPI from '../../app/api/Museum/museum';
+import RegionAPI from '../../app/api/Region/region';
 import Relic from '../Relic/Relic';
 import {
     infiniteQueryOptions,
@@ -77,11 +79,15 @@ interface GetAllRelicsResponse {
 }
 
 export interface Filters {
+    name: string;
     historicalPeriods: string[];
     statuses: string[];
     techniques: string[];
     categories: string[];
-    [key: string]: string[];
+    regions: string[];
+    museums: string[];
+    file:boolean;
+    [key: string]: any;
 }
 
 interface ImageId {
@@ -141,10 +147,14 @@ const Catalogue = () => {
     );
     const [selectedFilterOptions, setSelectedFilterOptions] = useState<Filters>(
         {
+            name: '',
             historicalPeriods: [],
             statuses: [],
             techniques: [],
             categories: [],
+            museums: [],
+            regions: [],
+            file: false
         }
     );
     const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
@@ -266,12 +276,10 @@ const Catalogue = () => {
 
         if (categoryParam) {
             const categoriesArray = categoryParam.split(',');
-            setSelectedFilterOptions({
+            setSelectedFilterOptions(prevState => ({
+                ...prevState,
                 categories: categoriesArray,
-                historicalPeriods: [],
-                statuses: [],
-                techniques: [],
-            });
+            }));
         }
         fetchData(pageNumber);
     }, [location.search]);
@@ -280,13 +288,21 @@ const Catalogue = () => {
         fetchData(currentPage);
     }, [navigate, selectedFilterOptions]);
 
+    useEffect(()=>{console.log(selectedFilterOptions)},[selectedFilterOptions])
+
     const paginate = (pageNumber: number) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
             navigate(`?page=${pageNumber}`);
             scrollToTop();
         }
     };
-
+        
+    const handleToggleFileFilter = (isChecked:boolean) => {
+        setSelectedFilterOptions((prevOptions) => ({
+            ...prevOptions,
+            file: isChecked, 
+        }));
+    };
     const handleFilterCategoryClick = (category: string) => {
         if (category === selectedCategory) {
             setIsFilterModalOpen(false);
@@ -312,10 +328,10 @@ const Catalogue = () => {
             [category]:
                 option === 'clear'
                     ? []
-                    : prevOptions[category]
-                      ? prevOptions[category].includes(selectedValue)
+                    : Array.isArray(prevOptions[category]) 
+                      ? prevOptions[category].includes(selectedValue) 
                           ? prevOptions[category].filter(
-                                (item) => item !== selectedValue
+                                (item: string) => item !== selectedValue
                             )
                           : [...prevOptions[category], selectedValue]
                       : [selectedValue],
@@ -323,46 +339,22 @@ const Catalogue = () => {
     };
 
     useEffect(() => {
-        const fetchCategories = async () => {
+        const fetchData = async ( apiFunction: () => Promise<{ name: string }[]>, 
+        setStateFunction: (names: string[]) => void) => {
             try {
-                const response = await CategoryAPI.getCategories();
-                const categoryNames = response.map(
-                    (item: { name: string }) => item.name
-                );
-                setCategories(categoryNames);
+                const response = await apiFunction();
+                const names = response.map((item) => item.name);
+                setStateFunction(names);
             } catch (error) {
-                console.error('Error fetching categories:', error);
+                console.error(`Error fetching data: ${error}`);
             }
         };
-
-        const fetchHistoricalPeriods = async () => {
-            try {
-                const response =
-                    await HistoricalPeriodAPI.getHistoricalPeriods();
-                const periodNames = response.map(
-                    (item: { name: string }) => item.name
-                );
-                setHistoricalPeriods(periodNames);
-            } catch (error) {
-                console.error('Error fetching historical periods:', error);
-            }
-        };
-
-        const fetchTechniques = async () => {
-            try {
-                const response = await TechniqueAPI.getTechniques();
-                const techniqueNames = response.map(
-                    (item: { name: string }) => item.name
-                );
-                setTechniques(techniqueNames);
-            } catch (error) {
-                console.error('Error fetching techniques:', error);
-            }
-        };
-
-        fetchCategories();
-        fetchHistoricalPeriods();
-        fetchTechniques();
+    
+        fetchData(CategoryAPI.getCategories, setCategories);
+        fetchData(HistoricalPeriodAPI.getHistoricalPeriods, setHistoricalPeriods);
+        fetchData(TechniqueAPI.getTechniques, setTechniques);
+        fetchData(MuseumAPI.getMuseums,setMuseums);
+        fetchData(RegionAPI.getRegions,setRegions);
     }, []);
 
     const filterTitles = [
@@ -384,6 +376,8 @@ const Catalogue = () => {
     const [categories, setCategories] = useState<string[]>([]);
     const [historicalPeriods, setHistoricalPeriods] = useState<string[]>([]);
     const [techniques, setTechniques] = useState<string[]>([]);
+    const [museums, setMuseums] = useState<string[]>([]);
+    const [regions, setRegions] = useState<string[]>([]);
     const statusOptions = [
         { value: 'DESTROYED', label: 'Знищено' },
         { value: 'STOLEN', label: 'Вкрадено' },
@@ -395,7 +389,6 @@ const Catalogue = () => {
     };
 
     const applyFilters = () => {
-        // console.log('yes,hell');
         fetchData(currentPage);
     };
 
@@ -439,7 +432,7 @@ const Catalogue = () => {
                         <div className="cat_filter">
                             <div className="cat_photo">
                                 <h6>Фото</h6>
-                                <SwitchBtn />
+                                <SwitchBtn onToggle={handleToggleFileFilter}/>
                             </div>
                             <div className="filter_categories">
                                 <ul>
