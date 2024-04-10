@@ -86,7 +86,7 @@ export interface Filters {
     categories: string[];
     regions: string[];
     museums: string[];
-    file:boolean;
+    file: boolean;
     [key: string]: any;
 }
 
@@ -138,9 +138,7 @@ const Catalogue = () => {
         numberOfElements: 0,
         empty: true,
     });
-    const handleSetResult = (data: any) => {
-        setResult(data);
-    };
+
 
     const [selectedCategory, setSelectedCategory] = useState<string | null>(
         null
@@ -154,7 +152,7 @@ const Catalogue = () => {
             categories: [],
             museums: [],
             regions: [],
-            file: false
+            file: false,
         }
     );
     const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
@@ -276,7 +274,7 @@ const Catalogue = () => {
 
         if (categoryParam) {
             const categoriesArray = categoryParam.split(',');
-            setSelectedFilterOptions(prevState => ({
+            setSelectedFilterOptions((prevState) => ({
                 ...prevState,
                 categories: categoriesArray,
             }));
@@ -288,7 +286,9 @@ const Catalogue = () => {
         fetchData(currentPage);
     }, [navigate, selectedFilterOptions]);
 
-    useEffect(()=>{console.log(selectedFilterOptions)},[selectedFilterOptions])
+    useEffect(() => {
+        console.log(selectedFilterOptions);
+    }, [selectedFilterOptions]);
 
     const paginate = (pageNumber: number) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -296,11 +296,11 @@ const Catalogue = () => {
             scrollToTop();
         }
     };
-        
-    const handleToggleFileFilter = (isChecked:boolean) => {
+
+    const handleToggleFileFilter = (isChecked: boolean) => {
         setSelectedFilterOptions((prevOptions) => ({
             ...prevOptions,
-            file: isChecked, 
+            file: isChecked,
         }));
     };
     const handleFilterCategoryClick = (category: string) => {
@@ -328,8 +328,8 @@ const Catalogue = () => {
             [category]:
                 option === 'clear'
                     ? []
-                    : Array.isArray(prevOptions[category]) 
-                      ? prevOptions[category].includes(selectedValue) 
+                    : Array.isArray(prevOptions[category])
+                      ? prevOptions[category].includes(selectedValue)
                           ? prevOptions[category].filter(
                                 (item: string) => item !== selectedValue
                             )
@@ -339,8 +339,10 @@ const Catalogue = () => {
     };
 
     useEffect(() => {
-        const fetchData = async ( apiFunction: () => Promise<{ name: string }[]>, 
-        setStateFunction: (names: string[]) => void) => {
+        const fetchData = async (
+            apiFunction: () => Promise<{ name: string }[]>,
+            setStateFunction: (names: string[]) => void
+        ) => {
             try {
                 const response = await apiFunction();
                 const names = response.map((item) => item.name);
@@ -349,12 +351,15 @@ const Catalogue = () => {
                 console.error(`Error fetching data: ${error}`);
             }
         };
-    
+
         fetchData(CategoryAPI.getCategories, setCategories);
-        fetchData(HistoricalPeriodAPI.getHistoricalPeriods, setHistoricalPeriods);
+        fetchData(
+            HistoricalPeriodAPI.getHistoricalPeriods,
+            setHistoricalPeriods
+        );
         fetchData(TechniqueAPI.getTechniques, setTechniques);
-        fetchData(MuseumAPI.getMuseums,setMuseums);
-        fetchData(RegionAPI.getRegions,setRegions);
+        fetchData(MuseumAPI.getMuseums, setMuseums);
+        fetchData(RegionAPI.getRegions, setRegions);
     }, []);
 
     const filterTitles = [
@@ -362,12 +367,16 @@ const Catalogue = () => {
         'Статус',
         'Історичний період',
         'Техніка',
+        'Музей',
+        'Регіон'
     ];
     const filterCategories = [
         'categories',
         'statuses',
         'historicalPeriods',
         'techniques',
+        'museums',
+        'regions'
     ];
     const translatedTitles = filterCategories.map(
         (category, index) => filterTitles[index] || category
@@ -424,15 +433,13 @@ const Catalogue = () => {
                     <div className="cat_left">
                         <div className="cat_search">
                             <Search
-                                setSearchData={handleSetResult}
-                                page={0}
-                                size={20}
+                               setSelectedFilterOptions={setSelectedFilterOptions}
                             />
                         </div>
                         <div className="cat_filter">
                             <div className="cat_photo">
                                 <h6>Фото</h6>
-                                <SwitchBtn onToggle={handleToggleFileFilter}/>
+                                <SwitchBtn onToggle={handleToggleFileFilter} />
                             </div>
                             <div className="filter_categories">
                                 <ul>
@@ -461,7 +468,13 @@ const Catalogue = () => {
                                                         : category ===
                                                             'techniques'
                                                           ? techniques
-                                                          : []
+                                                          : category ===
+                                                              'museums'
+                                                            ? museums
+                                                            : category ===
+                                                                'regions'
+                                                              ? regions
+                                                              : []
                                             }
                                             selectedFilterOptions={
                                                 selectedFilterOptions
