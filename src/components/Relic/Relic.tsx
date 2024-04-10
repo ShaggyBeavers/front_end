@@ -133,7 +133,6 @@ const Relic = () => {
 
     useEffect(() => {
         if (getImages.isSuccess) {
-            console.log('Images:', typeof getImages.data);
             // imageProcessing({ setImages, data: getImages.data });
             const reader = new FileReader();
             reader.onload = function (e) {

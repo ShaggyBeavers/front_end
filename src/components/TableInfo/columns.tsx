@@ -79,7 +79,7 @@ let tmpColumns: any = [
         ),
         cell: ({ row }: any) => {
             const categories = row.getValue('categoriesDTO');
-            console.log(categories);
+            // console.log(categories);
             let labels = categories.map((category: categoryType) => {
                 return (
                     categories.find(

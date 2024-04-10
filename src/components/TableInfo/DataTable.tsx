@@ -93,7 +93,7 @@ export function DataTable<TData, TValue>({
         mutationFn: async (reportId: number) =>
             await ReportAPI.getReport(reportId),
         onSuccess: (response: any) => {
-            console.log('Report fetched', data);
+            // console.log('Report fetched', data);
             setSelectedReport(response.data);
             setIsModalOpen(true);
         },

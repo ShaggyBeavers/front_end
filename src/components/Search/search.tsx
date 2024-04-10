@@ -8,12 +8,12 @@ const Search = ({ setSearchData, page, size }: any) => {
 
     const relicsSearch = useMutation({
         mutationFn: () => RelicAPI.searchRelics(searchTerm, page, 20),
-        onMutate: () => {
-            console.log('onMutate', searchTerm);
-        },
-        onSuccess: (data) => {
-            console.log('onSuccess', data);
-        },
+        // onMutate: () => {
+        //     // console.log('onMutate', searchTerm);
+        // },
+        // onSuccess: (data) => {
+        //     // console.log('onSuccess', data);
+        // },
     });
 
     const performSearch = (e: React.FormEvent) => {

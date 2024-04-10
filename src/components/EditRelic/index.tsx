@@ -86,7 +86,7 @@ export const EditRelic = () => {
         mutationFn: async ({ relicId, file }: { relicId: number; file: any }) =>
             await RelicAPI.uploadRelicFile(relicId, file),
         onSuccess: () => {
-            console.log('File uploaded');
+            // console.log('File uploaded');
             queryClient.invalidateQueries({ queryKey: ['relicImages'] });
         },
         onError: (error) => {
@@ -101,10 +101,10 @@ export const EditRelic = () => {
     const addRelic = useMutation({
         mutationFn: RelicAPI.createRelic,
         onSuccess: (data) => {
-            console.log(
-                'Relic added. Now we can start adding photos to: ',
-                data.data
-            );
+            // console.log(
+            //     'Relic added. Now we can start adding photos to: ',
+            //     data.data
+            // );
             // files.forEach((file) => {
             //     if (file?.file) {
             //         formData.append('file', file.file);

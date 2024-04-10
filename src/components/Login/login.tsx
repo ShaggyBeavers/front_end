@@ -29,7 +29,7 @@ export default function Login() {
     const { data, isPending, mutate, mutateAsync } = useMutation({
         mutationFn: AuthAPI.login,
         onSuccess: (data) => {
-            console.log('Use is done: ', data);
+            // console.log('Use is done: ', data);
         },
         onError: (error) => {
             alert(error);

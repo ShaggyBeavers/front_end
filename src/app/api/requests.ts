@@ -21,14 +21,10 @@ export const removeHeaderToken = () => {
     delete axios.defaults.headers.common.Authorization;
 };
 
-async function getNewAccessToken() {
-    console.log('I wish you were normal');
-}
-
 authAPi.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('ACCESS_TOKEN');
-        console.log('Interceptor triggered request');
+        // console.log('Interceptor triggered request');
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
@@ -45,7 +41,7 @@ authAPi.interceptors.request.use(
 
 authAPi.interceptors.response.use(
     (response) => {
-        console.log('Interceptor triggered response:');
+        // console.log('Interceptor triggered response:');
         return response;
     },
     async (error) => {
@@ -63,7 +59,7 @@ authAPi.interceptors.response.use(
             // const accessToken = await getNewAccessToken();
             // localStorage.setItem('ACCESS_TOKEN', accessToken);
             // axios.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken;
-            console.log('Unauthorized');
+            // console.log('Unauthorized');
             return axios(originalRequest);
         }
         return Promise.reject(error);

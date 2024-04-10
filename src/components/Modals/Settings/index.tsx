@@ -87,7 +87,7 @@ const Settings = () => {
         const email = userProfile.data?.data.email;
         const firstName = data.firstName || userProfile.data?.data.firstName;
         const lastName = data.lastName || userProfile.data?.data.lastName;
-        console.log(data);
+        // console.log(data);
 
         if (data.firstName || data.lastName) {
             editUser.mutate({

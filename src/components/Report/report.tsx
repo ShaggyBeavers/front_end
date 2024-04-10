@@ -34,7 +34,7 @@ export default function Report() {
                 categoryIds: selectedCategories.map((category) => category.id),
                 regionId: selectedRegion ? selectedRegion.id : null,
             };
-            console.log(formData);
+            // console.log(formData);
             await ReportAPI.createReport(formData);
             reset();
             setSelectedCategories([]);
