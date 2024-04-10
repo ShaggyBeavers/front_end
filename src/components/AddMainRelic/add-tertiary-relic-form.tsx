@@ -70,6 +70,9 @@ export const AddTertiaryRelicForm = ({ form }: any) => {
                                 <FormControl>
                                     <Input type="text" {...field} />
                                 </FormControl>
+                                <FormDescription>
+                                    Вкажіть авторські підписи та написи, якщо вони є
+                                </FormDescription>
                                 <FormMessage />
                             </FormItem>
                         )}

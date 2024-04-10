@@ -61,7 +61,8 @@ const relicFormSchema = z
             .number({ required_error: 'Вкажіть кількість' })
             .min(1, {
                 message: 'Кількість повинна бути більше 0',
-            }),
+            })
+            .default(1),
         inventoryNumber: z.string().optional(),
         formerInventoryNumber: z.string().optional(),
         // categories: z.array(z.any()),
@@ -111,6 +112,20 @@ export const EditRelic = () => {
             //     }
             // });
             setRelicId(data.data);
+            toast.success(`Реліквія добавлена`, {
+                description: (
+                    <>
+                        <b>{data.data.name}</b>{' '}
+                        {data.data.status && `зі статусом ${data.data.status}`}{' '}
+                        була добавлена
+                    </>
+                    // <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                    //     <code className="text-white">
+                    //         {JSON.stringify(relic, null, 2)}
+                    //     </code>
+                    // </pre>
+                ),
+            });
         },
         onSettled: () => {
             // uploadRelicFile.mutate({ relicId: relicId, file: formData });
@@ -130,6 +145,7 @@ export const EditRelic = () => {
     const form = useForm<any>({
         resolver: zodResolver(relicFormSchema),
         defaultValues: {
+            quantity: 1,
             // name: '',
             // region: '',
             // status: '',
@@ -301,15 +317,24 @@ export const EditRelic = () => {
                 console.log(error);
             });
 
-        // uploadRelicFile.mutate({ relicId: relicId, file: formData });
+        uploadRelicFile.mutate({ relicId: relicId, file: formData });
+        // toast.success(`Реліквію додано`, {
+        //     description: (
+        //         <>
+        //             <b>{relic.name}</b>{' '}
+        //             {/* {relic.status && `зі статусом ${relic.status}`}  */}
+        //             була додано
+        //         </>
+        //     ),
+        // });
 
-        toast('You submitted the following values:', {
+        toast.success(`Фотографії зафантажено`, {
             description: (
-                <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                    <code className="text-white">
-                        {JSON.stringify(relic, null, 2)}
-                    </code>
-                </pre>
+            <>
+                {files.map((file) => (
+                <div key={file.name}>{file.name}</div>
+                ))}
+            </>
             ),
         });
         form.reset({
@@ -319,7 +344,7 @@ export const EditRelic = () => {
             categories: '',
             author: '',
             creationDate: '',
-            quantity: 0,
+            quantity: 1,
             status: '',
             regionId: '',
             comment: '',

@@ -7,6 +7,7 @@ import ReactSelect from 'react-select';
 import { reportData } from '../../app/api/Report/report';
 import RegionAPI from '../../app/api/Region/region';
 import CategoryAPI from '../../app/api/Category/category';
+import { toast } from 'sonner';
 
 export default function Report() {
     const { register, handleSubmit, formState, reset, setValue } =
@@ -39,6 +40,7 @@ export default function Report() {
             reset();
             setSelectedCategories([]);
             setSelectedRegion(null);
+            toast.success('Ваша звістка успішно надіслана');
         } catch (error: any) {
             if (error) {
                 console.log(error);

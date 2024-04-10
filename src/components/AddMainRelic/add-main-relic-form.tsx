@@ -193,6 +193,9 @@ const AddMainRelic = ({ form }: any) => {
                                     options={categoriesOptions}
                                     closeMenuOnSelect={false}
                                     placeholder={'Виберіть категорію'}
+                                    noOptionsMessage={() =>
+                                        'Жодної категорії не знайдено'
+                                    }
                                     onChange={(options) =>
                                         field.onChange(
                                             options
@@ -291,6 +294,9 @@ const AddMainRelic = ({ form }: any) => {
                                     className="select"
                                     options={historicalPeriodOptions}
                                     placeholder={'Виберіть історичний період'}
+                                    noOptionsMessage={() =>
+                                        'Жодного періода не знайдено'
+                                    }
                                     onBlur={field.onBlur}
                                     value={historicalPeriodOptions.filter(
                                         (category) =>
@@ -397,7 +403,7 @@ const AddMainRelic = ({ form }: any) => {
                         control={form.control}
                         name="regionId"
                         render={({ field }) => (
-                            <FormItem>
+                            <FormItem className="flex flex-col">
                                 <FormLabel htmlFor="regionId">Регіон</FormLabel>
                                 <ReactSelect
                                     {...field}
@@ -407,6 +413,9 @@ const AddMainRelic = ({ form }: any) => {
                                     options={regionOptions}
                                     // closeMenuOnSelect={false}
                                     placeholder={'Виберіть регіон'}
+                                    noOptionsMessage={() =>
+                                        'Жодного регіона не знайдено'
+                                    }
                                     // onChange={(options) =>
                                     //     field.onChange(
                                     //         options
@@ -423,6 +432,7 @@ const AddMainRelic = ({ form }: any) => {
                                     menuPortalTarget={document.body}
                                     theme={(theme) => ({
                                         ...theme,
+                                        height: '180px',
                                         border: 'none',
                                         borderRadius: 20,
                                         fontSize: 10,
@@ -466,6 +476,9 @@ const AddMainRelic = ({ form }: any) => {
                                     options={regionOptions}
                                     // closeMenuOnSelect={false}
                                     placeholder={'Виберіть регіон'}
+                                    noOptionsMessage={() =>
+                                        'Жодного регіону не знайдено'
+                                    }
                                     // onChange={(options) =>
                                     //     field.onChange(
                                     //         options
@@ -541,6 +554,9 @@ const AddMainRelic = ({ form }: any) => {
                                     className="select"
                                     options={techniqueOptions}
                                     placeholder={'Виберіть техніку'}
+                                    noOptionsMessage={() =>
+                                        'Жодної техніки не знайдено'
+                                    }
                                     // onChange={(option, actionMeta) => {
                                     //     console.log(
                                     //         'technique',
@@ -656,6 +672,9 @@ const AddMainRelic = ({ form }: any) => {
                                         }`
                                     }
                                     placeholder={'Виберіть музей'}
+                                    noOptionsMessage={() =>
+                                        'Жодного музею нe знайдено'
+                                    }
                                     onBlur={field.onBlur}
                                     value={museumOptions.filter(
                                         (category) =>

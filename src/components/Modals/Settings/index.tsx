@@ -117,7 +117,11 @@ const Settings = () => {
 
     const userData = userProfile.data?.data;
 
-    const categories = userData.categories;
+    interface Region {
+        id: string;
+        name: string;
+    }
+    const categories: Region[] = userData.categories;
     const regions = userData.regions;
 
     return (
@@ -362,10 +366,10 @@ const Settings = () => {
                             <ul>
                                 {categories.map((category: any) => (
                                     <li
-                                        key={category.value}
+                                        key={category.id}
                                         value={category.value}
                                     >
-                                        {category.label}
+                                        {category.value}
                                     </li>
                                 ))}
                             </ul>
@@ -393,8 +397,8 @@ const Settings = () => {
                         <div className="regions-list">
                             <ul>
                                 {regions.map((region: any) => (
-                                    <li key={region.value} value={region.value}>
-                                        {region.label}
+                                    <li key={region.id} value={region.name}>
+                                        {region.name}
                                     </li>
                                 ))}
                             </ul>

@@ -6,7 +6,7 @@ const ProfilePage = () => (
     <>
         <NavBar />
         <Profile />
-        <Toaster />
+        <Toaster richColors />
     </>
 );
 
