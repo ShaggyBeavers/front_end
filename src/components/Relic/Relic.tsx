@@ -2,13 +2,32 @@ import React, { useEffect, useState } from 'react';
 import './relic.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import RelicAPI from '../../app/api/Relic/relic';
-import { infiniteQueryOptions, useQuery } from '@tanstack/react-query';
+import {
+    infiniteQueryOptions,
+    useMutation,
+    useQuery,
+} from '@tanstack/react-query';
 // import { unzipFile } from '../../../src/lib/utils';
 import { set } from 'zod';
 import { gzipSync, decompressSync, unzipSync, unzip } from 'fflate';
 import { Buffer } from 'buffer';
 import { imageProcessing } from '../../../src/lib/imageFunc';
-
+import ProtectedItems from '../ProtectedItems';
+import { RoleEnum } from '../../../src/enums/roles';
+import { Button } from '../ui/button';
+import { Toaster, toast } from 'sonner';
+import { ConfirmButton } from '../ConfirmButton';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '../ui/alert-dialog';
 interface RelicPropertyDTO {
     name: string;
     value: string;
@@ -157,6 +176,45 @@ const Relic = () => {
             reader.readAsArrayBuffer(getImages.data);
         }
     }, [getImages.data]);
+
+    const deleteRelicFile = useMutation({
+        mutationKey: ['deleteRelicFile'],
+        mutationFn: (relicId: any) => RelicAPI.deleteRelicFile(relicId),
+        // onMutate: () => {
+        //     setIsLoading(true);
+        // },
+        onSuccess: () => {
+            toast.success('Файл реліквії успішно видалено');
+            // setIsLoading(false);
+        },
+        onError: (error) => {
+            toast.error('Помилка видалення файлу реліквії');
+            // setIsLoading(false);
+            console.error(error);
+        },
+    });
+
+    const deleteRelic = useMutation({
+        mutationKey: ['deleteRelic', relicId],
+        mutationFn: () => RelicAPI.deleteRelic(relicId),
+        onMutate: () => {
+            deleteRelicFile.mutate(relicId);
+            // setIsLoading(true);
+        },
+        onSuccess: () => {
+            toast.success('Реліквію успішно видалено');
+            navigate('/catalogue?page=1');
+        },
+        onError: (error) => {
+            toast.error('Помилка видалення реліквії');
+            // setIsLoading(false);
+            console.error(error);
+        },
+    });
+
+    const handleDeleteRelic = () => {
+        deleteRelic.mutate();
+    };
 
     return (
         <div className="relic_con">
@@ -330,8 +388,65 @@ const Relic = () => {
                     </p>
                 </div>
             </div>
-            <div className="relic_right">
-                <div className="relic_carousel">
+            <div className="relic_right flex flex-col">
+                <ProtectedItems
+                    role={[
+                        RoleEnum.ADMIN,
+                        RoleEnum.REGIONAL_MODERATOR,
+                        RoleEnum.MODERATOR,
+                    ]}
+                >
+                    <div className="relic-control-buttons flex flex-row space-between space-x-5 basis-1/6">
+                        <Button
+                        // onClick={}
+                        >
+                            Редагувати
+                        </Button>
+                        {/* Видалити */}
+                        {/* <ConfirmButton
+                            dialogAction={() => handleDeleteRelic()}
+                            dialogTitle="Видалити реліквію"
+                            dialogDescription="Ви дійсно хочете видалити реліквію?"
+                            buttonVariant="destructive"
+                            buttonMessage="Видалити"
+                        /> */}
+                        <div>
+                            <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    <Button
+                                        variant={'destructive'}
+                                        type="submit"
+                                        className="logout_btn"
+                                    >
+                                        {'Видалити'}
+                                    </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle>
+                                            Видалити реліквію
+                                        </AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                            Ви дійсно хочете видалити реліквію?
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel>
+                                            Відхилити
+                                        </AlertDialogCancel>
+                                        <AlertDialogAction
+                                            onClick={() => handleDeleteRelic()}
+                                            className="text-white hover:bg-red-500 "
+                                        >
+                                            Прийняти
+                                        </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
+                        </div>
+                    </div>
+                </ProtectedItems>
+                <div className="relic_carousel mt-5 basis-5/6">
                     <div className="relic_pic_nav">
                         <img
                             src={
@@ -398,6 +513,7 @@ const Relic = () => {
                     </div>
                 </div>
             </div>
+            <Toaster richColors />;
         </div>
     );
 };
