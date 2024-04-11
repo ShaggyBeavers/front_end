@@ -16,11 +16,23 @@ import {
 import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
 import { MixerHorizontalIcon } from '@radix-ui/react-icons';
 
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '../ui/alert-dialog';
 import { statuses } from './data/reportData';
 import { ReportStatusEnum } from '../../../src/enums/reportstatus';
 import ReportAPI from '../../../src/app/api/Report/report';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import UserAPI from '../../../src/app/api/Account/User/user';
+import { toast } from 'sonner';
 
 interface DataTableRowActionsProps<TData> {
     row: Row<TData>;
@@ -60,13 +72,35 @@ export function DataTableRowActions<TData>({
             queryClient.invalidateQueries({ queryKey: ['getRegMod'] });
         },
     });
-
-    const deleteReport = useMutation({
-        mutationFn: (reportId: number) => ReportAPI.deleteReport(reportId),
+    const deleteReportFiles = useMutation({
+        mutationKey: ['deleteReportFiles'],
+        mutationFn: (reportId: number) => ReportAPI.deleteReportFiles(reportId),
         onSettled: () => {
             queryClient.invalidateQueries({ queryKey: ['reports'] });
         },
     });
+    const deleteReport = useMutation({
+        mutationKey: ['deleteReport'],
+        mutationFn: (reportId: number) => ReportAPI.deleteReport(reportId),
+        onMutate: (reportId: number) => {
+            deleteReportFiles.mutate(reportId);
+        },
+        onSuccess: () => {
+            toast.success('Звістка успішно видалено');
+        },
+        onError: (error) => {
+            toast.error('Помилка видалення звістки');
+            console.error(error);
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ['reports'] });
+        },
+    });
+
+    const handleDeleteReport = async (reportId: number) => {
+        deleteReport.mutate(reportId);
+        queryClient.invalidateQueries({ queryKey: ['reports'] });
+    };
 
     return (
         <DropdownMenu>
@@ -107,14 +141,53 @@ export function DataTableRowActions<TData>({
                     <Ban className="mr-1 max-w-4" />
                     Блок автора
                 </DropdownMenuItem>
-                <DropdownMenuItem
+                {/* <DropdownMenuItem
                     onClick={() => {
-                        // deleteReport.mutate(row.reportId);
+                        handleDeleteReport(row.getValue('reportId'));
                     }}
                 >
                     <Trash2 className="mr-1 max-w-4" />
                     Видалити
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
+                <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                        {/* <DropdownMenuItem
+                            onClick={() => {
+                                handleDelete(row.getValue('id'));
+                            }}
+                        > */}
+                        <div className="relative hover:bg-gray-100 flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+                            <Trash2 className="mr-1 max-w-4" />
+                            Видалити
+                        </div>
+                        {/* </DropdownMenuItem> */}
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>
+                                {`Видалити звістку?`}
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                                {`Ви впевнені, що хочете видалити цю звістку?`}
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Відхилити</AlertDialogCancel>
+                            <AlertDialogAction
+                                onClick={() => {
+                                    handleDeleteReport(
+                                        row.getValue('reportId')
+                                    );
+                                    // handleDelete(row.getValue('id'));
+                                    // console.log('delete');
+                                }}
+                                className="text-white hover:bg-red-500 "
+                            >
+                                Прийняти
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
             </DropdownMenuContent>
         </DropdownMenu>
     );

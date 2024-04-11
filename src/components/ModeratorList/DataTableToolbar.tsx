@@ -94,13 +94,7 @@ export function DataTableToolbar<TData>({
                     }
                     className="h-8 w-[150px] lg:w-[250px]"
                 />
-                <ProtectedItems
-                    role={[
-                        RoleEnum.ADMIN,
-                        RoleEnum.REGIONAL_MODERATOR,
-                        RoleEnum.MODERATOR,
-                    ]}
-                >
+                <ProtectedItems role={[RoleEnum.ADMIN]}>
                     {isRegMod ? (
                         <Button
                             variant="default"
