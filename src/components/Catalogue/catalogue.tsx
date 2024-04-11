@@ -16,6 +16,8 @@ import RelicAPI from '../../app/api/Relic/relic';
 import CategoryAPI from '../../app/api/Category/category';
 import HistoricalPeriodAPI from '../../app/api/HistoricalPeriod/historicalPeriod';
 import TechniqueAPI from '../../app/api/Technique/technique';
+import MuseumAPI from '../../app/api/Museum/museum';
+import RegionAPI from '../../app/api/Region/region';
 import Relic from '../Relic/Relic';
 import {
     infiniteQueryOptions,
@@ -77,11 +79,15 @@ interface GetAllRelicsResponse {
 }
 
 export interface Filters {
+    name: string;
     historicalPeriods: string[];
     statuses: string[];
     techniques: string[];
     categories: string[];
-    [key: string]: string[];
+    regions: string[];
+    museums: string[];
+    file: any;
+    [key: string]: any;
 }
 
 interface ImageId {
@@ -132,19 +138,20 @@ const Catalogue = () => {
         numberOfElements: 0,
         empty: true,
     });
-    const handleSetResult = (data: any) => {
-        setResult(data);
-    };
 
     const [selectedCategory, setSelectedCategory] = useState<string | null>(
         null
     );
     const [selectedFilterOptions, setSelectedFilterOptions] = useState<Filters>(
         {
+            name: '',
             historicalPeriods: [],
             statuses: [],
             techniques: [],
             categories: [],
+            museums: [],
+            regions: [],
+            file: null,
         }
     );
     const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
@@ -266,12 +273,10 @@ const Catalogue = () => {
 
         if (categoryParam) {
             const categoriesArray = categoryParam.split(',');
-            setSelectedFilterOptions({
+            setSelectedFilterOptions((prevState) => ({
+                ...prevState,
                 categories: categoriesArray,
-                historicalPeriods: [],
-                statuses: [],
-                techniques: [],
-            });
+            }));
         }
         fetchData(pageNumber);
     }, [location.search]);
@@ -280,6 +285,10 @@ const Catalogue = () => {
         fetchData(currentPage);
     }, [navigate, selectedFilterOptions]);
 
+    useEffect(() => {
+        console.log(selectedFilterOptions);
+    }, [selectedFilterOptions]);
+
     const paginate = (pageNumber: number) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
             navigate(`?page=${pageNumber}`);
@@ -287,6 +296,12 @@ const Catalogue = () => {
         }
     };
 
+    const handleToggleFileFilter = (isChecked: boolean | null) => {
+        setSelectedFilterOptions((prevOptions) => ({
+            ...prevOptions,
+            file: isChecked === null ? null : isChecked,
+        }));
+    };
     const handleFilterCategoryClick = (category: string) => {
         if (category === selectedCategory) {
             setIsFilterModalOpen(false);
@@ -312,10 +327,10 @@ const Catalogue = () => {
             [category]:
                 option === 'clear'
                     ? []
-                    : prevOptions[category]
+                    : Array.isArray(prevOptions[category])
                       ? prevOptions[category].includes(selectedValue)
                           ? prevOptions[category].filter(
-                                (item) => item !== selectedValue
+                                (item: string) => item !== selectedValue
                             )
                           : [...prevOptions[category], selectedValue]
                       : [selectedValue],
@@ -323,46 +338,27 @@ const Catalogue = () => {
     };
 
     useEffect(() => {
-        const fetchCategories = async () => {
+        const fetchData = async (
+            apiFunction: () => Promise<{ name: string }[]>,
+            setStateFunction: (names: string[]) => void
+        ) => {
             try {
-                const response = await CategoryAPI.getCategories();
-                const categoryNames = response.map(
-                    (item: { name: string }) => item.name
-                );
-                setCategories(categoryNames);
+                const response = await apiFunction();
+                const names = response.map((item) => item.name);
+                setStateFunction(names);
             } catch (error) {
-                console.error('Error fetching categories:', error);
+                console.error(`Error fetching data: ${error}`);
             }
         };
 
-        const fetchHistoricalPeriods = async () => {
-            try {
-                const response =
-                    await HistoricalPeriodAPI.getHistoricalPeriods();
-                const periodNames = response.map(
-                    (item: { name: string }) => item.name
-                );
-                setHistoricalPeriods(periodNames);
-            } catch (error) {
-                console.error('Error fetching historical periods:', error);
-            }
-        };
-
-        const fetchTechniques = async () => {
-            try {
-                const response = await TechniqueAPI.getTechniques();
-                const techniqueNames = response.map(
-                    (item: { name: string }) => item.name
-                );
-                setTechniques(techniqueNames);
-            } catch (error) {
-                console.error('Error fetching techniques:', error);
-            }
-        };
-
-        fetchCategories();
-        fetchHistoricalPeriods();
-        fetchTechniques();
+        fetchData(CategoryAPI.getCategories, setCategories);
+        fetchData(
+            HistoricalPeriodAPI.getHistoricalPeriods,
+            setHistoricalPeriods
+        );
+        fetchData(TechniqueAPI.getTechniques, setTechniques);
+        fetchData(MuseumAPI.getMuseums, setMuseums);
+        fetchData(RegionAPI.getRegions, setRegions);
     }, []);
 
     const filterTitles = [
@@ -370,12 +366,16 @@ const Catalogue = () => {
         'Статус',
         'Історичний період',
         'Техніка',
+        'Музей',
+        'Регіон',
     ];
     const filterCategories = [
         'categories',
         'statuses',
         'historicalPeriods',
         'techniques',
+        'museums',
+        'regions',
     ];
     const translatedTitles = filterCategories.map(
         (category, index) => filterTitles[index] || category
@@ -384,6 +384,8 @@ const Catalogue = () => {
     const [categories, setCategories] = useState<string[]>([]);
     const [historicalPeriods, setHistoricalPeriods] = useState<string[]>([]);
     const [techniques, setTechniques] = useState<string[]>([]);
+    const [museums, setMuseums] = useState<string[]>([]);
+    const [regions, setRegions] = useState<string[]>([]);
     const statusOptions = [
         { value: 'DESTROYED', label: 'Знищено' },
         { value: 'STOLEN', label: 'Вкрадено' },
@@ -395,7 +397,6 @@ const Catalogue = () => {
     };
 
     const applyFilters = () => {
-        // console.log('yes,hell');
         fetchData(currentPage);
     };
 
@@ -411,7 +412,7 @@ const Catalogue = () => {
     const positioner = usePositioner(
         {
             // width: width * 0.7,
-            width: window.innerWidth * 0.5,
+            width: window.innerWidth * 0.6,
             columnGutter: 20,
             columnWidth: 120,
             columnCount: 3,
@@ -431,15 +432,15 @@ const Catalogue = () => {
                     <div className="cat_left">
                         <div className="cat_search">
                             <Search
-                                setSearchData={handleSetResult}
-                                page={0}
-                                size={20}
+                                setSelectedFilterOptions={
+                                    setSelectedFilterOptions
+                                }
                             />
                         </div>
                         <div className="cat_filter">
                             <div className="cat_photo">
                                 <h6>Фото</h6>
-                                <SwitchBtn />
+                                <SwitchBtn onToggle={handleToggleFileFilter} />
                             </div>
                             <div className="filter_categories">
                                 <ul>
@@ -468,7 +469,13 @@ const Catalogue = () => {
                                                         : category ===
                                                             'techniques'
                                                           ? techniques
-                                                          : []
+                                                          : category ===
+                                                              'museums'
+                                                            ? museums
+                                                            : category ===
+                                                                'regions'
+                                                              ? regions
+                                                              : []
                                             }
                                             selectedFilterOptions={
                                                 selectedFilterOptions
@@ -488,37 +495,51 @@ const Catalogue = () => {
                     </div>
                     {/* <div className="cat_right"> */}
                     <div className="w-full">
-                        {/* <div className="cat-items-container"> */}
-                        <div className="w-full">
-                            <MasonryScroller
-                                items={result.content}
-                                positioner={positioner}
-                                resizeObserver={resizeObserver}
-                                height={windowHeight}
-                                offset={offset}
-                                // columnGutter={5}
-                                // rowGutter={15}
-                                // columnCount={3}
-                                // columnWidth={140}
-                                overscanBy={Infinity}
-                                render={RelicItem}
-                            />
-                            {/* {result &&
-                                    result.content.map((item) => (
-                                        
-                                    ))} */}
-                        </div>
-
-                        <div className="flex flex-col items-center">
-                            <Pagination
-                                totalPages={totalPages}
-                                currentPage={currentPage}
-                                onPageChange={paginate}
-                            />
-                            <div className="to_top" onClick={scrollToTop}>
-                                Перейти до гори
+                        {result.totalElements === 0 ? (
+                            <div className="w-full flex justify-center items-center h-screen">
+                                <div className="max-w-md text-center ">
+                                    <h3 className="pb-20">
+                                        За вашим запитом нічого не знайдено
+                                    </h3>
+                                </div>
                             </div>
-                        </div>
+                        ) : (
+                            <>
+                                <div className="w-full">
+                                    <MasonryScroller
+                                        items={result.content}
+                                        positioner={positioner}
+                                        resizeObserver={resizeObserver}
+                                        height={windowHeight}
+                                        offset={offset}
+                                        // columnGutter={5}
+                                        // rowGutter={15}
+                                        // columnCount={3}
+                                        // columnWidth={140}
+                                        overscanBy={Infinity}
+                                        render={RelicItem}
+                                    />
+                                    {/* {result &&
+                                        result.content.map((item) => (
+                        
+                                      ))} */}
+                                </div>
+
+                                <div className="flex flex-col items-center">
+                                    <Pagination
+                                        totalPages={totalPages}
+                                        currentPage={currentPage}
+                                        onPageChange={paginate}
+                                    />
+                                    <div
+                                        className="to_top"
+                                        onClick={scrollToTop}
+                                    >
+                                        Перейти до гори
+                                    </div>
+                                </div>
+                            </>
+                        )}
                         {isFilterModalOpen && (
                             <div
                                 className={`dimmed-overlay ${isFilterModalOpen ? 'active' : ''}`}
