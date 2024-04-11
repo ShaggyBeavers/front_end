@@ -134,7 +134,7 @@
     }
 
     .relic_pic_nav_resp {
-        display: flex;
+        display:flex;
         gap: 4rem;
     }
 

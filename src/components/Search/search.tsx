@@ -2,25 +2,18 @@ import React, { useState } from 'react';
 import './search.css';
 import { useMutation } from '@tanstack/react-query';
 import RelicAPI from '../../../src/app/api/Relic/relic';
+import { Filters } from '../Catalogue/catalogue';
 
-const Search = ({ setSearchData, page, size }: any) => {
+const Search = ({ setSelectedFilterOptions }: any) => {
     const [searchTerm, setSearchTerm] = useState('');
-
-    const relicsSearch = useMutation({
-        mutationFn: () => RelicAPI.searchRelics(searchTerm, page, 20),
-        // onMutate: () => {
-        //     // console.log('onMutate', searchTerm);
-        // },
-        // onSuccess: (data) => {
-        //     // console.log('onSuccess', data);
-        // },
-    });
 
     const performSearch = (e: React.FormEvent) => {
         e.preventDefault();
-        relicsSearch.mutate();
+        setSelectedFilterOptions((prevOptions: Filters) => ({
+            ...prevOptions,
+            name: searchTerm,
+        }));
         setSearchTerm('');
-        // setSearchData(relicsSearch.data); // Call the setSearchData function with the data
     };
 
     return (
@@ -42,3 +35,4 @@ const Search = ({ setSearchData, page, size }: any) => {
 };
 
 export default Search;
+

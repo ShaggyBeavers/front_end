@@ -8,6 +8,7 @@ import RegionAPI from '../../app/api/Region/region';
 import TechniqueAPI from '../../app/api/Technique/technique';
 import PropertyAPI from '../../app/api/Property/property';
 import MuseumAPI from '../../app/api/Museum/museum';
+import { toast } from 'sonner';
 
 interface Term {
     id: number;
@@ -32,7 +33,6 @@ const AddTerm = () => {
     useEffect(() => {
         fetchTerms(selectedCategory);
     }, []);
-
 
     useEffect(() => {
         if (!initialRender) {
@@ -134,6 +134,23 @@ const AddTerm = () => {
                 fetchTerms(selectedCategory);
                 setInputValue('');
                 setNameOld('');
+                toast('Успішно подано термін', {
+                    description: (
+                        <pre className="mt-2 w-[340px] rounded-md">
+                            <code>
+                                {JSON.stringify(
+                                    {
+                                        name: selectedTerm,
+                                        nameOld: nameOld,
+                                        isDestroyed: isDestroyed,
+                                    },
+                                    null,
+                                    4
+                                )}
+                            </code>
+                        </pre>
+                    ),
+                });
             } catch (error) {
                 console.error(
                     `Error adding ${selectedTerm} to ${selectedCategory}:`,
@@ -148,6 +165,13 @@ const AddTerm = () => {
                 fetchTerms(selectedCategory);
                 setInputValue('');
                 setNameOld('');
+                toast('Успішно подано термін', {
+                    description: (
+                        <pre className="mt-2 w-[340px] rounded-md">
+                            <code>{JSON.stringify(selectedTerm, null, 4)}</code>
+                        </pre>
+                    ),
+                });
             } catch (error) {
                 console.error(
                     `Error adding ${selectedTerm} to ${selectedCategory}:`,
@@ -304,7 +328,8 @@ const AddTerm = () => {
                                                     key={term.id}
                                                     className="values"
                                                 >
-                                                     {(term as MuseumTerm).nameOld || '-'}
+                                                    {(term as MuseumTerm)
+                                                        .nameOld || '-'}
                                                 </div>
                                             ))}
                                         </div>
@@ -319,7 +344,10 @@ const AddTerm = () => {
                                                     key={term.id}
                                                     className="values"
                                                 >
-                                                      {(term as MuseumTerm).isDestroyed ? 'Так' : 'Ні'}
+                                                    {(term as MuseumTerm)
+                                                        .isDestroyed
+                                                        ? 'Так'
+                                                        : 'Ні'}
                                                 </div>
                                             ))}
                                         </div>

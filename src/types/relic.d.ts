@@ -54,8 +54,11 @@ export interface RecoveredRelicInfoCreateEditDTO {
 }
 
 interface RelicFilterRequest {
+    name: string;
     historicalPeriods: string[];
     statuses: string[];
     techniques: string[];
     categories: string[];
+    regions: string[];
+    museums: string[];
 }

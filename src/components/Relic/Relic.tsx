@@ -8,6 +8,7 @@ import { set } from 'zod';
 import { gzipSync, decompressSync, unzipSync, unzip } from 'fflate';
 import { Buffer } from 'buffer';
 import { imageProcessing } from '../../../src/lib/imageFunc';
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 
 interface RelicPropertyDTO {
     name: string;
@@ -333,15 +334,10 @@ const Relic = () => {
             <div className="relic_right">
                 <div className="relic_carousel">
                     <div className="relic_pic_nav">
-                        <img
-                            src={
-                                currentImageIndex === 0
-                                    ? '/icons/prev_arrow_relic.svg'
-                                    : '/icons/prev_arrow_relic_d.svg'
-                            }
+                        <ChevronLeftIcon
                             className={`arrow prev ${currentImageIndex === 0 ? 'relic_disabled' : ''}`}
                             onClick={handlePrevImage}
-                            alt="Previous"
+                            size={65}
                         />
                     </div>
                     <div className="relic_img_con">
@@ -356,45 +352,24 @@ const Relic = () => {
                     </div>
 
                     <div className="relic_pic_nav">
-                        <img
+                        <ChevronRightIcon
                             className={`arrow next ${currentImageIndex === imageNames.length - 1 ? 'relic_disabled' : ''}`}
                             onClick={handleNextImage}
-                            src={
-                                currentImageIndex === imageNames.length - 1
-                                    ? '/icons/next_arrow_relic_d.svg'
-                                    : '/icons/next_arrow_relic.svg'
-                            }
-                            alt="Next"
+                            size={65}
                         />
                     </div>
 
                     <div className="relic_pic_nav_resp hidden">
-                        <div>
-                            <img
-                                src={
-                                    currentImageIndex === 0
-                                        ? '/icons/prev_arrow_relic.svg'
-                                        : '/icons/prev_arrow_relic_d.svg'
-                                }
-                                className={`arrow prev ${currentImageIndex === 0 ? 'relic_disabled' : ''}`}
-                                onClick={handlePrevImage}
-                                alt="Previous"
-                            />
-                        </div>
-                        <div
-                            // className={`arrow next ${currentImageIndex === imageNames.length - 1 ? 'relic_disabled' : ''}`}
-                            className={`arrow next ${currentImageIndex === imageNames.length - 1 ? '' : ''}`}
+                        <ChevronLeftIcon
+                            className={`arrow prev ${currentImageIndex === 0 ? 'relic_disabled' : ''}`}
+                            onClick={handlePrevImage}
+                            size={65}
+                        />
+                        <ChevronRightIcon
+                            className={`arrow next ${currentImageIndex === imageNames.length - 1 ? 'relic_disabled' : ''}`}
                             onClick={handleNextImage}
-                        >
-                            <img
-                                src={
-                                    currentImageIndex === imageNames.length - 1
-                                        ? '/icons/next_arrow_relic_d.svg'
-                                        : '/icons/next_arrow_relic.svg'
-                                }
-                                alt="Next"
-                            />
-                        </div>
+                            size={65}
+                        />
                     </div>
                 </div>
             </div>
