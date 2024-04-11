@@ -20,6 +20,7 @@
 .not_for_safari_user h3 {
     color: black;
     margin-top: 1rem;
+    text-align: center;
 }
 
 .not_for_safari_user button {

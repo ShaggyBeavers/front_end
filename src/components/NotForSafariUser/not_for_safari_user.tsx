@@ -8,24 +8,28 @@ const NotForSafariUser = () => {
     const [showBanner, setShowBanner] = useState(true);
 
     const userAgent = window.navigator.userAgent;
-    const isSafari = /^((?!Chrome|Android).)*Safari/i.test(navigator.userAgent);
+    const isSafari = /^((?!chrome|android).)*safari/i.test(userAgent);
+
   
     const handleButtonClick = () => {
       setShowBanner(false); 
     };
   
-    if (showBanner && (isSafari)) {
+    if (showBanner && (isSafari) {
       return (
         <div className="not_for_safari_user_con">
             <div className="not_for_safari_user">
                 <Logo404 />
-                <h3>Даний веб-сайт може не коректно працювати у вашому браузері.</h3>
+                <h3>Даний веб-сайт може не коректно працювати у вашому браузері - Safari<br/>
+                Для кращого досвіду користування, зайдіть з іншого браузера.
+                </h3>
+                {/* <h3>Для кращого досвіду користування, зайдіть з іншого браузера.</h3> */}
                 <button onClick={handleButtonClick}>Все одно зайти</button>
             </div>
         </div>
       );
     } else {
-        return null; 
+        return null; // Don't render anything if not Safari or Chrome, or if the banner is hidden
       }
     };
 
