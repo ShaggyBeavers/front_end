@@ -139,7 +139,6 @@ const Catalogue = () => {
         empty: true,
     });
 
-
     const [selectedCategory, setSelectedCategory] = useState<string | null>(
         null
     );
@@ -368,7 +367,7 @@ const Catalogue = () => {
         'Історичний період',
         'Техніка',
         'Музей',
-        'Регіон'
+        'Регіон',
     ];
     const filterCategories = [
         'categories',
@@ -376,7 +375,7 @@ const Catalogue = () => {
         'historicalPeriods',
         'techniques',
         'museums',
-        'regions'
+        'regions',
     ];
     const translatedTitles = filterCategories.map(
         (category, index) => filterTitles[index] || category
@@ -413,7 +412,7 @@ const Catalogue = () => {
     const positioner = usePositioner(
         {
             // width: width * 0.7,
-            width: window.innerWidth * 0.5,
+            width: window.innerWidth * 0.6,
             columnGutter: 20,
             columnWidth: 120,
             columnCount: 3,
@@ -433,7 +432,9 @@ const Catalogue = () => {
                     <div className="cat_left">
                         <div className="cat_search">
                             <Search
-                               setSelectedFilterOptions={setSelectedFilterOptions}
+                                setSelectedFilterOptions={
+                                    setSelectedFilterOptions
+                                }
                             />
                         </div>
                         <div className="cat_filter">
@@ -494,37 +495,51 @@ const Catalogue = () => {
                     </div>
                     {/* <div className="cat_right"> */}
                     <div className="w-full">
-                        {/* <div className="cat-items-container"> */}
-                        <div className="w-full">
-                            <MasonryScroller
-                                items={result.content}
-                                positioner={positioner}
-                                resizeObserver={resizeObserver}
-                                height={windowHeight}
-                                offset={offset}
-                                // columnGutter={5}
-                                // rowGutter={15}
-                                // columnCount={3}
-                                // columnWidth={140}
-                                overscanBy={Infinity}
-                                render={RelicItem}
-                            />
-                            {/* {result &&
-                                    result.content.map((item) => (
-                                        
-                                    ))} */}
-                        </div>
-
-                        <div className="flex flex-col items-center">
-                            <Pagination
-                                totalPages={totalPages}
-                                currentPage={currentPage}
-                                onPageChange={paginate}
-                            />
-                            <div className="to_top" onClick={scrollToTop}>
-                                Перейти до гори
+                        {result.totalElements === 0 ? (
+                            <div className="w-full flex justify-center items-center h-screen">
+                                <div className="max-w-md text-center ">
+                                    <h3 className="pb-20">
+                                        За вашим запитом нічого не знайдено
+                                    </h3>
+                                </div>
                             </div>
-                        </div>
+                        ) : (
+                            <>
+                                <div className="w-full">
+                                    <MasonryScroller
+                                        items={result.content}
+                                        positioner={positioner}
+                                        resizeObserver={resizeObserver}
+                                        height={windowHeight}
+                                        offset={offset}
+                                        // columnGutter={5}
+                                        // rowGutter={15}
+                                        // columnCount={3}
+                                        // columnWidth={140}
+                                        overscanBy={Infinity}
+                                        render={RelicItem}
+                                    />
+                                    {/* {result &&
+                                        result.content.map((item) => (
+                        
+                                      ))} */}
+                                </div>
+
+                                <div className="flex flex-col items-center">
+                                    <Pagination
+                                        totalPages={totalPages}
+                                        currentPage={currentPage}
+                                        onPageChange={paginate}
+                                    />
+                                    <div
+                                        className="to_top"
+                                        onClick={scrollToTop}
+                                    >
+                                        Перейти до гори
+                                    </div>
+                                </div>
+                            </>
+                        )}
                         {isFilterModalOpen && (
                             <div
                                 className={`dimmed-overlay ${isFilterModalOpen ? 'active' : ''}`}
