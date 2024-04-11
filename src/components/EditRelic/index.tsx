@@ -119,11 +119,6 @@ export const EditRelic = () => {
                         {data.data.status && `зі статусом ${data.data.status}`}{' '}
                         була добавлена
                     </>
-                    // <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                    //     <code className="text-white">
-                    //         {JSON.stringify(relic, null, 2)}
-                    //     </code>
-                    // </pre>
                 ),
             });
         },
@@ -330,11 +325,11 @@ export const EditRelic = () => {
 
         toast.success(`Фотографії зафантажено`, {
             description: (
-            <>
-                {files.map((file) => (
-                <div key={file.name}>{file.name}</div>
-                ))}
-            </>
+                <>
+                    {files.map((file) => (
+                        <div key={file.name}>{file.name}</div>
+                    ))}
+                </>
             ),
         });
         form.reset({

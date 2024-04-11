@@ -21,6 +21,7 @@ const UserAPI = {
     // getUserProfile: () => requests.get('api/user/current-profile'),
     getUserProfile: () => authAPi.get('api/user/current-profile'),
     getUsers: () => authAPi.get('api/user/'),
+    
 };
 
 export default UserAPI;
