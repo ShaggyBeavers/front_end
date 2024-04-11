@@ -365,11 +365,8 @@ const Settings = () => {
                         <div className="categories-list">
                             <ul>
                                 {categories.map((category: any) => (
-                                    <li
-                                        key={category.id}
-                                        value={category.value}
-                                    >
-                                        {category.value}
+                                    <li key={category.id} value={category.name}>
+                                        {category.name}
                                     </li>
                                 ))}
                             </ul>

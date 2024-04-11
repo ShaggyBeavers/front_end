@@ -15,12 +15,11 @@ import {
     categoryType,
 } from '../../types/report-table-columns';
 import { ShowLabels } from './DataTableShowLabels';
-import { cva } from 'class-variance-authority';
-import { stat } from 'fs';
 import { DataTableRowActions } from './DataTableRowActions';
 import ProtectedItems from '../ProtectedItems';
 import { checkAuthRole } from '../../../src/lib/utils';
 import { RoleEnum } from '../../../src/enums/roles';
+import { Ban } from 'lucide-react';
 
 let tmpColumns: any = [
     {
@@ -43,7 +42,17 @@ let tmpColumns: any = [
         ),
         cell: ({ row }: any) => (
             <div className="max-w-[500px] truncate font-medium">
-                <span>{row.getValue('userId')}</span>
+                <span className="flex flex-row items-center">
+                    <span className="pr-1">
+                        {row.getValue('isUserBanned') ? (
+                            <Ban className="text-red-500 w-4 h-4" />
+                        ) : (
+                            <div className="w-4 h-4 bg-transparent"></div>
+                        )}
+                    </span>
+
+                    {row.getValue('userId')}
+                </span>
             </div>
         ),
     },
@@ -118,6 +127,24 @@ let tmpColumns: any = [
         },
         filterFn: (row: any, id: any, value: any) => {
             return value.includes(row.getValue(id));
+        },
+    },
+    {
+        accessorKey: 'isUserBanned',
+        meta: 'Бан',
+        header: ({ column }: any) => (
+            <DataTableColumnHeader column={column} title="Бан" />
+        ),
+        cell: ({ row }: any) => {
+            return (
+                <div className="flex items-center space-x-2">
+                    {row.getValue('isUserBanned') ? (
+                        <Badge variant="destructive">Заблокований</Badge>
+                    ) : (
+                        <Badge variant="secondary">Активний</Badge>
+                    )}
+                </div>
+            );
         },
     },
 ];

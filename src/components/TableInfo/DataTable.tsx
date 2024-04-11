@@ -69,7 +69,9 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
     // const [rowSelection, setRowSelection] = React.useState({});
     const [columnVisibility, setColumnVisibility] =
-        React.useState<VisibilityState>({});
+        React.useState<VisibilityState>({
+            isUserBanned: false,
+        });
     const [columnFilters, setColumnFilters] =
         React.useState<ColumnFiltersState>([]);
     const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -205,10 +207,11 @@ export function DataTable<TData, TValue>({
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
                                     key={row.id}
-                                    data-state={
-                                        row.getIsSelected() && 'selected'
-                                    }
-                                    className="hover:bg-gray-50 cursor-pointer"
+                                    // data-state={
+                                    //     row.getValue('isUserBanned') &&
+                                    //     'selected bg-red-100'
+                                    // }
+                                    className={`hover:bg-gray-50 cursor-pointer ${row.getValue('isUserBanned') && 'bg-red-200/45 opacity-55'}`}
                                 >
                                     {row
                                         .getVisibleCells()
