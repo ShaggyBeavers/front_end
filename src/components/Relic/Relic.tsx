@@ -213,7 +213,7 @@ const Relic = () => {
                 <div className="relic_divider" />
 
                 <h4>Вторинна інформація</h4>
-                
+
                 <div>
                     <h6>Первинний інвентарний номер:</h6>
                     <p>{renderFieldValue(item?.formerInventoryNumber)}</p>

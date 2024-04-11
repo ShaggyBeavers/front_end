@@ -26,10 +26,32 @@ const AddModeratorModal = (props: any) => {
         queryKey: ['regions'],
         queryFn: async () => await RegionAPI.getRegions(),
     });
+
     const addModerator = useMutation({
+        mutationKey: ['addModerator'],
         mutationFn: (data: any) => AdminAPI.addModerator(data),
+        onSuccess: (data) => {
+            toast.success('Користувачу надані права модератора');
+        },
         onError: (error) => {
-            console.log('Error', error);
+            toast.error(
+                'Помилка при додаванні модератора. Цей користувач вже є звичайним або регіональним модератором.'
+            );
+            console.log('Error on adding moderator: ', error);
+        },
+    });
+
+    const addRegModerator = useMutation({
+        mutationKey: ['addRegModerator'],
+        mutationFn: (data: any) => AdminAPI.addRegionalModerator(data),
+        onSuccess: (data) => {
+            toast.success('Користувачу надані права регіонального модератора');
+        },
+        onError: (error) => {
+            toast.error(
+                'Помилка при додаванні модератора. Цей користувач вже є звичайним або регіональним модератором.'
+            );
+            console.log('Error on adding regional moderator: ', error);
         },
     });
 
@@ -64,50 +86,23 @@ const AddModeratorModal = (props: any) => {
         };
 
         // addModerator.mutate(nFormData);
-        if (regModerator) AdminAPI.addRegionalModerator(nFormData);
+        if (regModerator) addRegModerator.mutate(nFormData);
         else addModerator.mutate(nFormData);
 
         props.closeModal();
         // cleanup the form
 
-        toast('Успішно додано модератора', {
-            description: (
-                <pre className="mt-2 w-[340px] rounded-md">
-                    <code>{JSON.stringify(nFormData, null, 4)}</code>
-                    {regModerator
-                        ? 'Регіональний модератор'
-                        : 'Звичайний модератор'}
-                </pre>
-            ),
-        });
+        // toast('Успішно додано модератора', {
+        //     description: (
+        //         <pre className="mt-2 w-[340px] rounded-md">
+        //             <code>{JSON.stringify(nFormData, null, 4)}</code>
+        //             {regModerator
+        //                 ? 'Регіональний модератор'
+        //                 : 'Звичайний модератор'}
+        //         </pre>
+        //     ),
+        // });
     };
-
-    // const categories = [
-    //     { value: 1, label: 'Архітектура' },
-    //     { value: 2, label: 'Історія' },
-    //     { value: 3, label: 'Природа' },
-    //     { value: 4, label: 'Культура' },
-    //     { value: 5, label: 'Релігія' },
-    //     { value: 6, label: 'Військовість' },
-    //     { value: 7, label: 'Наука' },
-    //     { value: 8, label: 'Мистецтво' },
-    //     { value: 9, label: 'Спорт' },
-    //     { value: 10, label: 'Інше' },
-    // ];
-
-    // const regions = [
-    //     { value: 1, label: 'Київ' },
-    //     { value: 2, label: 'Харків' },
-    //     { value: 3, label: 'Одеса' },
-    //     { value: 4, label: 'Дніпро' },
-    //     { value: 5, label: 'Донецьк' },
-    //     { value: 6, label: 'Запоріжжя' },
-    //     { value: 7, label: 'Львів' },
-    //     { value: 8, label: 'Кривий Ріг' },
-    //     { value: 9, label: 'Миколаїв' },
-    //     { value: 10, label: 'Волинь' },
-    //     { value: 11, label: 'Стара Біла Церква' },
-    // ];
 
     return (
         <>
