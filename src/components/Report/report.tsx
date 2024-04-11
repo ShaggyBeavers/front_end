@@ -40,13 +40,7 @@ export default function Report() {
             reset();
             setSelectedCategories([]);
             setSelectedRegion(null);
-            toast('Успішно подано репорт', {
-                description: (
-                    <pre className="mt-2 w-[340px] rounded-md">
-                        <code>{JSON.stringify(formData, null, 4)}</code>
-                    </pre>
-                ),
-            });
+            toast.success('Ваша звістка успішно надіслана');
         } catch (error: any) {
             if (error) {
                 console.log(error);
