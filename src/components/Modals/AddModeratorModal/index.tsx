@@ -27,9 +27,15 @@ const AddModeratorModal = (props: any) => {
         queryFn: async () => await RegionAPI.getRegions(),
     });
 
+    // const getUser = useMutation({
+    //     mutationKey: ['getUser'],
+    //     mutationFn: (userId: number) => UserAPI.getUser(userId),
+    // });
+
     const addModerator = useMutation({
         mutationKey: ['addModerator'],
-        mutationFn: (data: any) => AdminAPI.addModerator(data),
+        // mutationFn: (data: any) => AdminAPI.addModerator(data),
+        mutationFn: (data: any) => AdminAPI.changeModerator(data),
         onSuccess: (data) => {
             toast.success('Користувачу надані права модератора');
         },
@@ -43,7 +49,7 @@ const AddModeratorModal = (props: any) => {
 
     const addRegModerator = useMutation({
         mutationKey: ['addRegModerator'],
-        mutationFn: (data: any) => AdminAPI.addRegionalModerator(data),
+        mutationFn: (data: any) => AdminAPI.changeRegModerator(data),
         onSuccess: (data) => {
             toast.success('Користувачу надані права регіонального модератора');
         },
@@ -86,6 +92,7 @@ const AddModeratorModal = (props: any) => {
         };
 
         // addModerator.mutate(nFormData);
+
         if (regModerator) addRegModerator.mutate(nFormData);
         else addModerator.mutate(nFormData);
 

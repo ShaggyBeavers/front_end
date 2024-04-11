@@ -23,6 +23,16 @@ const AdminAPI = {
     }) => authAPi.patch('api/admin/moderators/change-categories', values),
     deleteModerator: (moderatorId: number) =>
         authAPi.delete(`api/admin/moderators/${moderatorId}`),
+    changeModerator: (values: {
+        userId: number;
+        regionIds: string[];
+        categoryIds: string[];
+    }) => authAPi.patch('api/admin/moderators', values),
+    changeRegModerator: (values: {
+        userId: number;
+        regionIds: string[];
+        categoryIds: string[];
+    }) => authAPi.patch('api/admin/regional-moderators', values),
 };
 
 export default AdminAPI;
