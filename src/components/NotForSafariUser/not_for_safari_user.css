@@ -1,0 +1,44 @@
+.not_for_safari_user_con {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.not_for_safari_user {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.not_for_safari_user h3 {
+    color: black;
+    margin-top: 1rem;
+}
+
+.not_for_safari_user button {
+    border-radius: 40px;
+    background: black;
+    color: white;
+    border: 2px solid black;
+    padding: 7px 17px;
+    margin-top: 1rem;
+    transition: 0.5s;
+}
+
+.not_for_safari_user button:hover {
+    color: black;
+    flex: 1;
+    background:
+        linear-gradient(white, white) padding-box,
+        linear-gradient(to right, #bf98c6, #4b8bfa) border-box;
+    border-radius: 40px;
+    border: 2px solid transparent;
+    transition: 0.5s;
+}
