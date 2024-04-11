@@ -7,7 +7,7 @@ const WeeklyExhibit = () => {
             <div className="weekly_exhibit">
                 <div className="week_con">
                     <div className="week_left">
-                        <h2 id="week-exhibit">Експонат тижня:</h2>
+                        <h2 id="week-exhibit">Експонат:</h2>
                         <div className="week_img">
                             <img src="assets/images/dima_wide.jpg" />
                         </div>
@@ -48,7 +48,7 @@ const WeeklyExhibit = () => {
                             </div>
                             <div className="week_inner">
                                 <h6>Судові процеси:</h6>
-                                <h6 className="week_inner_small">dsjchjkahvcnkjewdsnkjncvkesdnvcjksdncvjksnfjk</h6>
+                                <h6 className="week_inner_small">-</h6>
                             </div>
                         </div>
                     </div>

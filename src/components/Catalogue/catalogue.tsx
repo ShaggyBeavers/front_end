@@ -86,7 +86,7 @@ export interface Filters {
     categories: string[];
     regions: string[];
     museums: string[];
-    file: boolean;
+    file: any;
     [key: string]: any;
 }
 
@@ -151,7 +151,7 @@ const Catalogue = () => {
             categories: [],
             museums: [],
             regions: [],
-            file: false,
+            file: null,
         }
     );
     const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
@@ -296,10 +296,10 @@ const Catalogue = () => {
         }
     };
 
-    const handleToggleFileFilter = (isChecked: boolean) => {
+    const handleToggleFileFilter = (isChecked: boolean | null) => {
         setSelectedFilterOptions((prevOptions) => ({
             ...prevOptions,
-            file: isChecked,
+            file: isChecked === null ? null : isChecked,
         }));
     };
     const handleFilterCategoryClick = (category: string) => {

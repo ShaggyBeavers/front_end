@@ -1,13 +1,14 @@
 import './switch_btn.css';
 
 interface SwitchBtnProps {
-    onToggle: (isChecked: boolean) => void;
+    onToggle: (isChecked: boolean | null) => void;
 }
 
 export default function SwitchBtn({ onToggle }: SwitchBtnProps) {
     const handleToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
         const isChecked = event.target.checked;
-        onToggle(isChecked);
+        onToggle(isChecked ? true : null);
+        console.log(isChecked)
     };
 
 

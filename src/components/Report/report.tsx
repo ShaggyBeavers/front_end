@@ -7,6 +7,7 @@ import ReactSelect from 'react-select';
 import { reportData } from '../../app/api/Report/report';
 import RegionAPI from '../../app/api/Region/region';
 import CategoryAPI from '../../app/api/Category/category';
+import { toast } from 'sonner';
 
 export default function Report() {
     const { register, handleSubmit, formState, reset, setValue } =
@@ -39,6 +40,13 @@ export default function Report() {
             reset();
             setSelectedCategories([]);
             setSelectedRegion(null);
+            toast('Успішно подано репорт', {
+                description: (
+                    <pre className="mt-2 w-[340px] rounded-md">
+                        <code>{JSON.stringify(formData, null, 4)}</code>
+                    </pre>
+                ),
+            });
         } catch (error: any) {
             if (error) {
                 console.log(error);
