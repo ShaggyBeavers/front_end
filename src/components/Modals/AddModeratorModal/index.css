@@ -1,4 +1,4 @@
-.center-mod{
+.center-mod {
     width: 642px;
     height: 330px;
     display: flex;
@@ -7,26 +7,26 @@
     justify-content: center;
 }
 
-.center-mod > *:not(:first-child){
+.center-mod > *:not(:first-child) {
     margin-top: 20px;
 }
 
-.mod-input{
+.mod-input {
     height: 32px;
     border-radius: 20px;
-    border: 1px solid var(--Dark-Grey, #A3A3A3);
+    border: 1px solid var(--Dark-Grey, #a3a3a3);
     font-size: 13px;
     padding-left: 12px;
 }
 
-.row-mod{
+.row-mod {
     display: flex;
     flex-direction: column;
     /* justify-content: space-between; */
     /* align-items: center; */
 }
 
-.row-mod:last-child{
+.row-mod:last-child {
     margin-top: 25px;
     display: flex;
     flex-direction: row;
@@ -34,7 +34,7 @@
     align-items: flex-end;
 }
 
-.select{
+.select {
     border-radius: 24px;
     width: 100%;
     font-size: 13px;

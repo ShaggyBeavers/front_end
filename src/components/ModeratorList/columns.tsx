@@ -5,7 +5,6 @@ that will be displayed, how it will be formatted,
 sorted and filtered.
 */
 
-import { ColumnDef } from '@tanstack/react-table';
 import { Badge } from '../ui/badge';
 
 import { statuses, categories } from './data/reportData';
@@ -15,9 +14,8 @@ import {
     categoryType,
 } from '../../types/report-table-columns';
 import { ShowLabels } from './DataTableShowLabels';
-import { cva } from 'class-variance-authority';
-import { stat } from 'fs';
 import { DataTableRowActions } from './DataTableRowActions';
+import { Ban } from 'lucide-react';
 
 export const columns: any = [
     {

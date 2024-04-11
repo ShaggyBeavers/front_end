@@ -26,6 +26,8 @@ const ReportAPI = {
     getReport: (reportId: number) => authAPi.get(`api/report/${reportId}`),
     deleteReport: (reportId: number) =>
         authAPi.delete(`api/report/delete/${reportId}`),
+    deleteReportFiles: (reportId: number) =>
+        authAPi.delete(`api/report/files/delete/${reportId}`),
 };
 
 export default ReportAPI;

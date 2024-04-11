@@ -5,7 +5,7 @@ const AddRelicPage = () => {
     return (
         <>
             <EditRelic />
-            <Toaster />
+            <Toaster richColors />
         </>
     );
 };
