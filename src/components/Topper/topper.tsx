@@ -8,7 +8,7 @@ const Topper = () => {
             <NavBar />
             <div className="topper">
                 <div className="topper_con">
-                    <h1>Divi</h1>
+                    <h1>Реліквії</h1>
                     <Search />
                 </div>
             </div>

@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet";
 import NavBar from "../components/NavBar/navbar";
 import RecoveryEmail from "../components/RecoveryEmail/recovery_email";
 
@@ -8,6 +9,9 @@ const RecoveryPage = () => {
   
     return (
       <div>
+        <Helmet>
+            <title>Відновлення паролю</title>
+        </Helmet>
         <NavBar />
         <RecoveryEmail/>
       </div>
