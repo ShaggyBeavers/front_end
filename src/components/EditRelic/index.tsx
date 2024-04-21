@@ -49,7 +49,11 @@ const relicFormSchema = z
             .string({ required_error: 'Вкажіть назву реліквії' })
             .min(3, { message: 'Назва повинна бути більше 3 символів.' }),
         //     .max(255),
-        // region: z.string({ required_error: 'Вкажіть регіон' }),
+        // region: z
+        //     .string({
+        //         required_error: 'Вкажіть регіон',
+        //     })
+        //     .min(1, { message: 'Вкажіть регіон' }),
         // status: z.string({ required_error: 'Вкажіть статус' }),
         // description: z.string({ required_error: 'Вкажіть опис' }),
         // creationDate: z.string({ required_error: 'Вкажіть дату' }),
@@ -92,6 +96,7 @@ export const EditRelic = () => {
         },
         onError: (error) => {
             console.log(error);
+            toast.error('Помилка при завантаженні файлу');
         },
         // retryDelay: 1000,
         // retry: 3,
@@ -99,19 +104,24 @@ export const EditRelic = () => {
 
     const formData = new FormData();
     const [relicId, setRelicId] = useState<number>(0);
+    const [fileFormData, setFileFormData] = useState<FormData>(formData);
+
     const addRelic = useMutation({
         mutationFn: RelicAPI.createRelic,
         onSuccess: (data) => {
-            // console.log(
-            //     'Relic added. Now we can start adding photos to: ',
-            //     data.data
-            // );
+            console.log(
+                'Relic added. Now we can start adding photos to: ',
+                data
+            );
+            console.log('Relic ID:', relicId);
             // files.forEach((file) => {
             //     if (file?.file) {
             //         formData.append('file', file.file);
             //     }
             // });
             setRelicId(data.data);
+            // uploadRelicFile.mutate({ relicId: data.data, file: fileFormData });
+            console.log('RElic ID:', data.data);
             toast.success(`Реліквія добавлена`, {
                 description: (
                     <>
@@ -123,10 +133,11 @@ export const EditRelic = () => {
             });
         },
         onSettled: () => {
-            // uploadRelicFile.mutate({ relicId: relicId, file: formData });
+            // console.log('Relid ID:', relicId);
         },
         onError: (error) => {
             console.log(error);
+            toast.error('Помилка при додаванні реліквії');
         },
     });
 
@@ -173,17 +184,6 @@ export const EditRelic = () => {
 
     const onSubmit = (data: any) => {
         data = cleanUpData(data);
-        // if (formRef.current?.checkValidity()) {
-        // toast('You submitted the following values:', {
-        //     description: (
-        //         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-        //             <code className="text-white">
-        //                 {JSON.stringify(data, null, 2)}
-        //             </code>
-        //         </pre>
-        //     ),
-        // });
-
         let LostRelicInfoCreateEditDTO: LostRelicInfoCreateEditDTO | undefined =
             {};
         if (isLost) {
@@ -297,31 +297,26 @@ export const EditRelic = () => {
         };
 
         // add upload files to relicId 20
-        const formData = new FormData();
+        const fileData = new FormData();
         files.forEach((file) => {
             if (file?.file) {
-                formData.append('file', file.file);
+                fileData.append('file', file.file);
             }
         });
+
+        setFileFormData(fileData);
         addRelic
             .mutateAsync(relic)
             .then((data: any) => {
-                uploadRelicFile.mutate({ relicId: data.data, file: formData });
+                uploadRelicFile.mutate({ relicId: relicId, file: formData });
             })
             .catch((error: any) => {
                 console.log(error);
             });
 
-        uploadRelicFile.mutate({ relicId: relicId, file: formData });
-        // toast.success(`Реліквію додано`, {
-        //     description: (
-        //         <>
-        //             <b>{relic.name}</b>{' '}
-        //             {/* {relic.status && `зі статусом ${relic.status}`}  */}
-        //             була додано
-        //         </>
-        //     ),
-        // });
+        // addRelic.mutate(relic);
+
+        // uploadRelicFile.mutate({ relicId: relicId, file: formData });
 
         toast.success(`Фотографії зафантажено`, {
             description: (
@@ -374,7 +369,9 @@ export const EditRelic = () => {
             }),
         });
 
+        setRelicId(0);
         setFiles([]);
+        setFileFormData(new FormData());
         setSelectedProperties([]);
         // formRef.current?.dispatchEvent(
         //     new Event('submit', { bubbles: true })
