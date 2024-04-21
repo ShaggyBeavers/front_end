@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { Filters } from '../Catalogue/catalogue';
 import NavBar from '../NavBar/navbar';
 import Search from '../Search/search';
 import './topper.css';
@@ -9,7 +11,7 @@ const Topper = () => {
             <div className="topper">
                 <div className="topper_con">
                     <h1>Реліквії</h1>
-                    <Search />
+                    <Search/>
                 </div>
             </div>
         </div>

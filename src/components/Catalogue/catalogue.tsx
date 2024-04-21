@@ -265,20 +265,32 @@ const Catalogue = () => {
     };
 
     useEffect(() => {
-        // const searchParams = new URLSearchParams(location.search);
-        const pageParam = searchParam.get('page');
-        const categoryParam = searchParam.get('category');
-        const pageNumber = pageParam ? parseInt(pageParam, 10) : 1;
-        setCurrentPage(pageNumber);
+        const searchParams = new URLSearchParams(location.search);
 
-        if (categoryParam) {
-            const categoriesArray = categoryParam.split(',');
-            setSelectedFilterOptions((prevState) => ({
-                ...prevState,
-                categories: categoriesArray,
-            }));
-        }
-        fetchData(pageNumber);
+        const updatedFilterOptions: Filters = {
+            name: searchParams.get('name') || '',
+            historicalPeriods: (searchParams.get('historicalPeriods') || '')
+                .split(',')
+                .filter(Boolean),
+            statuses: (searchParams.get('statuses') || '')
+                .split(',')
+                .filter(Boolean),
+            techniques: (searchParams.get('techniques') || '')
+                .split(',')
+                .filter(Boolean),
+            categories: (searchParams.get('categories') || '')
+                .split(',')
+                .filter(Boolean),
+            museums: (searchParams.get('museums') || '')
+                .split(',')
+                .filter(Boolean),
+            regions: (searchParams.get('regions') || '')
+                .split(',')
+                .filter(Boolean),
+            file: searchParams.get('file') || null,
+        };
+
+        setSelectedFilterOptions(updatedFilterOptions);
     }, [location.search]);
 
     useEffect(() => {
@@ -289,9 +301,32 @@ const Catalogue = () => {
         console.log(selectedFilterOptions);
     }, [selectedFilterOptions]);
 
+    useEffect(() => {
+        const searchParams = new URLSearchParams();
+        Object.entries(selectedFilterOptions).forEach(([key, value]) => {
+            if (Array.isArray(value) && value.length > 0) {
+                searchParams.append(key, value.join(','));
+            } else if (value && value !== '' && value.length !== 0) {
+                searchParams.append(key, value);
+            }
+        });
+        setSearchParam(searchParams);
+    }, [setSelectedFilterOptions]);
+
     const paginate = (pageNumber: number) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
-            navigate(`?page=${pageNumber}`);
+            setCurrentPage(pageNumber);
+            const searchParams = new URLSearchParams(location.search);
+
+            // Update the 'page' parameter
+            searchParams.set('page', pageNumber.toString());
+
+            // Construct the new URL with updated parameters
+            const newUrl = `${location.pathname}?${searchParams.toString()}`;
+            console.log(newUrl);
+
+            // Navigate to the new URL
+            navigate(newUrl);
             scrollToTop();
         }
     };
