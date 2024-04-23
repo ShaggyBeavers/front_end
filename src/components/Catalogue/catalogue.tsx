@@ -37,6 +37,7 @@ import {
     MasonryScroller,
 } from 'masonic';
 import RelicItem from './relicItem';
+import { ArrayParam, BooleanParam, NumberParam, QueryParamConfig, StringParam, useQueryParams, withDefault } from 'use-query-params';
 
 interface Photo {
     //FOR STYLING
@@ -264,72 +265,75 @@ const Catalogue = () => {
         }
     };
 
-    useEffect(() => {
-        const searchParams = new URLSearchParams(location.search);
+    const [queryParams, setQueryParams] = useQueryParams({
+        page: NumberParam,
+        name: StringParam,
+        historicalPeriods: ArrayParam,
+        statuses: ArrayParam,
+        techniques: ArrayParam,
+        categories: ArrayParam,
+        museums: ArrayParam,
+        regions: ArrayParam,
+        file:BooleanParam,
+    });
 
-        const updatedFilterOptions: Filters = {
-            name: searchParams.get('name') || '',
-            historicalPeriods: (searchParams.get('historicalPeriods') || '')
-                .split(',')
-                .filter(Boolean),
-            statuses: (searchParams.get('statuses') || '')
-                .split(',')
-                .filter(Boolean),
-            techniques: (searchParams.get('techniques') || '')
-                .split(',')
-                .filter(Boolean),
-            categories: (searchParams.get('categories') || '')
-                .split(',')
-                .filter(Boolean),
-            museums: (searchParams.get('museums') || '')
-                .split(',')
-                .filter(Boolean),
-            regions: (searchParams.get('regions') || '')
-                .split(',')
-                .filter(Boolean),
-            file: searchParams.get('file') || null,
-        };
-
-        setSelectedFilterOptions(updatedFilterOptions);
-    }, [location.search]);
+ 
 
     useEffect(() => {
-        fetchData(currentPage);
-    }, [navigate, selectedFilterOptions]);
-
-    useEffect(() => {
-        console.log(selectedFilterOptions);
-    }, [selectedFilterOptions]);
-
-    useEffect(() => {
-        const searchParams = new URLSearchParams();
-        Object.entries(selectedFilterOptions).forEach(([key, value]) => {
-            if (Array.isArray(value) && value.length > 0) {
-                searchParams.append(key, value.join(','));
-            } else if (value && value !== '' && value.length !== 0) {
-                searchParams.append(key, value);
-            }
+        setSelectedFilterOptions({
+            name: queryParams.name || '',
+            historicalPeriods: (queryParams.historicalPeriods || []).filter(Boolean) as string[],
+            statuses: (queryParams.statuses || []).filter(Boolean) as string[],
+            techniques: (queryParams.techniques || []).filter(Boolean) as string[],
+            categories:(queryParams.categories || []).filter(Boolean) as string[],
+            museums: (queryParams.museums || []).filter(Boolean) as string[],
+            regions: (queryParams.regions || []).filter(Boolean) as string[],
+            file: queryParams.file || null, 
         });
-        setSearchParam(searchParams);
-    }, [setSelectedFilterOptions]);
+    }, [queryParams]);
+
+    useEffect(() => {
+        setQueryParams({
+            name: selectedFilterOptions.name,
+            historicalPeriods: selectedFilterOptions.historicalPeriods,
+            statuses: selectedFilterOptions.statuses,
+            techniques: selectedFilterOptions.techniques,
+            categories: selectedFilterOptions.categories,
+            museums: selectedFilterOptions.museums,
+            regions: selectedFilterOptions.regions,
+            file: selectedFilterOptions.file,
+        });
+    }, [selectedFilterOptions]);
+    
+
+    useEffect(() => {
+        fetchData(currentPage); 
+    }, [currentPage, selectedFilterOptions]); 
+
+
+    useEffect(() => {
+        const pageFromUrl = queryParams.page || 1;
+    
+        if (currentPage !== pageFromUrl || selectedFilterOptions !== queryParams) {
+            setCurrentPage(pageFromUrl); 
+            fetchData(pageFromUrl);
+        }
+    }, [currentPage, selectedFilterOptions, queryParams.page]);
 
     const paginate = (pageNumber: number) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
+            setQueryParams({ page: pageNumber });
             setCurrentPage(pageNumber);
-            const searchParams = new URLSearchParams(location.search);
-
-            // Update the 'page' parameter
-            searchParams.set('page', pageNumber.toString());
-
-            // Construct the new URL with updated parameters
-            const newUrl = `${location.pathname}?${searchParams.toString()}`;
-            console.log(newUrl);
-
-            // Navigate to the new URL
-            navigate(newUrl);
             scrollToTop();
         }
     };
+
+    const applyFilters = () => {
+        setCurrentPage(1); 
+    };
+    // useEffect(() => {
+    //     console.log(selectedFilterOptions);
+    // }, [selectedFilterOptions]);
 
     const handleToggleFileFilter = (isChecked: boolean | null) => {
         setSelectedFilterOptions((prevOptions) => ({
@@ -429,10 +433,6 @@ const Catalogue = () => {
     ];
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-
-    const applyFilters = () => {
-        fetchData(currentPage);
     };
 
     const containerRef = useRef(null);
