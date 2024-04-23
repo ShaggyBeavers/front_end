@@ -106,7 +106,6 @@ const Catalogue = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [notFound, setNotFound] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [ids, setIds] = useState<ImageId[]>([]);
     // const [items, setItems] = useState<Photo[]>([]);   FOR STYLING
@@ -276,20 +275,18 @@ const Catalogue = () => {
         file:BooleanParam,
     });
 
- 
-
-    // useEffect(() => {
-    //     setSelectedFilterOptions({
-    //         name: queryParams.name || '',
-    //         historicalPeriods: (queryParams.historicalPeriods || []).filter(Boolean) as string[],
-    //         statuses: (queryParams.statuses || []).filter(Boolean) as string[],
-    //         techniques: (queryParams.techniques || []).filter(Boolean) as string[],
-    //         categories:(queryParams.categories || []).filter(Boolean) as string[],
-    //         museums: (queryParams.museums || []).filter(Boolean) as string[],
-    //         regions: (queryParams.regions || []).filter(Boolean) as string[],
-    //         file: queryParams.file || null, 
-    //     });
-    // }, [queryParams]);
+    useEffect(() => {
+        setSelectedFilterOptions({
+            name: queryParams.name || '',
+            historicalPeriods: (queryParams.historicalPeriods || []).filter(Boolean) as string[],
+            statuses: (queryParams.statuses || []).filter(Boolean) as string[],
+            techniques: (queryParams.techniques || []).filter(Boolean) as string[],
+            categories:(queryParams.categories || []).filter(Boolean) as string[],
+            museums: (queryParams.museums || []).filter(Boolean) as string[],
+            regions: (queryParams.regions || []).filter(Boolean) as string[],
+            file: queryParams.file || null, 
+        });
+    }, [queryParams]);
 
     useEffect(() => {
         setQueryParams({
@@ -305,32 +302,26 @@ const Catalogue = () => {
     }, [selectedFilterOptions]);
     
 
-    useEffect(() => {
-        // fetchData(currentPage); 
+    useEffect(() => { 
         fetchData(queryParams.page); 
-    }, [selectedFilterOptions]); //currentPage
+    }, [selectedFilterOptions]); 
 
 
     useEffect(() => {
         const pageFromUrl = queryParams.page || 1;
     
-        if (currentPage !== pageFromUrl || selectedFilterOptions !== queryParams) {
-            setCurrentPage(pageFromUrl); 
+        if (selectedFilterOptions !== queryParams) {
             fetchData(pageFromUrl);
         }
-    }, [  queryParams.page]); //currentPage,selectedFilterOptions
+    }, [  queryParams.page]);
 
     const paginate = (pageNumber: number) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
             setQueryParams({ page: pageNumber });
-            // setCurrentPage(pageNumber);
             scrollToTop();
         }
     };
 
-    // const applyFilters = () => {
-    //     setCurrentPage(1); 
-    // };
     // useEffect(() => {
     //     console.log(selectedFilterOptions);
     // }, [selectedFilterOptions]);
@@ -562,7 +553,7 @@ const Catalogue = () => {
                                 <div className="flex flex-col items-center">
                                     <Pagination
                                         totalPages={totalPages}
-                                        currentPage={currentPage}
+                                        currentPage={queryParams.page}
                                         onPageChange={paginate}
                                     />
                                     <div
