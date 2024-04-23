@@ -109,7 +109,6 @@ const Catalogue = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [ids, setIds] = useState<ImageId[]>([]);
-    const [searchParam, setSearchParam] = useSearchParams();
     // const [items, setItems] = useState<Photo[]>([]);   FOR STYLING
     const [result, setResult] = useState<GetAllRelicsResponse>({
         totalPages: 0,
@@ -181,7 +180,7 @@ const Catalogue = () => {
         retry: false,
     });
 
-    const fetchData = async (page: number) => {
+    const fetchData = async (page: any) => {
         try {
             //  FOR STYLING
             // const response = await axios.get<Photo[]>(
@@ -279,18 +278,18 @@ const Catalogue = () => {
 
  
 
-    useEffect(() => {
-        setSelectedFilterOptions({
-            name: queryParams.name || '',
-            historicalPeriods: (queryParams.historicalPeriods || []).filter(Boolean) as string[],
-            statuses: (queryParams.statuses || []).filter(Boolean) as string[],
-            techniques: (queryParams.techniques || []).filter(Boolean) as string[],
-            categories:(queryParams.categories || []).filter(Boolean) as string[],
-            museums: (queryParams.museums || []).filter(Boolean) as string[],
-            regions: (queryParams.regions || []).filter(Boolean) as string[],
-            file: queryParams.file || null, 
-        });
-    }, [queryParams]);
+    // useEffect(() => {
+    //     setSelectedFilterOptions({
+    //         name: queryParams.name || '',
+    //         historicalPeriods: (queryParams.historicalPeriods || []).filter(Boolean) as string[],
+    //         statuses: (queryParams.statuses || []).filter(Boolean) as string[],
+    //         techniques: (queryParams.techniques || []).filter(Boolean) as string[],
+    //         categories:(queryParams.categories || []).filter(Boolean) as string[],
+    //         museums: (queryParams.museums || []).filter(Boolean) as string[],
+    //         regions: (queryParams.regions || []).filter(Boolean) as string[],
+    //         file: queryParams.file || null, 
+    //     });
+    // }, [queryParams]);
 
     useEffect(() => {
         setQueryParams({
@@ -307,8 +306,9 @@ const Catalogue = () => {
     
 
     useEffect(() => {
-        fetchData(currentPage); 
-    }, [currentPage, selectedFilterOptions]); 
+        // fetchData(currentPage); 
+        fetchData(queryParams.page); 
+    }, [selectedFilterOptions]); //currentPage
 
 
     useEffect(() => {
@@ -318,19 +318,19 @@ const Catalogue = () => {
             setCurrentPage(pageFromUrl); 
             fetchData(pageFromUrl);
         }
-    }, [currentPage, selectedFilterOptions, queryParams.page]);
+    }, [  queryParams.page]); //currentPage,selectedFilterOptions
 
     const paginate = (pageNumber: number) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
             setQueryParams({ page: pageNumber });
-            setCurrentPage(pageNumber);
+            // setCurrentPage(pageNumber);
             scrollToTop();
         }
     };
 
-    const applyFilters = () => {
-        setCurrentPage(1); 
-    };
+    // const applyFilters = () => {
+    //     setCurrentPage(1); 
+    // };
     // useEffect(() => {
     //     console.log(selectedFilterOptions);
     // }, [selectedFilterOptions]);
@@ -521,7 +521,6 @@ const Catalogue = () => {
                                             setIsFilterModalOpen={
                                                 setIsFilterModalOpen
                                             }
-                                            applyFilters={applyFilters}
                                         />
                                     ))}
                                 </ul>

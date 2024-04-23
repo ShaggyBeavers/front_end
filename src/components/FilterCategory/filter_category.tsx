@@ -15,7 +15,6 @@ interface FilterCategoryProps {
     selectedFilterOptions: Filters;
     handleFilterOptionClick: (option: string, category: string) => void;
     setIsFilterModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    applyFilters: () => void;
 }
 
 export const FilterCategory: React.FC<FilterCategoryProps> = ({
@@ -28,7 +27,6 @@ export const FilterCategory: React.FC<FilterCategoryProps> = ({
     selectedFilterOptions,
     handleFilterOptionClick,
     setIsFilterModalOpen,
-    applyFilters,
 }) => {
     const selectedOptionsForCategory = selectedFilterOptions[category];
 
@@ -52,7 +50,6 @@ export const FilterCategory: React.FC<FilterCategoryProps> = ({
                     options={options} // here will be the result from the endpoint
                     selectedOptions={selectedOptionsForCategory}
                     onClose={() => {
-                        applyFilters();
                         setIsFilterModalOpen(false);
                         handleFilterCategoryClick(category);
                     }}
