@@ -3,11 +3,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: rgb(255, 214, 0);
+    background: rgba(75, 139, 250, 1);
     background: linear-gradient(
         135deg,
-        rgba(255, 214, 0, 1) 0%,
-        rgba(250, 89, 79, 1) 100%
+        rgba(75, 139, 250, 1) 0%,
+        rgba(191, 152, 198, 1) 100%
     );
 }
 

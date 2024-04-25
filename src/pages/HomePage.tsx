@@ -5,6 +5,7 @@ import WeeklyExhibit from '../components/WeeklyExhibit/w_exhibit';
 import Categories from '../components/Categories/categories';
 import NotForSafariUser from '../components/NotForSafariUser/not_for_safari_user';
 import { Helmet } from 'react-helmet';
+import HelpBanner from '../components/HelpBanner/help_banner';
 
 const HomePage = () => (
     <div>
@@ -14,8 +15,9 @@ const HomePage = () => (
         <NotForSafariUser />
         <Topper />
         <WeeklyExhibit />
-        <BannerLanding />
+        <HelpBanner/>
         <Categories />
+        <BannerLanding />
         <Footer />
     </div>
 );
