@@ -28,6 +28,8 @@ import { array } from 'zod';
 import { useWindowSize } from '@react-hook/window-size';
 import { unzipSync } from 'fflate';
 import { Buffer } from 'buffer';
+
+import { X } from 'lucide-react';
 // import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import {
     Masonry,
@@ -37,7 +39,16 @@ import {
     MasonryScroller,
 } from 'masonic';
 import RelicItem from './relicItem';
-import { ArrayParam, BooleanParam, NumberParam, QueryParamConfig, StringParam, useQueryParams, withDefault } from 'use-query-params';
+import {
+    ArrayParam,
+    BooleanParam,
+    NumberParam,
+    QueryParamConfig,
+    StringParam,
+    useQueryParams,
+    withDefault,
+} from 'use-query-params';
+import { Badge } from '../ui/badge';
 
 interface Photo {
     //FOR STYLING
@@ -179,7 +190,10 @@ const Catalogue = () => {
         retry: false,
     });
 
-    const fetchData = async (page: any, filterOptions?: typeof selectedFilterOptions) => {
+    const fetchData = async (
+        page: any,
+        filterOptions?: typeof selectedFilterOptions
+    ) => {
         try {
             //  FOR STYLING
             // const response = await axios.get<Photo[]>(
@@ -272,27 +286,39 @@ const Catalogue = () => {
         categories: ArrayParam,
         museums: ArrayParam,
         regions: ArrayParam,
-        file:BooleanParam,
+        file: BooleanParam,
     });
 
     useEffect(() => {
         setSelectedFilterOptions(() => {
-          const updatedOptions = {
-            name: queryParams.name || '',
-            historicalPeriods: (queryParams.historicalPeriods || []).filter(Boolean) as string[],
-            statuses: (queryParams.statuses || []).filter(Boolean) as string[],
-            techniques: (queryParams.techniques || []).filter(Boolean) as string[],
-            categories: (queryParams.categories || []).filter(Boolean) as string[],
-            museums: (queryParams.museums || []).filter(Boolean) as string[],
-            regions: (queryParams.regions || []).filter(Boolean) as string[],
-            file: queryParams.file || null,
-          };
-      
-          fetchData(queryParams.page, updatedOptions);
-      
-          return updatedOptions;
+            const updatedOptions = {
+                name: queryParams.name || '',
+                historicalPeriods: (queryParams.historicalPeriods || []).filter(
+                    Boolean
+                ) as string[],
+                statuses: (queryParams.statuses || []).filter(
+                    Boolean
+                ) as string[],
+                techniques: (queryParams.techniques || []).filter(
+                    Boolean
+                ) as string[],
+                categories: (queryParams.categories || []).filter(
+                    Boolean
+                ) as string[],
+                museums: (queryParams.museums || []).filter(
+                    Boolean
+                ) as string[],
+                regions: (queryParams.regions || []).filter(
+                    Boolean
+                ) as string[],
+                file: queryParams.file || null,
+            };
+
+            fetchData(queryParams.page, updatedOptions);
+
+            return updatedOptions;
         });
-      }, [queryParams]);
+    }, [queryParams]);
 
     const paginate = (pageNumber: number) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -301,9 +327,9 @@ const Catalogue = () => {
         }
     };
 
-    const applyFilters = () =>{
+    const applyFilters = () => {
         setQueryParams({
-            page:1,
+            page: 1,
             name: selectedFilterOptions.name,
             historicalPeriods: selectedFilterOptions.historicalPeriods,
             statuses: selectedFilterOptions.statuses,
@@ -313,7 +339,7 @@ const Catalogue = () => {
             regions: selectedFilterOptions.regions,
             file: selectedFilterOptions.file,
         });
-    }
+    };
 
     const handleToggleFileFilter = (isChecked: boolean | null) => {
         setSelectedFilterOptions((prevOptions) => ({
@@ -438,129 +464,201 @@ const Catalogue = () => {
 
     const resizeObserver = useResizeObserver(positioner);
 
+    function removeQueryParam(key: string): void {}
+
     return (
         <>
             {notFound ? (
                 <NotFound />
             ) : (
-                <div className="catalogue-container">
-                    <div className="cat_left">
-                        <div className="cat_search">
-                            <Search
-                                setQueryParams={
-                                    setQueryParams
+                <div className="catalogue-container flex flex-col">
+                    <div className="item-bar h-10 w-full">
+                        <div className="flex">
+                            {Object.entries(queryParams).map(([key, value]) => {
+                                if (key !== 'page') {
+                                    if (
+                                        value === null ||
+                                        value === undefined ||
+                                        value === ''
+                                    )
+                                        return null;
+                                    if (Array.isArray(value)) {
+                                        return value.map((val) => (
+                                            <Badge
+                                                key={`${key}-${val}`}
+                                                variant="outline"
+                                                className="flex mr-2"
+                                                onClick={() =>
+                                                    removeQueryParam(key)
+                                                }
+                                            >
+                                                {val}
+                                                <X className="w-[70%] h-[70%]" />
+                                            </Badge>
+                                        ));
+                                    } else {
+                                        if (Array.isArray(value)) {
+                                            return value.map((val) => (
+                                                <Badge
+                                                    key={`${key}-${val}`}
+                                                    variant="outline"
+                                                    className="flex mr-2"
+                                                    onClick={() =>
+                                                        removeQueryParam(key)
+                                                    }
+                                                >
+                                                    {val}
+                                                    <X className="w-[70%] h-[70%]" />
+                                                </Badge>
+                                            ));
+                                        } else {
+                                            return (
+                                                <Badge
+                                                    key={key}
+                                                    variant="outline"
+                                                    className="flex mr-2"
+                                                    onClick={() =>
+                                                        removeQueryParam(key)
+                                                    }
+                                                >
+                                                    {value}
+                                                    <X className="w-[70%] h-[70%]" />
+                                                </Badge>
+                                            );
+                                        }
+                                    }
+                                    return null;
                                 }
-                                applyFilters={applyFilters}
-                            />
-                        </div>
-                        <div className="cat_filter">
-                            <div className="cat_photo">
-                                <h6>Фото</h6>
-                                <SwitchBtn onToggle={handleToggleFileFilter} />
-                            </div>
-                            <div className="filter_categories">
-                                <ul>
-                                    {filterCategories.map((category, index) => (
-                                        <FilterCategory
-                                            key={category}
-                                            category={category}
-                                            title={translatedTitles[index]}
-                                            selectedCategory={selectedCategory}
-                                            handleFilterCategoryClick={
-                                                handleFilterCategoryClick
-                                            }
-                                            isFilterModalOpen={
-                                                isFilterModalOpen
-                                            }
-                                            options={
-                                                category === 'statuses'
-                                                    ? statusOptions.map(
-                                                          ({ label }) => label
-                                                      )
-                                                    : category === 'categories'
-                                                      ? categories
-                                                      : category ===
-                                                          'historicalPeriods'
-                                                        ? historicalPeriods
-                                                        : category ===
-                                                            'techniques'
-                                                          ? techniques
-                                                          : category ===
-                                                              'museums'
-                                                            ? museums
-                                                            : category ===
-                                                                'regions'
-                                                              ? regions
-                                                              : []
-                                            }
-                                            selectedFilterOptions={
-                                                selectedFilterOptions
-                                            }
-                                            handleFilterOptionClick={
-                                                handleFilterOptionClick
-                                            }
-                                            setIsFilterModalOpen={
-                                                setIsFilterModalOpen
-                                            }
-                                            applyFilters={applyFilters}
-                                        />
-                                    ))}
-                                </ul>
-                            </div>
+                            })}
                         </div>
                     </div>
-                    {/* <div className="cat_right"> */}
-                    <div className="w-full">
-                        {result.totalElements === 0 ? (
-                            <div className="w-full flex justify-center items-center h-screen">
-                                <div className="max-w-md text-center ">
-                                    <h3 className="pb-20">
-                                        За вашим запитом нічого не знайдено
-                                    </h3>
+                    <div className="page-content flex flex-row">
+                        <div className="cat_left">
+                            <div className="cat_search">
+                                <Search
+                                    setQueryParams={setQueryParams}
+                                    applyFilters={applyFilters}
+                                />
+                            </div>
+                            <div className="cat_filter">
+                                <div className="cat_photo">
+                                    <h6>Фото</h6>
+                                    <SwitchBtn
+                                        onToggle={handleToggleFileFilter}
+                                    />
+                                </div>
+                                <div className="filter_categories">
+                                    <ul>
+                                        {filterCategories.map(
+                                            (category, index) => (
+                                                <FilterCategory
+                                                    key={category}
+                                                    category={category}
+                                                    title={
+                                                        translatedTitles[index]
+                                                    }
+                                                    selectedCategory={
+                                                        selectedCategory
+                                                    }
+                                                    handleFilterCategoryClick={
+                                                        handleFilterCategoryClick
+                                                    }
+                                                    isFilterModalOpen={
+                                                        isFilterModalOpen
+                                                    }
+                                                    options={
+                                                        category === 'statuses'
+                                                            ? statusOptions.map(
+                                                                  ({ label }) =>
+                                                                      label
+                                                              )
+                                                            : category ===
+                                                                'categories'
+                                                              ? categories
+                                                              : category ===
+                                                                  'historicalPeriods'
+                                                                ? historicalPeriods
+                                                                : category ===
+                                                                    'techniques'
+                                                                  ? techniques
+                                                                  : category ===
+                                                                      'museums'
+                                                                    ? museums
+                                                                    : category ===
+                                                                        'regions'
+                                                                      ? regions
+                                                                      : []
+                                                    }
+                                                    selectedFilterOptions={
+                                                        selectedFilterOptions
+                                                    }
+                                                    handleFilterOptionClick={
+                                                        handleFilterOptionClick
+                                                    }
+                                                    setIsFilterModalOpen={
+                                                        setIsFilterModalOpen
+                                                    }
+                                                    applyFilters={applyFilters}
+                                                />
+                                            )
+                                        )}
+                                    </ul>
                                 </div>
                             </div>
-                        ) : (
-                            <>
-                                <div className="w-full">
-                                    <MasonryScroller
-                                        items={result.content}
-                                        positioner={positioner}
-                                        resizeObserver={resizeObserver}
-                                        height={windowHeight}
-                                        offset={offset}
-                                        // columnGutter={5}
-                                        // rowGutter={15}
-                                        // columnCount={3}
-                                        // columnWidth={140}
-                                        overscanBy={Infinity}
-                                        render={RelicItem}
-                                    />
-                                    {/* {result &&
+                        </div>
+                        {/* <div className="cat_right"> */}
+                        <div className="w-full">
+                            {result.totalElements === 0 ? (
+                                <div className="w-full flex justify-center items-center h-screen">
+                                    <div className="max-w-md text-center ">
+                                        <h3 className="pb-20">
+                                            За вашим запитом нічого не знайдено
+                                        </h3>
+                                    </div>
+                                </div>
+                            ) : (
+                                <>
+                                    <div className="w-full">
+                                        <MasonryScroller
+                                            items={result.content}
+                                            positioner={positioner}
+                                            resizeObserver={resizeObserver}
+                                            height={windowHeight}
+                                            offset={offset}
+                                            // columnGutter={5}
+                                            // rowGutter={15}
+                                            // columnCount={3}
+                                            // columnWidth={140}
+                                            overscanBy={Infinity}
+                                            render={RelicItem}
+                                        />
+                                        {/* {result &&
                                         result.content.map((item) => (
                         
                                       ))} */}
-                                </div>
-
-                                <div className="flex flex-col items-center">
-                                    <Pagination
-                                        totalPages={totalPages}
-                                        currentPage={queryParams.page}
-                                        onPageChange={paginate}
-                                    />
-                                    <div
-                                        className="to_top"
-                                        onClick={scrollToTop}
-                                    >
-                                        Перейти до гори
                                     </div>
-                                </div>
-                            </>
-                        )}
-                        {isFilterModalOpen && (
-                            <div
-                                className={`dimmed-overlay ${isFilterModalOpen ? 'active' : ''}`}
-                            ></div>
-                        )}
+
+                                    <div className="flex flex-col items-center">
+                                        <Pagination
+                                            totalPages={totalPages}
+                                            currentPage={queryParams.page}
+                                            onPageChange={paginate}
+                                        />
+                                        <div
+                                            className="to_top"
+                                            onClick={scrollToTop}
+                                        >
+                                            Перейти до гори
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+                            {isFilterModalOpen && (
+                                <div
+                                    className={`dimmed-overlay ${isFilterModalOpen ? 'active' : ''}`}
+                                ></div>
+                            )}
+                        </div>
                     </div>
                 </div>
             )}
