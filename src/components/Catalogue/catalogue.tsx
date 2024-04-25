@@ -179,7 +179,7 @@ const Catalogue = () => {
         retry: false,
     });
 
-    const fetchData = async (page: any) => {
+    const fetchData = async (page: any, filterOptions?: typeof selectedFilterOptions) => {
         try {
             //  FOR STYLING
             // const response = await axios.get<Photo[]>(
@@ -188,7 +188,7 @@ const Catalogue = () => {
             const response = await RelicAPI.filterRelics(
                 page - 1,
                 PAGE_SIZE,
-                selectedFilterOptions
+                filterOptions || selectedFilterOptions
             );
             setResult(response);
             const idsList = getIdsFromItems(response.content);
@@ -276,20 +276,34 @@ const Catalogue = () => {
     });
 
     useEffect(() => {
-        setSelectedFilterOptions({
+        setSelectedFilterOptions(() => {
+          const updatedOptions = {
             name: queryParams.name || '',
             historicalPeriods: (queryParams.historicalPeriods || []).filter(Boolean) as string[],
             statuses: (queryParams.statuses || []).filter(Boolean) as string[],
             techniques: (queryParams.techniques || []).filter(Boolean) as string[],
-            categories:(queryParams.categories || []).filter(Boolean) as string[],
+            categories: (queryParams.categories || []).filter(Boolean) as string[],
             museums: (queryParams.museums || []).filter(Boolean) as string[],
             regions: (queryParams.regions || []).filter(Boolean) as string[],
-            file: queryParams.file || null, 
+            file: queryParams.file || null,
+          };
+      
+          fetchData(queryParams.page, updatedOptions);
+      
+          return updatedOptions;
         });
-    }, [queryParams]);
+      }, [queryParams]);
 
-    useEffect(() => {
+    const paginate = (pageNumber: number) => {
+        if (pageNumber >= 1 && pageNumber <= totalPages) {
+            setQueryParams({ page: pageNumber });
+            scrollToTop();
+        }
+    };
+
+    const applyFilters = () =>{
         setQueryParams({
+            page:1,
             name: selectedFilterOptions.name,
             historicalPeriods: selectedFilterOptions.historicalPeriods,
             statuses: selectedFilterOptions.statuses,
@@ -299,32 +313,7 @@ const Catalogue = () => {
             regions: selectedFilterOptions.regions,
             file: selectedFilterOptions.file,
         });
-    }, [selectedFilterOptions]);
-    
-
-    useEffect(() => { 
-        fetchData(queryParams.page); 
-    }, [selectedFilterOptions]); 
-
-
-    useEffect(() => {
-        const pageFromUrl = queryParams.page || 1;
-    
-        if (selectedFilterOptions !== queryParams) {
-            fetchData(pageFromUrl);
-        }
-    }, [  queryParams.page]);
-
-    const paginate = (pageNumber: number) => {
-        if (pageNumber >= 1 && pageNumber <= totalPages) {
-            setQueryParams({ page: pageNumber });
-            scrollToTop();
-        }
-    };
-
-    // useEffect(() => {
-    //     console.log(selectedFilterOptions);
-    // }, [selectedFilterOptions]);
+    }
 
     const handleToggleFileFilter = (isChecked: boolean | null) => {
         setSelectedFilterOptions((prevOptions) => ({
@@ -458,9 +447,10 @@ const Catalogue = () => {
                     <div className="cat_left">
                         <div className="cat_search">
                             <Search
-                                setSelectedFilterOptions={
-                                    setSelectedFilterOptions
+                                setQueryParams={
+                                    setQueryParams
                                 }
+                                applyFilters={applyFilters}
                             />
                         </div>
                         <div className="cat_filter">
@@ -512,6 +502,7 @@ const Catalogue = () => {
                                             setIsFilterModalOpen={
                                                 setIsFilterModalOpen
                                             }
+                                            applyFilters={applyFilters}
                                         />
                                     ))}
                                 </ul>
