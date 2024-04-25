@@ -472,7 +472,7 @@ const Catalogue = () => {
                 <NotFound />
             ) : (
                 <div className="catalogue-container flex flex-col">
-                    <div className="item-bar h-10 w-full">
+                    {/* <div className="item-bar h-10 w-full">
                         <div className="flex">
                             {Object.entries(queryParams).map(([key, value]) => {
                                 if (key !== 'page') {
@@ -531,7 +531,7 @@ const Catalogue = () => {
                                 }
                             })}
                         </div>
-                    </div>
+                    </div> */}
                     <div className="page-content flex flex-row">
                         <div className="cat_left">
                             <div className="cat_search">

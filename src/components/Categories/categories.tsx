@@ -6,22 +6,22 @@ const Categories = () => {
     const categories = [
         {
             title: 'Архітектура',
-            query: 'architecture',
+            query: 'Архітектура',
             pic: '/assets/images/landing_sections/architecture.jpg',
         },
         {
             title: 'Зброя',
-            query: 'weapon',
+            query: 'Зброя',
             pic: '/assets/images/landing_sections/collections.jpg',
         },
         {
             title: 'Скульптура',
-            query: 'sculpture',
+            query: 'Скульптура',
             pic: '/assets/images/landing_sections/sculpture.jpg',
         },
         {
             title: 'Живопис',
-            query: 'paintings',
+            query: 'Живопис',
             pic: '/assets/images/landing_sections/paintings.jpg',
         },
     ];

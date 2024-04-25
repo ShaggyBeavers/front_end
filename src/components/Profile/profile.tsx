@@ -8,6 +8,7 @@ import AddTerm from '../AddTerm';
 import ModeratorList from '../ModeratorList';
 import ProtectedItems from '../ProtectedItems';
 import { RoleEnum } from '../../../src/enums/roles';
+import { Button } from '../ui/button';
 
 const headers = [
     {
@@ -37,8 +38,8 @@ const Profile = () => {
 
     return (
         <div className="profile-container">
-            <div className="profile-content">
-                <div className="profile-header">
+            {/* <div className="profile-content"> */}
+                {/* <div className="profile-header">
                     <h2>{displayName}</h2>
                     <ProtectedItems
                         role={[
@@ -49,20 +50,20 @@ const Profile = () => {
                     >
                         {header && header.path === 'profile' ? (
                             <p>
-                                Тут ви можете переглянути репорти про релівії{' '}
+                                Тут ви можете переглянути звістки про реліквії{' '} <a href="/report">Повідомити</a>
                             </p>
-                        ) : (
+                        ) : null}
+                        {header && header.path === 'moderator-list' ? (
                             <p>
                                 Тут ви можете переглянути модераторів сайту,
-                                {/* <Link> Повідомивши</Link> */}
                             </p>
-                        )}
+                        ) : null}
                     </ProtectedItems>
-                </div>
+                </div> */}
                 {isModeratorList && <ModeratorList />}
                 {isProfile && <RelicTableInfo />}
                 {isAddTerm && <AddTerm />}
-            </div>
+            {/* </div> */}
             <SideMenu currentPage={path} />
         </div>
     );

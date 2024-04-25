@@ -8,6 +8,7 @@ import { reportData } from '../../app/api/Report/report';
 import RegionAPI from '../../app/api/Region/region';
 import CategoryAPI from '../../app/api/Category/category';
 import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 
 export default function Report() {
     const { register, handleSubmit, formState, reset, setValue } =
@@ -27,6 +28,7 @@ export default function Report() {
     const [categories, setCategories] = useState<
         { value: string; id: number }[]
     >([]);
+    const navigate = useNavigate();
 
     const submitForm: SubmitHandler<reportData> = async (data) => {
         try {
@@ -41,6 +43,9 @@ export default function Report() {
             setSelectedCategories([]);
             setSelectedRegion(null);
             toast.success('Ваша звістка успішно надіслана');
+            setTimeout(() => {
+                navigate('/profile');
+            }, 700);
         } catch (error: any) {
             if (error) {
                 console.log(error);

@@ -23,40 +23,6 @@ import { Ban } from 'lucide-react';
 
 let tmpColumns: any = [
     {
-        accessorKey: 'reportId',
-        meta: 'Report Id',
-        header: ({ column }: any) => (
-            <DataTableColumnHeader column={column} title="Id" />
-        ),
-        cell: ({ row }: any) => (
-            <div className="max-w-[500px] truncate font-medium">
-                <span>{row.getValue('reportId')}</span>
-            </div>
-        ),
-    },
-    {
-        accessorKey: 'userId',
-        meta: 'Автор Id',
-        header: ({ column }: any) => (
-            <DataTableColumnHeader column={column} title="Автор Id" />
-        ),
-        cell: ({ row }: any) => (
-            <div className="max-w-[500px] truncate font-medium">
-                <span className="flex flex-row items-center">
-                    <span className="pr-1">
-                        {row.getValue('isUserBanned') ? (
-                            <Ban className="text-red-500 w-4 h-4" />
-                        ) : (
-                            <div className="w-4 h-4 bg-transparent"></div>
-                        )}
-                    </span>
-
-                    {row.getValue('userId')}
-                </span>
-            </div>
-        ),
-    },
-    {
         accessorKey: 'name',
         meta: 'Назва',
         header: ({ column }: any) => (
@@ -129,24 +95,6 @@ let tmpColumns: any = [
             return value.includes(row.getValue(id));
         },
     },
-    {
-        accessorKey: 'isUserBanned',
-        meta: 'Бан',
-        header: ({ column }: any) => (
-            <DataTableColumnHeader column={column} title="Бан" />
-        ),
-        cell: ({ row }: any) => {
-            return (
-                <div className="flex items-center space-x-2">
-                    {row.getValue('isUserBanned') ? (
-                        <Badge variant="destructive">Заблокований</Badge>
-                    ) : (
-                        <Badge variant="secondary">Активний</Badge>
-                    )}
-                </div>
-            );
-        },
-    },
 ];
 
 if (
@@ -156,10 +104,64 @@ if (
         RoleEnum.REGIONAL_MODERATOR,
     ])
 ) {
-    tmpColumns.push({
-        id: 'action',
-        cell: ({ row }: any) => <DataTableRowActions row={row} />,
-    });
+    tmpColumns.push(
+        {
+            accessorKey: 'reportId',
+            meta: 'Report Id',
+            header: ({ column }: any) => (
+                <DataTableColumnHeader column={column} title="Id" />
+            ),
+            cell: ({ row }: any) => (
+                <div className="max-w-[500px] truncate font-medium">
+                    <span>{row.getValue('reportId')}</span>
+                </div>
+            ),
+        },
+        {
+            accessorKey: 'userId',
+            meta: 'Автор Id',
+            header: ({ column }: any) => (
+                <DataTableColumnHeader column={column} title="Автор Id" />
+            ),
+            cell: ({ row }: any) => (
+                <div className="max-w-[500px] truncate font-medium">
+                    <span className="flex flex-row items-center">
+                        <span className="pr-1">
+                            {row.getValue('isUserBanned') ? (
+                                <Ban className="text-red-500 w-4 h-4" />
+                            ) : (
+                                <div className="w-4 h-4 bg-transparent"></div>
+                            )}
+                        </span>
+
+                        {row.getValue('userId')}
+                    </span>
+                </div>
+            ),
+        },
+        {
+            accessorKey: 'isUserBanned',
+            meta: 'Бан',
+            header: ({ column }: any) => (
+                <DataTableColumnHeader column={column} title="Бан" />
+            ),
+            cell: ({ row }: any) => {
+                return (
+                    <div className="flex items-center space-x-2">
+                        {row.getValue('isUserBanned') ? (
+                            <Badge variant="destructive">Заблокований</Badge>
+                        ) : (
+                            <Badge variant="secondary">Активний</Badge>
+                        )}
+                    </div>
+                );
+            },
+        },
+        {
+            id: 'action',
+            cell: ({ row }: any) => <DataTableRowActions row={row} />,
+        }
+    );
 }
 
 export const columns = tmpColumns;
