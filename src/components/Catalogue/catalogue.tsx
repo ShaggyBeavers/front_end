@@ -464,7 +464,23 @@ const Catalogue = () => {
 
     const resizeObserver = useResizeObserver(positioner);
 
-    function removeQueryParam(key: string): void {}
+    function removeQueryParam(key: string,value:any): void {
+        console.log(key,value)
+        setSelectedFilterOptions((prevOptions) => {
+            if (key === 'name') {
+              return { ...prevOptions, name: '' };
+            } else {
+              const updatedOptions = { ...prevOptions };
+              updatedOptions[key] = prevOptions[key].filter(
+                (option: string) => option !== value
+              );
+              fetchData(queryParams.page,updatedOptions)
+              return updatedOptions;
+            }
+          });
+    }
+
+    useEffect(()=>{console.log(selectedFilterOptions)},[selectedFilterOptions])
 
     return (
         <>
@@ -488,12 +504,11 @@ const Catalogue = () => {
                                                 key={`${key}-${val}`}
                                                 variant="outline"
                                                 className="flex mr-2"
-                                                onClick={() =>
-                                                    removeQueryParam(key)
-                                                }
                                             >
                                                 {val}
-                                                <X className="w-[70%] h-[70%]" />
+                                                <X className="w-[70%] h-[70%]" onClick={() =>
+                                                    removeQueryParam(key,val)
+                                                }/>
                                             </Badge>
                                         ));
                                     } else {
@@ -503,12 +518,12 @@ const Catalogue = () => {
                                                     key={`${key}-${val}`}
                                                     variant="outline"
                                                     className="flex mr-2"
-                                                    onClick={() =>
-                                                        removeQueryParam(key)
-                                                    }
+                                                    
                                                 >
                                                     {val}
-                                                    <X className="w-[70%] h-[70%]" />
+                                                    <X className="w-[70%] h-[70%]" onClick={() =>
+                                                        removeQueryParam(key,val)
+                                                    }   />
                                                 </Badge>
                                             ));
                                         } else {
@@ -517,12 +532,12 @@ const Catalogue = () => {
                                                     key={key}
                                                     variant="outline"
                                                     className="flex mr-2"
-                                                    onClick={() =>
-                                                        removeQueryParam(key)
-                                                    }
+                                                    
                                                 >
                                                     {value}
-                                                    <X className="w-[70%] h-[70%]" />
+                                                    <X className="w-[70%] h-[70%]" onClick={() =>
+                                                        removeQueryParam(key,value)
+                                                    }/>
                                                 </Badge>
                                             );
                                         }
