@@ -16,7 +16,7 @@ const Pagination = ({
     onPageChange,
 }: {
     totalPages: number;
-    currentPage: number;
+    currentPage: any;
     onPageChange: (pageNumber: number) => void;
 }) => {
     

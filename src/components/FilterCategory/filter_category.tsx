@@ -15,7 +15,7 @@ interface FilterCategoryProps {
     selectedFilterOptions: Filters;
     handleFilterOptionClick: (option: string, category: string) => void;
     setIsFilterModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    applyFilters: () => void;
+    applyFilters: ()=>void;
 }
 
 export const FilterCategory: React.FC<FilterCategoryProps> = ({

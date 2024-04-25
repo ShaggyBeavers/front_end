@@ -1,6 +1,7 @@
 import './footer.css';
 import { Link } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
+import Logo from '../Logo/logo';
 
 const Footer = () => {
     const handleClick = () => {
@@ -11,7 +12,7 @@ const Footer = () => {
             <div className="footer_con">
                 <div className="footer_left">
                     <Link to="/">
-                        <h2>Divi </h2>
+                        <h2>Реліквії</h2>
                     </Link>
                     <div className="footer_nav">
                         <ul>
@@ -40,7 +41,7 @@ const Footer = () => {
                     </div>
                 </div>
                 <div className="footer_right">
-                    {/* here will go something instead of beaver */}
+                    <Logo size='220px' color='white'/>
                 </div>
             </div>
         </div>

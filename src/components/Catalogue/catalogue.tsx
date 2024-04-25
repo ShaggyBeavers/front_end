@@ -37,6 +37,7 @@ import {
     MasonryScroller,
 } from 'masonic';
 import RelicItem from './relicItem';
+import { ArrayParam, BooleanParam, NumberParam, QueryParamConfig, StringParam, useQueryParams, withDefault } from 'use-query-params';
 
 interface Photo {
     //FOR STYLING
@@ -105,10 +106,8 @@ const Catalogue = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [notFound, setNotFound] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [ids, setIds] = useState<ImageId[]>([]);
-    const [searchParam, setSearchParam] = useSearchParams();
     // const [items, setItems] = useState<Photo[]>([]);   FOR STYLING
     const [result, setResult] = useState<GetAllRelicsResponse>({
         totalPages: 0,
@@ -180,7 +179,7 @@ const Catalogue = () => {
         retry: false,
     });
 
-    const fetchData = async (page: number) => {
+    const fetchData = async (page: any, filterOptions?: typeof selectedFilterOptions) => {
         try {
             //  FOR STYLING
             // const response = await axios.get<Photo[]>(
@@ -189,7 +188,7 @@ const Catalogue = () => {
             const response = await RelicAPI.filterRelics(
                 page - 1,
                 PAGE_SIZE,
-                selectedFilterOptions
+                filterOptions || selectedFilterOptions
             );
             setResult(response);
             const idsList = getIdsFromItems(response.content);
@@ -264,37 +263,57 @@ const Catalogue = () => {
         }
     };
 
-    useEffect(() => {
-        // const searchParams = new URLSearchParams(location.search);
-        const pageParam = searchParam.get('page');
-        const categoryParam = searchParam.get('category');
-        const pageNumber = pageParam ? parseInt(pageParam, 10) : 1;
-        setCurrentPage(pageNumber);
-
-        if (categoryParam) {
-            const categoriesArray = categoryParam.split(',');
-            setSelectedFilterOptions((prevState) => ({
-                ...prevState,
-                categories: categoriesArray,
-            }));
-        }
-        fetchData(pageNumber);
-    }, [location.search]);
+    const [queryParams, setQueryParams] = useQueryParams({
+        page: NumberParam,
+        name: StringParam,
+        historicalPeriods: ArrayParam,
+        statuses: ArrayParam,
+        techniques: ArrayParam,
+        categories: ArrayParam,
+        museums: ArrayParam,
+        regions: ArrayParam,
+        file:BooleanParam,
+    });
 
     useEffect(() => {
-        fetchData(currentPage);
-    }, [navigate, selectedFilterOptions]);
-
-    useEffect(() => {
-        console.log(selectedFilterOptions);
-    }, [selectedFilterOptions]);
+        setSelectedFilterOptions(() => {
+          const updatedOptions = {
+            name: queryParams.name || '',
+            historicalPeriods: (queryParams.historicalPeriods || []).filter(Boolean) as string[],
+            statuses: (queryParams.statuses || []).filter(Boolean) as string[],
+            techniques: (queryParams.techniques || []).filter(Boolean) as string[],
+            categories: (queryParams.categories || []).filter(Boolean) as string[],
+            museums: (queryParams.museums || []).filter(Boolean) as string[],
+            regions: (queryParams.regions || []).filter(Boolean) as string[],
+            file: queryParams.file || null,
+          };
+      
+          fetchData(queryParams.page, updatedOptions);
+      
+          return updatedOptions;
+        });
+      }, [queryParams]);
 
     const paginate = (pageNumber: number) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
-            navigate(`?page=${pageNumber}`);
+            setQueryParams({ page: pageNumber });
             scrollToTop();
         }
     };
+
+    const applyFilters = () =>{
+        setQueryParams({
+            page:1,
+            name: selectedFilterOptions.name,
+            historicalPeriods: selectedFilterOptions.historicalPeriods,
+            statuses: selectedFilterOptions.statuses,
+            techniques: selectedFilterOptions.techniques,
+            categories: selectedFilterOptions.categories,
+            museums: selectedFilterOptions.museums,
+            regions: selectedFilterOptions.regions,
+            file: selectedFilterOptions.file,
+        });
+    }
 
     const handleToggleFileFilter = (isChecked: boolean | null) => {
         setSelectedFilterOptions((prevOptions) => ({
@@ -396,10 +415,6 @@ const Catalogue = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    const applyFilters = () => {
-        fetchData(currentPage);
-    };
-
     const containerRef = useRef(null);
     const [windowWidth, windowHeight] = useWindowSize({
         initialWidth: window.innerWidth,
@@ -432,9 +447,10 @@ const Catalogue = () => {
                     <div className="cat_left">
                         <div className="cat_search">
                             <Search
-                                setSelectedFilterOptions={
-                                    setSelectedFilterOptions
+                                setQueryParams={
+                                    setQueryParams
                                 }
+                                applyFilters={applyFilters}
                             />
                         </div>
                         <div className="cat_filter">
@@ -528,7 +544,7 @@ const Catalogue = () => {
                                 <div className="flex flex-col items-center">
                                     <Pagination
                                         totalPages={totalPages}
-                                        currentPage={currentPage}
+                                        currentPage={queryParams.page}
                                         onPageChange={paginate}
                                     />
                                     <div

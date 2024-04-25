@@ -27,7 +27,6 @@
     color: transparent;
 }
 
-/*styling elements (container->parts of it)*/
 .footer_con {
     width: 59.9375rem;
     display: flex;
@@ -51,8 +50,13 @@
 }
 
 .footer_right {
-    padding: 9.625rem 0 5.4375rem 0;
+    margin-top: auto;
     margin-left: 1rem;
+    margin-bottom: auto;
+}
+
+.footer_right img {
+    min-width: 140px;
 }
 
 @media (max-width: 860px) {

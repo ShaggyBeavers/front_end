@@ -60,7 +60,7 @@ export default function Login() {
 
             reset();
             setShowNotFoundMessage(false);
-            navigate('/profile', { replace: true });
+            navigate('/report', { replace: true });
         } catch (error: any) {
             if (error.response && error.response.status === 401) {
                 reset();
@@ -93,10 +93,10 @@ export default function Login() {
                                         value: true,
                                         message: 'Заповніть це поле',
                                     },
-                                    // pattern: {
-                                    //     value: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
-                                    //     message: 'Некоректний формат',
-                                    // },
+                                    pattern: {
+                                        value: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/,
+                                        message: 'Некоректний формат',
+                                    },
                                 })}
                             />
                             <p className="">

@@ -34,7 +34,7 @@ const Categories = () => {
             <div className="categories_con">
                 {categories.map((category, idx) => (
                     <Link
-                        to={`/catalogue?page=1&category=${encodeURIComponent(category.query)}`}
+                        to={`/catalogue?page=1&categories=${encodeURIComponent(category.query)}`}
                     >
                         <Category
                             key={idx}

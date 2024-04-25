@@ -13,11 +13,25 @@ import SuccessRecovery from '../pages/SuccessRecovery';
 import AddRelicPage from '../pages/AddRelicPage';
 import ProtectedRoutes from '../components/ProtectedRoutes';
 import { RoleEnum } from 'src/enums/roles';
+import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
+import { QueryParamProvider } from 'use-query-params';
+import queryString from 'query-string';
+const { parse, stringify } = queryString;
 
 export const router = createBrowserRouter([
     {
         path: '/',
-        element: <App />,
+        element: (
+            <QueryParamProvider
+                adapter={ReactRouter6Adapter}
+                options={{
+                    searchStringToObject: parse,
+                    objectToSearchString: stringify,
+                }}
+            >
+                <App />
+            </QueryParamProvider>
+        ),
         children: [
             { path: '', element: <HomePage /> },
             { path: 'login', element: <LoginPage /> },
@@ -79,7 +93,10 @@ export const router = createBrowserRouter([
                         path: 'moderator-list/:regMod?',
                         element: (
                             <ProtectedRoutes
-                                role={[RoleEnum.ADMIN, RoleEnum.REGIONAL_MODERATOR]}
+                                role={[
+                                    RoleEnum.ADMIN,
+                                    RoleEnum.REGIONAL_MODERATOR,
+                                ]}
                             >
                                 <ProfilePage />
                             </ProtectedRoutes>

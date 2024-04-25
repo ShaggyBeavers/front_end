@@ -3,17 +3,24 @@ import './search.css';
 import { useMutation } from '@tanstack/react-query';
 import RelicAPI from '../../../src/app/api/Relic/relic';
 import { Filters } from '../Catalogue/catalogue';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-const Search = ({ setSelectedFilterOptions }: any) => {
+const Search = ({ setQueryParams}: any) => {
     const [searchTerm, setSearchTerm] = useState('');
+    const navigate = useNavigate();
+    const { pathname } = useLocation();
 
-    const performSearch = (e: React.FormEvent) => {
+    const performSearch = async(e: React.FormEvent) => {
         e.preventDefault();
-        setSelectedFilterOptions((prevOptions: Filters) => ({
-            ...prevOptions,
-            name: searchTerm,
-        }));
-        setSearchTerm('');
+        if (pathname === '/catalogue') {
+            await setQueryParams((prevParams: any) => ({
+                ...prevParams,
+                page: 1,
+                name: searchTerm,
+            }));
+        } else {
+            navigate(`/catalogue?name=${encodeURIComponent(searchTerm)}&page=1`);
+        }
     };
 
     return (

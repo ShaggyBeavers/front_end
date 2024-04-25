@@ -4,6 +4,7 @@ import './navbar.css';
 import { Button } from '../ui/button';
 import DefaultButton from '../DefaultButton/defaultbutton';
 import { ConfirmButton } from '../ConfirmButton';
+import Logo from '../Logo/logo';
 
 interface NavBarProps {
     styles?: string;
@@ -21,7 +22,11 @@ const NavBar: React.FC<NavBarProps> = ({ styles }) => {
             <div className={`navbar_con ${styles}`}>
                 <div className="nav_logo">
                     <Link to="/">
-                        <h2>Divi</h2>
+                        {location.pathname === '/' ? (
+                            <Logo size="75px" color="black" />
+                        ) : (
+                            <h2>Реліквії</h2>
+                        )}
                     </Link>
                 </div>
                 {location.pathname !== '/catalogue' &&
