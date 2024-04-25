@@ -404,11 +404,17 @@ const AddMainRelic = ({ form }: any) => {
                         name="regionId"
                         render={({ field }) => (
                             <FormItem className="flex flex-col">
-                                <FormLabel htmlFor="regionId">Регіон</FormLabel>
+                                <FormLabel
+                                    htmlFor="regionId"
+                                    className="flex flex-row"
+                                >
+                                    Регіон <div className="text-red-500">*</div>
+                                </FormLabel>
                                 <ReactSelect
                                     {...field}
                                     // isMulti
                                     id="regionId"
+                                    required
                                     className="select"
                                     options={regionOptions}
                                     // closeMenuOnSelect={false}

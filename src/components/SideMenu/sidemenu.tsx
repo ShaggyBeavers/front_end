@@ -5,7 +5,7 @@ import DefaultButton from '../DefaultButton/defaultbutton';
 import ReactDOM from 'react-dom';
 import AddRelicModal from '../Modals/AddRelicModal';
 import AddModeratorModal from '../Modals/AddModeratorModal';
-import ModeratorsListModal from '../Modals/ModeratorsListModal';
+// import ModeratorsListModal from '../Modals/ModeratorsListModal';
 import Settings from '../Modals/Settings';
 import { useQuery } from '@tanstack/react-query';
 import UserAPI from '../../app/api/Account/User/user';
@@ -49,11 +49,11 @@ const SideMenu: React.FC<SideMenuProps> = ({ currentPage }) => {
             content: <AddModeratorModal closeModal={closeModal}/>,
             styles: 'add-moderator-window',
         },
-        moderatorsList: {
-            isOpen: false,
-            content: <ModeratorsListModal />,
-            styles: 'moderators-list-window',
-        },
+        // moderatorsList: {
+        //     isOpen: false,
+        //     content: <ModeratorsListModal />,
+        //     styles: 'moderators-list-window',
+        // },
     });
     //@ts-ignore
     const email = useAuthStore((state) => state.user.email);
