@@ -94,7 +94,7 @@ export default function Login() {
                                         message: 'Заповніть це поле',
                                     },
                                     pattern: {
-                                        value: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+                                        value: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/,
                                         message: 'Некоректний формат',
                                     },
                                 })}
