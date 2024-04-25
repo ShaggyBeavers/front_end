@@ -20,23 +20,34 @@
     font-size: 0.8125rem;
 }
 
+.filter-options p {
+    font-size: 11.375px;
+}
+
 .filter-options > div {
     max-width: 100px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    overflow-wrap: break-word;
     cursor: pointer;
 }
 
 .filter-options > div.selected {
-    transition: 0.1s;
-    background: var(
-        --Linear-Gradient,
-        linear-gradient(135deg, #bf98c6 0%, #4b8bfa 100%)
-    );
-    background-clip: text;
-    color: transparent;
-    font-family: 'eUkraine-Bold';
+    p {
+        background: var(
+            --Linear-Gradient,
+            linear-gradient(135deg, #bf98c6 0%, #4b8bfa 100%)
+        );
+        background-clip: text;
+        color: transparent;
+        font-family: 'eUkraine-Bold';
+        transition: 0.1s;
+    }
+    display: flex;
+    align-items: center;
+    word-break: break-all;
+}
+
+.filter-options > div.selected > :first-child {
+    width: 90%;
 }
 
 .filter-btns {

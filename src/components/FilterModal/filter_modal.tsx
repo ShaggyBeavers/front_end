@@ -1,5 +1,7 @@
 import React from 'react';
 import './filter_modal.css';
+import { CheckIcon } from '@radix-ui/react-icons';
+import { Divide } from 'lucide-react';
 
 interface FilterModalProps {
     options: string[];
@@ -25,6 +27,22 @@ const FilterModal: React.FC<FilterModalProps> = ({
         { value: 'UNKNOWN', label: 'Невідомо' },
     ];
 
+    const isOptionSelected = (option: string) => {
+        if (selectedOptions.includes(option)) {
+            return true;
+        }
+
+        const isStatusOptionSelected = selectedOptions.some(
+            (selectedOption) => {
+                const selectedLabel = statusOptions.find(
+                    ({ value }) => value === selectedOption
+                )?.label;
+                return selectedLabel === option;
+            }
+        );
+
+        return isStatusOptionSelected;
+    };
     return (
         <div className="filter-modal">
             <div className="filter-options">
@@ -32,19 +50,20 @@ const FilterModal: React.FC<FilterModalProps> = ({
                     <div
                         key={option}
                         onClick={() => onOptionClick(option)}
-                        className={
-                            selectedOptions.includes(option) ||
-                            selectedOptions.some((selectedOption) => {
-                                const selectedLabel = statusOptions.find(
-                                    ({ value }) => value === selectedOption
-                                )?.label;
-                                return selectedLabel === option;
-                            })
-                                ? 'selected'
-                                : ''
-                        }
+                        className={isOptionSelected(option) ? 'selected' : ''}
                     >
-                        {option}
+                        <p>{option}</p>
+                        {isOptionSelected(option) ? (
+                            <CheckIcon
+                                style={{
+                                    color: '4b8bfa',
+                                    width: 17,
+                                    height: 17,
+                                }}
+                            />
+                        ) : (
+                            <div />
+                        )}
                     </div>
                 ))}
             </div>
