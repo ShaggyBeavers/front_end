@@ -6,6 +6,8 @@ import SideMenu from '../SideMenu/sidemenu';
 import { Outlet, Route, Routes, useLocation } from 'react-router-dom';
 import AddTerm from '../AddTerm';
 import ModeratorList from '../ModeratorList';
+import ProtectedItems from '../ProtectedItems';
+import { RoleEnum } from '../../../src/enums/roles';
 
 const headers = [
     {
@@ -35,10 +37,33 @@ const Profile = () => {
 
     return (
         <div className="profile-container">
-            {isModeratorList && <ModeratorList />}
-            {isProfile && <RelicTableInfo />}
-            {isAddTerm && <AddTerm />}
-            <SideMenu currentPage={path}/>
+            <div className="profile-content">
+                <div className="profile-header">
+                    <h2>{displayName}</h2>
+                    <ProtectedItems
+                        role={[
+                            RoleEnum.ADMIN,
+                            RoleEnum.REGIONAL_MODERATOR,
+                            RoleEnum.MODERATOR,
+                        ]}
+                    >
+                        {header && header.path === 'profile' ? (
+                            <p>
+                                Тут ви можете переглянути репорти про релівії{' '}
+                            </p>
+                        ) : (
+                            <p>
+                                Тут ви можете переглянути модераторів сайту,
+                                {/* <Link> Повідомивши</Link> */}
+                            </p>
+                        )}
+                    </ProtectedItems>
+                </div>
+                {isModeratorList && <ModeratorList />}
+                {isProfile && <RelicTableInfo />}
+                {isAddTerm && <AddTerm />}
+            </div>
+            <SideMenu currentPage={path} />
         </div>
     );
 };

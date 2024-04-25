@@ -4,6 +4,8 @@
     align-items: center;
     justify-content: flex-start;
     row-gap: 20px;
+    font-family: e-Ukraine;
+    font-style: normal;
     /* just in case it will stop working */
     /* & > *:not(:first-child){
         margin-top: 20px;
@@ -46,13 +48,12 @@
     }
 }
 .email {
-    word-wrap: break-word; 
-    max-width: 100%; 
-    font-size: 80%; 
-    color: #ffffff; 
+    word-wrap: break-word;
+    max-width: 100%;
+    font-size: 80%;
+    color: #ffffff;
     /* margin-top: 4px; */
 }
-
 
 .row1 {
     display: flex;
@@ -60,8 +61,6 @@
     justify-content: space-between;
     align-items: center;
 }
-
-
 
 .settings-window,
 .add-relic-window,
