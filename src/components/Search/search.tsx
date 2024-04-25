@@ -18,9 +18,8 @@ const Search = ({ setQueryParams}: any) => {
                 page: 1,
                 name: searchTerm,
             }));
-            setSearchTerm('');
         } else {
-            navigate(`/catalogue?file&name=${encodeURIComponent(searchTerm)}&page=1`);
+            navigate(`/catalogue?name=${encodeURIComponent(searchTerm)}&page=1`);
         }
     };
 
