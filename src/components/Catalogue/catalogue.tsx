@@ -342,7 +342,7 @@ const Catalogue = () => {
     };
 
     const handleToggleFileFilter = (isChecked: boolean | null) => {
-        setSelectedFilterOptions((prevOptions) => ({
+        setQueryParams((prevOptions) => ({
             ...prevOptions,
             file: isChecked === null ? null : isChecked,
         }));
@@ -464,23 +464,29 @@ const Catalogue = () => {
 
     const resizeObserver = useResizeObserver(positioner);
 
-    function removeQueryParam(key: string,value:any): void {
-        console.log(key,value)
+    function removeQueryParam(key: string, value: any): void {
+        console.log(key, value);
         setSelectedFilterOptions((prevOptions) => {
+            let updatedOptions;
             if (key === 'name') {
-              return { ...prevOptions, name: '' };
+                return { ...prevOptions, name: '' };
             } else {
-              const updatedOptions = { ...prevOptions };
-              updatedOptions[key] = prevOptions[key].filter(
-                (option: string) => option !== value
-              );
-              fetchData(queryParams.page,updatedOptions)
-              return updatedOptions;
+                updatedOptions = { ...prevOptions };
+                updatedOptions[key] = prevOptions[key].filter(
+                    (option: string) => option !== value
+                );
+                setQueryParams({
+                    page: 1,
+                    ...updatedOptions,
+                });
+                return updatedOptions;
             }
-          });
+        });
     }
 
-    useEffect(()=>{console.log(selectedFilterOptions)},[selectedFilterOptions])
+    useEffect(() => {
+        console.log(selectedFilterOptions);
+    }, [selectedFilterOptions]);
 
     return (
         <>
@@ -488,10 +494,10 @@ const Catalogue = () => {
                 <NotFound />
             ) : (
                 <div className="catalogue-container flex flex-col">
-                    <div className="item-bar h-10 w-full">
-                        <div className="flex">
+                    <div >
+                        <div className="flex flex-wrap">
                             {Object.entries(queryParams).map(([key, value]) => {
-                                if (key !== 'page') {
+                                if (key !== 'page' && key !=='file') {
                                     if (
                                         value === null ||
                                         value === undefined ||
@@ -503,12 +509,18 @@ const Catalogue = () => {
                                             <Badge
                                                 key={`${key}-${val}`}
                                                 variant="outline"
-                                                className="flex mr-2"
+                                                className="flex mr-2 mb-4"
                                             >
                                                 {val}
-                                                <X className="w-[70%] h-[70%]" onClick={() =>
-                                                    removeQueryParam(key,val)
-                                                }/>
+                                                <X
+                                                    className=" h-[70%]"
+                                                    onClick={() =>
+                                                        removeQueryParam(
+                                                            key,
+                                                            val
+                                                        )
+                                                    }
+                                                />
                                             </Badge>
                                         ));
                                     } else {
@@ -517,13 +529,18 @@ const Catalogue = () => {
                                                 <Badge
                                                     key={`${key}-${val}`}
                                                     variant="outline"
-                                                    className="flex mr-2"
-                                                    
+                                                    className="flex mr-2 mb-4"
                                                 >
                                                     {val}
-                                                    <X className="w-[70%] h-[70%]" onClick={() =>
-                                                        removeQueryParam(key,val)
-                                                    }   />
+                                                    <X
+                                                        className=" h-[70%]"
+                                                        onClick={() =>
+                                                            removeQueryParam(
+                                                                key,
+                                                                val
+                                                            )
+                                                        }
+                                                    />
                                                 </Badge>
                                             ));
                                         } else {
@@ -531,13 +548,18 @@ const Catalogue = () => {
                                                 <Badge
                                                     key={key}
                                                     variant="outline"
-                                                    className="flex mr-2"
-                                                    
+                                                    className="flex mr-2 mb-4"
                                                 >
                                                     {value}
-                                                    <X className="w-[70%] h-[70%]" onClick={() =>
-                                                        removeQueryParam(key,value)
-                                                    }/>
+                                                    <X
+                                                        className=" h-[70%]"
+                                                        onClick={() =>
+                                                            removeQueryParam(
+                                                                key,
+                                                                value
+                                                            )
+                                                        }
+                                                    />
                                                 </Badge>
                                             );
                                         }

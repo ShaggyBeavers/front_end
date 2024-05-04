@@ -60,7 +60,7 @@ export default function Login() {
 
             reset();
             setShowNotFoundMessage(false);
-            navigate('/report', { replace: true });
+            navigate('/profile', { replace: true });
         } catch (error: any) {
             if (error.response && error.response.status === 401) {
                 reset();

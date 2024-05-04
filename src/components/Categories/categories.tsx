@@ -6,35 +6,36 @@ const Categories = () => {
     const categories = [
         {
             title: 'Архітектура',
-            query: 'architecture',
             pic: '/assets/images/landing_sections/architecture.jpg',
         },
         {
             title: 'Зброя',
-            query: 'weapon',
             pic: '/assets/images/landing_sections/collections.jpg',
         },
         {
             title: 'Скульптура',
-            query: 'sculpture',
             pic: '/assets/images/landing_sections/sculpture.jpg',
         },
         {
             title: 'Живопис',
-            query: 'paintings',
             pic: '/assets/images/landing_sections/paintings.jpg',
         },
     ];
 
+    const handleClick = () => {
+        window.scrollTo(0, 0);
+    };
+
     return (
         <div className="categories" id="categories">
-            <Link to="/catalogue?page=1" className="cat_link_all">
+            <Link to="/catalogue?page=1" className="cat_link_all" onClick={handleClick}>
                 Подивитись усі:
             </Link>
             <div className="categories_con">
                 {categories.map((category, idx) => (
                     <Link
-                        to={`/catalogue?page=1&categories=${encodeURIComponent(category.query)}`}
+                        to={`/catalogue?page=1&categories=${encodeURIComponent(category.title)}`}
+                        onClick={handleClick}
                     >
                         <Category
                             key={idx}

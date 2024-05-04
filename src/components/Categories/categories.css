@@ -18,6 +18,10 @@
     color: black;
     align-self: flex-end;
     padding-right: 2rem;
+    text-decoration: underline;
+    &:hover{
+        text-decoration: none;
+    }
 }
 
 @media (max-width: 900px) {
