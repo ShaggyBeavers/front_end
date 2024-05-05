@@ -21,7 +21,7 @@
     background: linear-gradient(135deg, #bf98c6 0%, #4b8bfa 100%);
     border-radius: 20px;
     padding: 16px;
-
+    
     .row1 {
         display: flex;
         align-items: flex-start;
