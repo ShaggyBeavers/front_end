@@ -1,7 +1,7 @@
 .add-term-con {
     display: flex;
     flex-direction: column;
-    width: 70%;
+    width: 100%;
 }
 
 .add-term-categories {

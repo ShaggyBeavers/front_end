@@ -268,7 +268,7 @@ export function DataTable<TData, TValue>({
                         <div className="report-modal">
                             <div className="report-modal-left">
                                 <h2 className="text-xl font-bold mb-4">
-                                    Деталі репорту
+                                    Деталі звістки
                                 </h2>
                                 {/* <p>
                                     <span className="font-bold">

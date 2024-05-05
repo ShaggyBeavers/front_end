@@ -96,6 +96,10 @@ export default function Report() {
                 <div className="report_form">
                     <form onSubmit={handleSubmit(submitForm)} noValidate>
                         <div className="report_group">
+                            <h3>Звістка</h3>
+                            <p style={{textAlign:'right'}}>Поділіться відомою вам інформацією про загублену/викрадену реліквію</p>
+                        </div>
+                        <div className="report_group">
                             <div
                                 className={`report_input ${errors.name ? 'error' : ''}`}
                                 style={{ width: '45%' }}
