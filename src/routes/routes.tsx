@@ -16,6 +16,7 @@ import { RoleEnum } from 'src/enums/roles';
 import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
 import { QueryParamProvider } from 'use-query-params';
 import queryString from 'query-string';
+import ChangePassword from '../pages/ChangePassword';
 const { parse, stringify } = queryString;
 
 export const router = createBrowserRouter([
@@ -55,6 +56,7 @@ export const router = createBrowserRouter([
             },
             { path: 'recovery', element: <RecoveryPage /> },
             { path: 'success_recovery', element: <SuccessRecovery /> },
+            { path: 'change_password', element: <ChangePassword /> },
             { path: '*', element: <NotFoundPage /> },
             {
                 path: 'profile',
