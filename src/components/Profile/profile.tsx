@@ -11,7 +11,7 @@ import { RoleEnum } from '../../../src/enums/roles';
 
 const headers = [
     {
-        name: 'Список репортів',
+        name: 'Список звісток',
         path: 'profile',
     },
     {
@@ -21,6 +21,10 @@ const headers = [
     {
         name: 'Список регіональних модераторів',
         path: 'moderator-list?regMod=true',
+    },
+    {
+        name: 'Додати термін',
+        path: 'add-term',
     },
 ];
 
@@ -38,8 +42,8 @@ const Profile = () => {
     return (
         <div className="profile-container">
             <div className="profile-content">
-                <div className="profile-header">
-                    <h2>{displayName}</h2>
+                <div className="profile-header mb-2">
+                    <h3>{displayName}</h3>
                     <ProtectedItems
                         role={[
                             RoleEnum.ADMIN,
@@ -49,13 +53,16 @@ const Profile = () => {
                     >
                         {header && header.path === 'profile' ? (
                             <p>
-                                Тут ви можете переглянути репорти про релівії{' '}
+                                Тут ви можете переглянути звістки про реліквії :
                             </p>
-                        ) : (
+                        ) :  header && header.path === 'add-term' ? (
                             <p>
-                                Тут ви можете переглянути модераторів сайту,
-                                {/* <Link> Повідомивши</Link> */}
-                            </p>
+                            Тут ви можете додати новий термін у потрібний розділ :
+                        </p>
+                        ) :(
+                            <p>
+                            Тут ви можете переглянути модераторів сайту :
+                        </p>
                         )}
                     </ProtectedItems>
                 </div>

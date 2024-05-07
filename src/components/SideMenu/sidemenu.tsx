@@ -172,7 +172,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ currentPage }) => {
                         <DefaultButton
                             height={38}
                             width={300}
-                            text="Список репортів"
+                            text="Список звісток"
                             action={() => navigate('/profile')}
                         />
                     ) : (
@@ -195,7 +195,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ currentPage }) => {
                         <DefaultButton
                             height={38}
                             width={300}
-                            text="Список репортів"
+                            text="Список звісток"
                             action={() => navigate('/profile')}
                         />
                     ) : (

@@ -470,6 +470,11 @@ const Catalogue = () => {
         setSelectedFilterOptions((prevOptions) => {
             let updatedOptions;
             if (key === 'name') {
+                setQueryParams({
+                    ...prevOptions,
+                    page: 1,
+                    name: '',
+                });
                 return { ...prevOptions, name: '' };
             } else {
                 updatedOptions = { ...prevOptions };
@@ -495,10 +500,10 @@ const Catalogue = () => {
                 <NotFound />
             ) : (
                 <div className="catalogue-container flex flex-col">
-                    <div >
+                    <div>
                         <div className="flex flex-wrap">
                             {Object.entries(queryParams).map(([key, value]) => {
-                                if (key !== 'page' && key !=='file') {
+                                if (key !== 'page' && key !== 'file') {
                                     if (
                                         value === null ||
                                         value === undefined ||
@@ -694,6 +699,10 @@ const Catalogue = () => {
                             {isFilterModalOpen && (
                                 <div
                                     className={`dimmed-overlay ${isFilterModalOpen ? 'active' : ''}`}
+                                    onClick={() => {
+                                        setIsFilterModalOpen(false);
+                                        setSelectedCategory(null);
+                                    }}
                                 ></div>
                             )}
                         </div>

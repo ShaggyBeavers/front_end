@@ -4,7 +4,7 @@
     align-items: center;
     justify-content: flex-start;
     row-gap: 20px;
-    font-family: e-Ukraine;
+    font-family: 'eUkraine-Regular';
     font-style: normal;
     /* just in case it will stop working */
     /* & > *:not(:first-child){
@@ -26,7 +26,7 @@
         display: flex;
         align-items: flex-start;
         .name {
-            font-family: e-Ukraine;
+            font-family: 'eUkraine-Regular';
             font-style: normal;
             font-weight: normal;
             font-size: 1.65rem;
@@ -38,7 +38,7 @@
 
     .row2 {
         .contact {
-            font-family: e-Ukraine;
+            font-family: 'eUkraine-Regular';
             font-style: normal;
             font-weight: normal;
             font-size: 16px;
@@ -70,7 +70,7 @@
     /* width: 700px;
     height: 500px; */
     display: flex;
-    top: 50%;
+    top: 53%;
     left: 50%;
     right: auto;
     bottom: auto;
@@ -81,11 +81,13 @@
     outline: none;
     padding: 20px;
     transform: translate(-50%, -50%);
+    z-index: 2;
 }
 
 .settings-window {
     width: 700px;
     height: 500px;
+   
 }
 
 .add-relic-window {

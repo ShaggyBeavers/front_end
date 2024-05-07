@@ -1,7 +1,7 @@
 .input-row > label {
     font-size: 1rem;
     line-height: 1.5rem;
-    font-family: e-Ukraine;
+    font-family: 'eUkraine-Regular';
     font-weight: 400;
     cursor: pointer;
 }
@@ -18,7 +18,7 @@
 }
 
 .input-row > input {
-    font-family: e-Ukraine;
+    font-family: 'eUkraine-Regular';
     font-size: 1rem;
     line-height: 1.5rem;
     padding: 0px;
@@ -45,7 +45,7 @@
     text-decoration-line: underline;
     font-size: 1rem;
     line-height: 1.5rem;
-    font-family: e-Ukraine;
+    font-family: 'eUkraine-Regular';
     font-weight: 400;
     cursor: pointer;
 }
@@ -114,7 +114,7 @@
     /* border: none; */
     border: 2px solid black;
     font-size: 0.8125rem;
-    font-family: e-Ukraine;
+    font-family: 'eUkraine-Regular';
     font-style: normal;
     font-weight: 400;
 }
@@ -177,7 +177,7 @@
 
 .password-req {
     position: absolute;
-    font-family: e-Ukraine;
+    font-family:'eUkraine-Regular';
     line-height: 1.125rem;
     font-size: 0.8125rem;
     font-weight: 400;
