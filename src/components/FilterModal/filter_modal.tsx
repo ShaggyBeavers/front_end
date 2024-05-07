@@ -25,6 +25,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
         { value: 'STOLEN', label: 'Вкрадено' },
         { value: 'RETURNED', label: 'Повернуто' },
         { value: 'UNKNOWN', label: 'Невідомо' },
+        { value: 'NONE', label: ' '}
     ];
 
     const isOptionSelected = (option: string) => {

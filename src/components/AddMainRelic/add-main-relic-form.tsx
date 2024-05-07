@@ -390,6 +390,7 @@ const AddMainRelic = ({ form }: any) => {
                                         <SelectItem value="UNKNOWN">
                                             Невідомо
                                         </SelectItem>
+                                        <SelectItem value="NONE">-</SelectItem>
                                     </SelectContent>
                                     <FormMessage />
                                 </Select>
