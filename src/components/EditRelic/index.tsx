@@ -123,13 +123,13 @@ export const EditRelic = () => {
             // uploadRelicFile.mutate({ relicId: data.data, file: fileFormData });
             console.log('RElic ID:', data.data);
             toast.success(`Реліквія добавлена`, {
-                description: (
-                    <>
-                        <b>{data.data.name}</b>{' '}
-                        {data.data.status && `зі статусом ${data.data.status}`}{' '}
-                        була добавлена
-                    </>
-                ),
+                // description: (
+                //     <>
+                //         <b>{data.data.name}</b>{' '}
+                //         {data.data.status &&
+                //             `зі статусом ${data.data.status} була добавлена`}
+                //     </>
+                // ),
             });
         },
         onSettled: () => {
