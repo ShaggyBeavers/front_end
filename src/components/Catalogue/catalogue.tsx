@@ -436,6 +436,7 @@ const Catalogue = () => {
         { value: 'STOLEN', label: 'Вкрадено' },
         { value: 'RETURNED', label: 'Повернуто' },
         { value: 'UNKNOWN', label: 'Невідомо' },
+        { value: 'NONE', label: '' },
     ];
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });

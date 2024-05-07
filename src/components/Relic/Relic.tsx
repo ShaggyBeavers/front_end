@@ -141,6 +141,7 @@ const Relic = () => {
             DESTROYED: 'Знищено',
             RETURNED: 'Повернуто',
             STOLEN: 'Викрадено',
+            NONE: ' - ',
         };
 
         if (value === null || value === undefined) {
