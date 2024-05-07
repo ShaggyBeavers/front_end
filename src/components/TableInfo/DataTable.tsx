@@ -41,6 +41,9 @@ import './DataTable.css';
 import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons';
 import RegionAPI from '../../../src/app/api/Region/region';
 import { Button } from '../ui/button';
+import { checkAuthRole } from '../../../src/lib/utils';
+import { RoleEnum } from '../../../src/enums/roles';
+import { DataTableRowActions } from './DataTableRowActions';
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -67,10 +70,31 @@ export function DataTable<TData, TValue>({
     columns,
     data,
 }: DataTableProps<TData, TValue>) {
+    let isUserId = false;
+    let isReportId = false;
+    if (
+        checkAuthRole([
+            RoleEnum.ADMIN,
+            RoleEnum.MODERATOR,
+            RoleEnum.REGIONAL_MODERATOR,
+        ])
+    ) {
+        if (!columns.some((column) => column.id === 'action')) {
+            columns.push({
+                id: 'action',
+                cell: ({ row }: any) => <DataTableRowActions row={row} />,
+            });
+        }
+        isUserId = true;
+        isReportId = true;
+    }
+
     // const [rowSelection, setRowSelection] = React.useState({});
     const [columnVisibility, setColumnVisibility] =
         React.useState<VisibilityState>({
             isUserBanned: false,
+            userId: isUserId,
+            reportId: isReportId,
         });
     const [columnFilters, setColumnFilters] =
         React.useState<ColumnFiltersState>([]);
