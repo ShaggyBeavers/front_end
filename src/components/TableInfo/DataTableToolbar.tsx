@@ -77,6 +77,13 @@ export function DataTableToolbar<TData>({
                     </Button>
                 )}
             </div>
+            <Button
+                // variant="outline"
+                variant="default"
+                // onClick={()=> navigate()}
+            >
+                <a href="/report">+ Звістку</a>
+            </Button>
             {/* <DataTableViewOptions table={table} /> */}
         </div>
     );
