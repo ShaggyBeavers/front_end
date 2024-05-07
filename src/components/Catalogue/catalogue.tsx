@@ -469,6 +469,11 @@ const Catalogue = () => {
         setSelectedFilterOptions((prevOptions) => {
             let updatedOptions;
             if (key === 'name') {
+                setQueryParams({
+                    ...prevOptions,
+                    page:1,
+                    name:'',
+                });
                 return { ...prevOptions, name: '' };
             } else {
                 updatedOptions = { ...prevOptions };
