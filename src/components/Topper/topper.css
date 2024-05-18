@@ -12,12 +12,16 @@
 }
 
 .topper_con {
-    width: 29.125rem;
+    width: 35.125rem;
     display: flex;
     flex-direction: column;
     padding: 16.25rem 0 13.5rem;
     row-gap: 2.0625rem;
     text-align: center;
+    .search-container{
+        width:80%;
+        align-self: center;
+    }
 }
 
 @media (max-width: 860px) {

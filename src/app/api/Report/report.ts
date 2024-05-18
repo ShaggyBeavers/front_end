@@ -10,10 +10,13 @@ export interface reportData {
     status: statusTypeEN;
     infoReferences: string;
     regionId: number;
+    image?: any;
 }
 
 const ReportAPI = {
     createReport: (values: {}) => authAPi.post('api/report/', values),
+    uploadFiles: (reportId: number, values: { file: any[] }) =>
+        authAPi.post(`api/report/files/upload/${reportId}`, values),
     getAllReports: (page: number, size: number) =>
         authAPi.get(`api/report/?page=${page}&size=${size}`),
     updateReportStatus: (values: {

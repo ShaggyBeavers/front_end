@@ -12,7 +12,7 @@ const Footer = () => {
             <div className="footer_con">
                 <div className="footer_left">
                     <Link to="/">
-                        <h2>Реліквії</h2>
+                        <h2>Реліквії.3D-музей</h2>
                     </Link>
                     <div className="footer_nav">
                         <ul>

@@ -10,7 +10,7 @@ const Topper = () => {
             <NavBar />
             <div className="topper">
                 <div className="topper_con">
-                    <h1>Реліквії</h1>
+                    <h1>Реліквії.3D-музей</h1>
                     <Search/>
                 </div>
             </div>

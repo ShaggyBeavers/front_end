@@ -23,10 +23,12 @@ const ChangePassword: React.FC<{ token: string }> = ({ token }) => {
         length: boolean | null;
         number: boolean | null;
         uppercase: boolean | null;
+        latinLetters: boolean | null;
     }>({
         length: null,
         number: null,
         uppercase: null,
+        latinLetters: null,
     });
 
     const mutation = useMutation({
@@ -62,6 +64,7 @@ const ChangePassword: React.FC<{ token: string }> = ({ token }) => {
             length: password.length >= 8,
             number: /\d/.test(password),
             uppercase: /[A-Z]/.test(password),
+            latinLetters: password.length > 0 && /^[A-Za-z0-9]+$/.test(password),
         });
     };
 
@@ -139,8 +142,10 @@ const ChangePassword: React.FC<{ token: string }> = ({ token }) => {
                                         {requirement === 'length'
                                             ? ' 8 символів'
                                             : requirement === 'number'
-                                              ? ' 1 число'
-                                              : ' 1 буква у верхньому регістрі'}
+                                            ? ' 1 число'
+                                            : requirement === 'uppercase'
+                                            ? ' 1 буква у верхньому регістрі'
+                                            : ' тільки латинські літери'}
                                     </p>
                                 </div>
                             )

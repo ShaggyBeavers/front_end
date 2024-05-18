@@ -1,4 +1,9 @@
-import { SubmitHandler, useForm, FieldValues } from 'react-hook-form';
+import {
+    SubmitHandler,
+    useForm,
+    FieldValues,
+    useController,
+} from 'react-hook-form';
 import './report.css';
 import { useEffect, useState } from 'react';
 import DropZone from '../DropZone/dropzone';
@@ -8,9 +13,20 @@ import { reportData } from '../../app/api/Report/report';
 import RegionAPI from '../../app/api/Region/region';
 import CategoryAPI from '../../app/api/Category/category';
 import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
+import {
+    Dropzone,
+    FileMosaic,
+    ExtFile,
+    FullScreen,
+    ImagePreview,
+} from '@dropzone-ui/react';
+import { FormControl, FormField, FormItem, FormMessage } from '../ui/form';
+import { useAtom } from 'jotai';
+import { filesAtom, selectedPropertiesAtom } from '../../stores/atoms';
 
 export default function Report() {
-    const { register, handleSubmit, formState, reset, setValue } =
+    const { register, handleSubmit, formState, reset, setValue, control } =
         useForm<reportData>();
     const { errors } = formState;
     const [remainingChars, setRemainingChars] = useState(3);
@@ -18,7 +34,6 @@ export default function Report() {
     const [selectedCategories, setSelectedCategories] = useState<
         { value: string; id: number }[]
     >([]);
-    const [photos, setPhotos] = useState<any[]>([]);
     const [selectedRegion, setSelectedRegion] = useState<{
         value: string;
         id: number;
@@ -27,26 +42,41 @@ export default function Report() {
     const [categories, setCategories] = useState<
         { value: string; id: number }[]
     >([]);
+    const navigate = useNavigate();
 
     const submitForm: SubmitHandler<reportData> = async (data) => {
         try {
+            const { image, ...restData } = data;
             const formData = {
-                ...data,
+                ...restData,
                 categoryIds: selectedCategories.map((category) => category.id),
                 regionId: selectedRegion ? selectedRegion.id : null,
             };
-            // console.log(formData);
-            await ReportAPI.createReport(formData);
+
+            const response = await ReportAPI.createReport(formData);
+            const reportId = response.data;
+
+            const fileData = {
+                file: files.map((file) => file.file),
+            };
+            console.log(fileData)
+
+            await ReportAPI.uploadFiles(reportId, fileData);
             reset();
             setSelectedCategories([]);
             setSelectedRegion(null);
+            setFiles([]);
             toast.success('Ваша звістка успішно надіслана');
+            setTimeout(() => {
+                navigate('/profile');
+            }, 1250);
         } catch (error: any) {
             if (error) {
                 console.log(error);
                 reset();
                 setSelectedCategories([]);
                 setSelectedRegion(null);
+                setFiles([]);
             }
         }
     };
@@ -90,6 +120,24 @@ export default function Report() {
         fetchCategories();
     }, []);
 
+    const [files, setFiles] = useAtom(filesAtom);
+    const [imgSrc, setImgSrc] = useState<any>(undefined);
+    const { field } = useController({
+        name: 'image',
+        control,
+    });
+
+    const handleSeeImage = (imageSource: any) => {
+        setImgSrc(imageSource);
+    };
+
+    const updateFile = (newFile: any) => {
+        setFiles(newFile);
+    };
+    const removeFile = (id: string | number | undefined) => {
+        setFiles(files.filter((x: ExtFile) => x.id !== id));
+    };
+
     return (
         <div className="report">
             <div className="report_con">
@@ -97,7 +145,10 @@ export default function Report() {
                     <form onSubmit={handleSubmit(submitForm)} noValidate>
                         <div className="report_group">
                             <h3>Звістка</h3>
-                            <p style={{textAlign:'right'}}>Поділіться відомою вам інформацією про загублену/викрадену реліквію</p>
+                            <p style={{ textAlign: 'right' }}>
+                                Поділіться відомою вам інформацією про
+                                загублену/викрадену реліквію
+                            </p>
                         </div>
                         <div className="report_group">
                             <div
@@ -227,7 +278,7 @@ export default function Report() {
                         <div className="report_group drop">
                             <div
                                 className="report_input"
-                                style={{ width: '60%' }}
+                                style={{ width: '53%' }}
                             >
                                 <div
                                     className={`report_input optional_v ${errors.mapLocation ? 'error' : ''}`}
@@ -286,7 +337,7 @@ export default function Report() {
 
                             <div
                                 className="region_photo"
-                                style={{ width: '35%' }}
+                                style={{ width: '42%' }}
                             >
                                 <div
                                     className="report_input optional_v "
@@ -366,10 +417,57 @@ export default function Report() {
                                         })}
                                     />
                                 </div>
-                                {/* <DropZone
-                                    onFilesChange={setPhotos}
-                                    initialFiles={photos}
-                                /> */}
+                                {/* Image Upload */}
+                                <div>
+                                    {' '}
+                                    <Dropzone
+                                        {...field}
+                                        onChange={(files) => {
+                                            field.onChange(files);
+                                            updateFile(files);
+                                        }}
+                                        maxFileSize={10 * 1024 * 1024}
+                                        maxFiles={3}
+                                        accept="image/*"
+                                        value={files}
+                                        header={false}
+                                        style={{
+                                            marginTop: '10px',
+                                            border: '1px solid #e4e4e7',
+                                        }}
+                                        label={
+                                            'Перетягніть фото сюди або клікніть, щоб вибрати'
+                                        }
+                                        background=""
+                                        footerConfig={{
+                                            customMessage: (
+                                                <>Максимум: 10Mб, 3 файли</>
+                                            ),
+                                        }}
+                                        clickable
+                                    >
+                                        {files.map((file: ExtFile) => (
+                                            <FileMosaic
+                                                style={{
+                                                    height: '85px',
+                                                    width: '85px',
+                                                    fontSize: '10px',
+                                                }}
+                                                key={file.id}
+                                                {...file}
+                                                onDelete={removeFile}
+                                                preview
+                                                onSee={handleSeeImage}
+                                            />
+                                        ))}
+                                    </Dropzone>
+                                    <FullScreen
+                                        open={imgSrc !== undefined}
+                                        onClose={() => setImgSrc(undefined)}
+                                    >
+                                        <ImagePreview src={imgSrc} />
+                                    </FullScreen>
+                                </div>
                             </div>
                         </div>
 

@@ -73,6 +73,7 @@ const Settings = () => {
         length: password.length >= 8,
         number: /\d/.test(password),
         uppercase: /[A-Z]/.test(password),
+        latin: /^[A-Za-z0-9]*$/.test(password),
     };
 
     const firstName = 'Іван';
@@ -234,6 +235,9 @@ const Settings = () => {
                                             hasUppercase: (value) =>
                                                 /[A-Z]/.test(value) ||
                                                 'Пароль повинен містити принаймні 1 велику літеру',
+                                            hasLatin: (value) =>
+                                                /^[A-Za-z0-9]*$/.test(value) ||
+                                                'Пароль повинен містити тільки латинські символи',
                                         },
                                     })}
                                 />
@@ -278,6 +282,17 @@ const Settings = () => {
                                         >
                                             1 буква у верхньому регістрі
                                         </li>
+                                        <li
+                                            className={
+                                                password
+                                                    ? passwordValidation.latin
+                                                        ? 'password-req-valid'
+                                                        : 'password-req-invalid'
+                                                    : 'password-req-default'
+                                            }
+                                        >
+                                            Тільки латинські символи
+                                        </li>
                                         {/* <li className={passwordValidation.length ? 'requirement-met' : 'requirement-not-met'}>8 символів</li>
                                         <li className={passwordValidation.number ? 'requirement-met' : 'requirement-not-met'}>1 число</li>
                                         <li className={passwordValidation.uppercase ? 'requirement-met' : 'requirement-not-met'}>1 буква у верхньому регістрі</li> */}
@@ -319,8 +334,8 @@ const Settings = () => {
                             </div>
                         </div>
                         <button
-                            disabled={!isValid2 || !isDirty2}
-                            className={`submit-button ${(!isDirty2 || !isValid2) && 'hidden'}`}
+                            disabled={ !isDirty2}
+                            className={`submit-button ${(!isDirty2) && 'hidden'}`}
                             type="submit"
                         >
                             Зберегти

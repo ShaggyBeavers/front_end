@@ -517,7 +517,11 @@ const Catalogue = () => {
                                                 variant="outline"
                                                 className="flex mr-2 mb-4"
                                             >
-                                                {val}
+                                                 {key === 'statuses'
+                                                ? statusOptions.find(
+                                                      (option) => option.value === val
+                                                  )?.label
+                                                : val}
                                                 <X
                                                     className=" h-[70%]"
                                                     onClick={() =>
