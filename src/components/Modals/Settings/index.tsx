@@ -30,12 +30,15 @@ const Settings = () => {
 
     const newPassword = useMutation({
         mutationFn: (values: {
-            password: string;
-            passwordConfirmation: string;
-        }) => UserAPI.newPassword(values),
+            oldPassword: string;
+            newPassword: string;
+        }) => UserAPI.updatePassword(values),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['currentUser'] });
         },
+        onError:(error:any)=>{
+            console.log(error)
+        }
     });
 
     const {
@@ -101,12 +104,10 @@ const Settings = () => {
 
     const onSubmitPassword = (data: any, e?: React.BaseSyntheticEvent) => {
         e?.preventDefault();
-        const password = data.oldPassword;
-        const passwordConfirmation = data.newPassword;
         if (data.newPassword) {
             newPassword.mutate({
-                password,
-                passwordConfirmation,
+                oldPassword: data.oldPassword,
+                newPassword: data.newPassword,
             });
         }
     };
@@ -196,8 +197,8 @@ const Settings = () => {
                             )}
                         </div>
                         <button
-                            disabled={!isDirty || !isValid}
-                            className={`submit-button ${(!isDirty || !isValid) && 'hidden'}`}
+                            disabled={ !isValid}
+                            className={`submit-button ${( !isValid) && 'hidden'}`}
                             type="submit"
                         >
                             Зберегти
@@ -313,16 +314,6 @@ const Settings = () => {
                                         required: {
                                             value: true,
                                             message: "Це поле є обов'язковим",
-                                        },
-                                        validate: {
-                                            samePassword: (value) => {
-                                                const { oldPassword } =
-                                                    getValues2();
-                                                return (
-                                                    value === oldPassword ||
-                                                    'Паролі повинні співпадати'
-                                                );
-                                            },
                                         },
                                     })}
                                 />
