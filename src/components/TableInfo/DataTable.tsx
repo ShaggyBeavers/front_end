@@ -136,22 +136,22 @@ export function DataTable<TData, TValue>({
     const getReportFiles = useMutation({
         mutationFn: async (reportId: number) =>
             await ReportAPI.getReportFiles(reportId),
-            // await RelicAPI.getRelicFiles(20),
+        // await RelicAPI.getRelicFiles(20),
         onSuccess: (response: any) => {
             console.log('Response', response);
             const reader = new FileReader();
             reader.onloadstart = function (e) {
                 console.log('Loading started');
-            }
+            };
             reader.onloadend = function (e) {
                 console.log('Loading ended');
-            }
+            };
             reader.onabort = function (e) {
                 console.log('Loading aborted');
-            }
+            };
             reader.onprogress = function (e) {
                 console.log('Loading in progress');
-            }
+            };
             reader.onload = function (e) {
                 console.log('INside loading');
                 const arrayBuffer = new Uint8Array(
@@ -174,13 +174,11 @@ export function DataTable<TData, TValue>({
             reader.onerror = function (e) {
                 console.error('Error reading file:', e?.target?.error);
             };
-            console.log("Reached reader")
+            console.log('Reached reader');
             reader.readAsArrayBuffer(response);
-            console.log("Passed reader")
+            console.log('Passed reader');
         },
     });
-
-
 
     const handleRowClick = async (reportId: number) => {
         getReport.mutate(reportId);
@@ -188,7 +186,7 @@ export function DataTable<TData, TValue>({
     };
 
     const [currentPictureIndex, setCurrentPictureIndex] = useState(0);
-    
+
     const pictures = [
         '/assets/images/dima_tall.png',
         '/assets/images/dima_wide.jpg',
@@ -252,8 +250,6 @@ export function DataTable<TData, TValue>({
         getFacetedRowModel: getFacetedRowModel(),
         getFacetedUniqueValues: getFacetedUniqueValues(),
     });
-
-    
 
     // const [modals, setModals] = useState<IModal>({isFilter,});
 
@@ -398,38 +394,39 @@ export function DataTable<TData, TValue>({
                                     {selectedReport.mapLocation || '-'}
                                 </p>
                             </div>
-                            <div className="report-modal-right">
-                                {/* {images.length > 0 && ( */}
-                                <img
-                                    className="modal-image"
-                                    src={`data:image/png;base64, ${images[currentPictureIndex]}`}
-                                    alt={`Image ${currentPictureIndex + 1}`}
-                                />
-                                {/*  )} */}
-                                <div className="report-modal-btns">
-                                    <button
-                                        className="arrow-button"
-                                        onClick={handlePreviousPicture}
-                                        disabled={currentPictureIndex === 0}
-                                    >
-                                        <ChevronLeftIcon />
-                                    </button>
-                                    <button
-                                        className="arrow-button"
-                                        onClick={handleNextPicture}
-                                        disabled={
-                                            currentPictureIndex ===
-                                            pictures.length - 1
-                                        }
-                                    >
-                                        <ChevronRightIcon />
-                                    </button>
+                            {images.length > 0 && (
+                                <div className="report-modal-right">
+                                    <img
+                                        className="modal-image"
+                                        src={`data:image/png;base64, ${images[currentPictureIndex]}`}
+                                        alt={`Image ${currentPictureIndex + 1}`}
+                                    />
+                                    <div className="report-modal-btns">
+                                        <button
+                                            className="arrow-button"
+                                            onClick={handlePreviousPicture}
+                                            disabled={currentPictureIndex === 0}
+                                        >
+                                            <ChevronLeftIcon />
+                                        </button>
+                                        <button
+                                            className="arrow-button"
+                                            onClick={handleNextPicture}
+                                            disabled={
+                                                currentPictureIndex ===
+                                                pictures.length - 1
+                                            }
+                                        >
+                                            <ChevronRightIcon />
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                         </div>
                         <button
-                            onClick={() => {setIsModalOpen(false)
-                            setImages([])
+                            onClick={() => {
+                                setIsModalOpen(false);
+                                setImages([]);
                             }}
                             className="bg-black text-white rounded-lg px-4 py-2 mt-6"
                         >
