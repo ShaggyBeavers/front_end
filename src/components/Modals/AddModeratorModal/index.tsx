@@ -117,12 +117,15 @@ const AddModeratorModal = (props: any) => {
             (user: any) => user.id === formData.userId
         );
 
+        let role = regModerator ? RoleEnum.REGIONAL_MODERATOR : RoleEnum.MODERATOR;
+
         console.log('User: ', user);
 
         const nFormData = {
             userId: formData.userId,
             regionIds: formData.regionIds || [],
             categoryIds: formData.categoryIds || [],
+            role: role
         };
 
         // addModerator.mutate(nFormData);
@@ -132,6 +135,7 @@ const AddModeratorModal = (props: any) => {
             else changeModerator.mutate(nFormData);
             return;
         }
+
         if (regModerator) addRegModerator.mutate(nFormData);
         else addModerator.mutate(nFormData);
 

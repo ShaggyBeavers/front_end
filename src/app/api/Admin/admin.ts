@@ -1,4 +1,6 @@
+import { RoleEnum } from '@/src/enums/roles';
 import requests, { authAPi } from '../requests';
+
 
 const AdminAPI = {
     getRegionalModerators: () => authAPi.get('api/admin/regional-moderators'),
@@ -27,11 +29,13 @@ const AdminAPI = {
         userId: number;
         regionIds: string[];
         categoryIds: string[];
+        role: RoleEnum;
     }) => authAPi.patch('api/admin/moderators', values),
     changeRegModerator: (values: {
         userId: number;
         regionIds: string[];
         categoryIds: string[];
+        role: RoleEnum;
     }) => authAPi.patch('api/admin/regional-moderators', values),
 };
 
