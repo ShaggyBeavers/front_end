@@ -16,7 +16,7 @@ const WeeklyExhibit = () => {
                         <h2>Опис:</h2>
                         <div className="week_descr">
                             <div className="week_title">
-                                <Link to={'/catalogue/1'}>
+                                <Link to={'/catalogue/34'}>
                                     <h6>
                                         Мозаїчне зображення Димитрія Солунського
                                         з Михайлівського Золотоверхого собору
