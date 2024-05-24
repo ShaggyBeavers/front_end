@@ -49,13 +49,41 @@ const AddModeratorModal = (props: any) => {
 
     const addRegModerator = useMutation({
         mutationKey: ['addRegModerator'],
+        mutationFn: (data: any) => AdminAPI.addRegionalModerator(data),
+        onSuccess: (data) => {
+            toast.success('Користувачу надані права регіонального модератора');
+        },
+        onError: (error) => {
+            toast.error(
+                'Помилка при додаванні Регіонального модератора. Цей користувач вже є звичайним або регіональним модератором.'
+            );
+            console.log('Error on adding regional moderator: ', error);
+        },
+    });
+
+    const changeModerator = useMutation({
+        mutationKey: ['changeModerator'],
+        mutationFn: (data: any) => AdminAPI.changeModerator(data),
+        onSuccess: (data) => {
+            toast.success('Користувачу надані права Модератора');
+        },
+        onError: (error) => {
+            toast.error(
+                'Помилка при додаванні Модератора. Цей користувач вже є звичайним або регіональним модератором.'
+            );
+            console.log('Error on adding moderator: ', error);
+        },
+    });
+
+    const changeRegModerator = useMutation({
+        mutationKey: ['changeRegModerator'],
         mutationFn: (data: any) => AdminAPI.changeRegModerator(data),
         onSuccess: (data) => {
             toast.success('Користувачу надані права регіонального модератора');
         },
         onError: (error) => {
             toast.error(
-                'Помилка при додаванні модератора. Цей користувач вже є звичайним або регіональним модератором.'
+                'Помилка при додаванні Регіонального модератора. Цей користувач вже є звичайним або регіональним модератором.'
             );
             console.log('Error on adding regional moderator: ', error);
         },
@@ -84,6 +112,12 @@ const AddModeratorModal = (props: any) => {
 
     const onSubmit = (data: any) => {
         const { regModerator, ...formData } = data;
+        // From users list get roleName of the user with id mathcing formData.userId
+        const user = users.data?.data.find(
+            (user: any) => user.id === formData.userId
+        );
+
+        console.log('User: ', user);
 
         const nFormData = {
             userId: formData.userId,
@@ -92,7 +126,12 @@ const AddModeratorModal = (props: any) => {
         };
 
         // addModerator.mutate(nFormData);
-
+        // if user is already a moderator
+        if (user?.roleName === RoleEnum.MODERATOR || user?.roleName === RoleEnum.REGIONAL_MODERATOR) {
+            if (regModerator) changeRegModerator.mutate(nFormData);
+            else changeModerator.mutate(nFormData);
+            return;
+        }
         if (regModerator) addRegModerator.mutate(nFormData);
         else addModerator.mutate(nFormData);
 
