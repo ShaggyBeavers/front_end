@@ -15,8 +15,8 @@ export interface reportData {
 
 const ReportAPI = {
     createReport: (values: {}) => authAPi.post('api/report/', values),
-    uploadFiles: (reportId: number, values: { file: any[] }) =>
-        authAPi.post(`api/report/files/upload/${reportId}`, values),
+    uploadFiles: (reportId: number, file: any[] ) =>
+        authAPi.post(`api/report/files/upload/${reportId}`, file),
     getAllReports: (page: number, size: number) =>
         authAPi.get(`api/report/?page=${page}&size=${size}`),
     updateReportStatus: (values: {

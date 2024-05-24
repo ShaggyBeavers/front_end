@@ -35,7 +35,7 @@ const AddModeratorModal = (props: any) => {
     const addModerator = useMutation({
         mutationKey: ['addModerator'],
         // mutationFn: (data: any) => AdminAPI.addModerator(data),
-        mutationFn: (data: any) => AdminAPI.changeModerator(data),
+        mutationFn: (data: any) => AdminAPI.addModerator(data),
         onSuccess: (data) => {
             toast.success('Користувачу надані права модератора');
         },

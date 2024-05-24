@@ -9,6 +9,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import UserAPI from '../../../../src/app/api/Account/User/user';
 import ProtectedItems from '../../ProtectedItems';
 import { RoleEnum } from '../../../../src/enums/roles';
+import { toast } from 'sonner';
 
 const Settings = () => {
     const queryClient = useQueryClient();
@@ -35,6 +36,8 @@ const Settings = () => {
         }) => UserAPI.updatePassword(values),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['currentUser'] });
+            resetPasswordForm();
+            toast.success('Пароль успішно змінено');
         },
         onError:(error:any)=>{
             console.log(error)
@@ -60,6 +63,7 @@ const Settings = () => {
         formState: { errors: errors2, isValid: isValid2, isDirty: isDirty2 },
         watch: watch2,
         getValues: getValues2,
+        reset: resetPasswordForm
     } = useForm({
         mode: 'onBlur',
     });
@@ -104,6 +108,7 @@ const Settings = () => {
 
     const onSubmitPassword = (data: any, e?: React.BaseSyntheticEvent) => {
         e?.preventDefault();
+        console.log(data)
         if (data.newPassword) {
             newPassword.mutate({
                 oldPassword: data.oldPassword,

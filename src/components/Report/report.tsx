@@ -24,6 +24,7 @@ import {
 import { FormControl, FormField, FormItem, FormMessage } from '../ui/form';
 import { useAtom } from 'jotai';
 import { filesAtom, selectedPropertiesAtom } from '../../stores/atoms';
+import { useMutation } from '@tanstack/react-query';
 
 export default function Report() {
     const { register, handleSubmit, formState, reset, setValue, control } =
@@ -43,6 +44,34 @@ export default function Report() {
         { value: string; id: number }[]
     >([]);
     const navigate = useNavigate();
+    const [files, setFiles] = useAtom(filesAtom);
+
+
+    const addReport = useMutation({
+        mutationFn: ReportAPI.createReport,
+        onSuccess: (data) => {
+            console.log(
+                'Report added. Now we can start adding photos to: ',
+                data
+            );
+        },
+        onError: (error) => {
+            console.log(error);
+            toast.error('Помилка при додаванні репорту');
+        },
+    });
+
+    const uploadReportFile = useMutation({
+        mutationFn: async ({ reportId, file }: { reportId: number; file: any }) =>
+            await ReportAPI.uploadFiles(reportId, file),
+        onSuccess: () => {
+            console.log('File uploaded');
+        },
+        onError: (error) => {
+            console.log(error);
+            toast.error('Помилка при завантаженні файлу');
+        },
+    });
 
     const submitForm: SubmitHandler<reportData> = async (data) => {
         try {
@@ -53,23 +82,33 @@ export default function Report() {
                 regionId: selectedRegion ? selectedRegion.id : null,
             };
 
-            const response = await ReportAPI.createReport(formData);
-            const reportId = response.data;
+            const fileData = new FormData();
+            files.forEach((file) => {
+                if (file?.file) {
+                    fileData.append('file', file.file);
+                }
+            });
 
-            const fileData = {
-                file: files.map((file) => file.file),
-            };
-            console.log(fileData)
+            console.log('REPORT FILE',fileData)
 
-            await ReportAPI.uploadFiles(reportId, fileData);
+            addReport
+                .mutateAsync(formData)
+                .then((data: any) => {
+                    console.log(data.data)
+                    uploadReportFile.mutate({
+                        reportId: data.data,
+                        file: fileData,
+                    });
+                })
+                .catch((error: any) => {
+                    console.log(error);
+                });
+
             reset();
             setSelectedCategories([]);
             setSelectedRegion(null);
             setFiles([]);
-            toast.success('Ваша звістка успішно надіслана');
-            setTimeout(() => {
-                navigate('/profile');
-            }, 1250);
+            navigate('/profile');
         } catch (error: any) {
             if (error) {
                 console.log(error);
@@ -120,7 +159,6 @@ export default function Report() {
         fetchCategories();
     }, []);
 
-    const [files, setFiles] = useAtom(filesAtom);
     const [imgSrc, setImgSrc] = useState<any>(undefined);
     const { field } = useController({
         name: 'image',

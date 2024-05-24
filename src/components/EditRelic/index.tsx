@@ -305,6 +305,9 @@ export const EditRelic = () => {
         });
 
         setFileFormData(fileData);
+
+        console.log('RELIC FILE',fileData)
+
         addRelic
             .mutateAsync(relic)
             .then((data: any) => {
