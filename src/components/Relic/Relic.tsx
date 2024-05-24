@@ -9,7 +9,7 @@ import {
 } from '@tanstack/react-query';
 // import { unzipFile } from '../../../src/lib/utils';
 import { set } from 'zod';
-import { gzipSync, decompressSync, unzipSync, unzip } from 'fflate';
+import { unzipSync} from 'fflate';
 import { Buffer } from 'buffer';
 import { imageProcessing } from '../../../src/lib/imageFunc';
 import ProtectedItems from '../ProtectedItems';
