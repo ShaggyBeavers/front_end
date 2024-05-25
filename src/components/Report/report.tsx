@@ -111,7 +111,7 @@ export default function Report() {
             toast.success('Звістку успішно надіслано!');
             setTimeout(() => {
                 navigate('/profile');
-            }, 1000);
+            }, 2000);
         } catch (error: any) {
             if (error) {
                 console.log(error);
