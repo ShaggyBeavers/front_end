@@ -108,6 +108,7 @@ export default function Report() {
             setSelectedCategories([]);
             setSelectedRegion(null);
             setFiles([]);
+            toast.success('Звістку успішно надіслано!');
             setTimeout(() => {
                 navigate('/profile');
             }, 1000);
