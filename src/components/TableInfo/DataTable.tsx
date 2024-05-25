@@ -372,7 +372,7 @@ export function DataTable<TData, TValue>({
                                 </p>
                                 <p>
                                     <span className="font-bold">
-                                        Ймовірне місце розсташування:
+                                        Ймовірне місце розташування:
                                     </span>{' '}
                                     {selectedReport.mapLocation || '-'}
                                 </p>
