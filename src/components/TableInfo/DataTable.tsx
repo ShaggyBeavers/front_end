@@ -198,7 +198,7 @@ export function DataTable<TData, TValue>({
             setCurrentPictureIndex(currentPictureIndex + 1);
         }
     };
-    
+
     const reports = useQuery({
         queryKey: ['reports', pagination.pageIndex, pagination.pageSize],
         queryFn: async () =>
@@ -344,10 +344,6 @@ export function DataTable<TData, TValue>({
                                 <h2 className="text-xl font-bold mb-4">
                                     Деталі звістки
                                 </h2>
-                                <p>
-                                    <span className="font-bold">User ID: </span>{' '}
-                                    {selectedReport.userId || '-'}
-                                </p>
                                 <p className="break-word">
                                     <span className="font-bold">Назва:</span>{' '}
                                     {selectedReport.name || '-'}
