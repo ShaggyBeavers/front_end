@@ -187,11 +187,6 @@ export function DataTable<TData, TValue>({
 
     const [currentPictureIndex, setCurrentPictureIndex] = useState(0);
 
-    const pictures = [
-        '/assets/images/dima_tall.png',
-        '/assets/images/dima_wide.jpg',
-    ];
-
     const handlePreviousPicture = () => {
         if (currentPictureIndex > 0) {
             setCurrentPictureIndex(currentPictureIndex - 1);
@@ -199,11 +194,11 @@ export function DataTable<TData, TValue>({
     };
 
     const handleNextPicture = () => {
-        if (currentPictureIndex < pictures.length - 1) {
+        if (currentPictureIndex < images.length - 1) {
             setCurrentPictureIndex(currentPictureIndex + 1);
         }
     };
-    ///
+    
     const reports = useQuery({
         queryKey: ['reports', pagination.pageIndex, pagination.pageSize],
         queryFn: async () =>
@@ -349,13 +344,6 @@ export function DataTable<TData, TValue>({
                                 <h2 className="text-xl font-bold mb-4">
                                     Деталі звістки
                                 </h2>
-                                {/* <p>
-                                    <span className="font-bold">
-                                        User Email:{' '}
-                                    </span>{' '}
-                                    test email
-                                    {selectedReport.userEmail}
-                                </p> */}
                                 <p>
                                     <span className="font-bold">User ID: </span>{' '}
                                     {selectedReport.userId || '-'}
@@ -368,7 +356,6 @@ export function DataTable<TData, TValue>({
                                     <span className="font-bold">
                                         Категорія:
                                     </span>{' '}
-                                    {/* cdsjcndsk */}
                                     {selectedReport.categoryDTOs
                                         .map((category) => category.name)
                                         .join(', ') || '-'}
@@ -414,7 +401,7 @@ export function DataTable<TData, TValue>({
                                             onClick={handleNextPicture}
                                             disabled={
                                                 currentPictureIndex ===
-                                                pictures.length - 1
+                                                images.length - 1
                                             }
                                         >
                                             <ChevronRightIcon />

@@ -108,7 +108,9 @@ export default function Report() {
             setSelectedCategories([]);
             setSelectedRegion(null);
             setFiles([]);
-            navigate('/profile');
+            setTimeout(() => {
+                navigate('/profile');
+            }, 1000);
         } catch (error: any) {
             if (error) {
                 console.log(error);
