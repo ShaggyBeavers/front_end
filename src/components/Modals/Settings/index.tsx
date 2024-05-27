@@ -26,6 +26,7 @@ const Settings = () => {
         }) => UserAPI.editUser(values),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['currentUser'] });
+            toast.success('Інформація успішно оновлена');
         },
     });
 

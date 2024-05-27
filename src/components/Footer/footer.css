@@ -19,6 +19,10 @@
     transition: 0.5s;
 }
 
+.footer h6{
+    color:white;
+}
+
 .footer a:hover,
 .footer h2:hover {
     transition: 0.5s;
@@ -40,7 +44,7 @@
 }
 
 .footer_nav {
-    margin-top: 5.1875rem;
+    margin-top: 3.1875rem;
     padding: 0 10.875rem 0 1.5rem;
 }
 

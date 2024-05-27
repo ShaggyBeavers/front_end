@@ -11,6 +11,7 @@ const Topper = () => {
             <div className="topper">
                 <div className="topper_con">
                     <h1>Реліквії.3D-музей</h1>
+                    <h6>Тестова версія, представлена для ознайомлення</h6>
                     <Search/>
                 </div>
             </div>

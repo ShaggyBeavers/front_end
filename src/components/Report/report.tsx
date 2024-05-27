@@ -384,7 +384,7 @@ export default function Report() {
                                     className="report_input optional_v "
                                     style={{ width: '100%' }}
                                 >
-                                    <label htmlFor="name">Регіон:</label>
+                                    <label htmlFor="name">Регіон походження:</label>
                                     <label>
                                         <p>(опційно)</p>
                                     </label>
