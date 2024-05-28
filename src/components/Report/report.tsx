@@ -46,7 +46,6 @@ export default function Report() {
     const navigate = useNavigate();
     const [files, setFiles] = useAtom(filesAtom);
 
-
     const addReport = useMutation({
         mutationFn: ReportAPI.createReport,
         onSuccess: (data) => {
@@ -62,8 +61,13 @@ export default function Report() {
     });
 
     const uploadReportFile = useMutation({
-        mutationFn: async ({ reportId, file }: { reportId: number; file: any }) =>
-            await ReportAPI.uploadFiles(reportId, file),
+        mutationFn: async ({
+            reportId,
+            file,
+        }: {
+            reportId: number;
+            file: any;
+        }) => await ReportAPI.uploadFiles(reportId, file),
         onSuccess: () => {
             console.log('File uploaded');
         },
@@ -89,16 +93,17 @@ export default function Report() {
                 }
             });
 
-            console.log('REPORT FILE',fileData)
+            console.log('REPORT FILE', fileData);
 
             addReport
                 .mutateAsync(formData)
                 .then((data: any) => {
-                    console.log(data.data)
-                    uploadReportFile.mutate({
-                        reportId: data.data,
-                        file: fileData,
-                    });
+                    console.log(data.data);
+                    if (files.length > 0)
+                        uploadReportFile.mutate({
+                            reportId: data.data,
+                            file: fileData,
+                        });
                 })
                 .catch((error: any) => {
                     console.log(error);
@@ -384,7 +389,9 @@ export default function Report() {
                                     className="report_input optional_v "
                                     style={{ width: '100%' }}
                                 >
-                                    <label htmlFor="name">Регіон походження:</label>
+                                    <label htmlFor="name">
+                                        Регіон походження:
+                                    </label>
                                     <label>
                                         <p>(опційно)</p>
                                     </label>
