@@ -14,7 +14,7 @@ const HelpBanner = () => {
                         <h2>Ти чув, бачив чи знаєш про втрачену реліквію?</h2>
                     </div>
                     <div className="Hban_lan_con_right">
-                        <h2>Поможи - заповни форму</h2>
+                        <h2>Поможи - заповни форму*</h2>
                         <Link to={'/report'} onClick={handleClick}><h2 className='help_link'>"Повідомити"</h2></Link>
                     </div>
                     <div className="Hban_lan_con_left">
