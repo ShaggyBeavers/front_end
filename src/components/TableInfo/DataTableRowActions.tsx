@@ -36,11 +36,10 @@ import { toast } from 'sonner';
 
 interface DataTableRowActionsProps<TData> {
     row: Row<TData>;
+    isUser:boolean;
 }
 
-export function DataTableRowActions<TData>({
-    row,
-}: DataTableRowActionsProps<TData>) {
+export function DataTableRowActions<TData>({ row, isUser }: DataTableRowActionsProps<TData>) {
     const queryClient = useQueryClient();
     // const task = taskSchema.parse(row.original);
     const changeStatus = useMutation({
@@ -114,7 +113,7 @@ export function DataTableRowActions<TData>({
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[200px]">
-                {statuses.map((status) => (
+            {!isUser && statuses.map((status) => (
                     <DropdownMenuItem
                         key={status.value}
                         onClick={() => {
@@ -128,19 +127,19 @@ export function DataTableRowActions<TData>({
                             className={`${status.color} ${status.label === 'Опрацьовується' ? 'h-8 w-8' : 'h-6 w-6'}`}
                         />
                         <span className="ml-2">Змінити на {status.label}</span>
-                        {/* <span className="ml-1">{status.label}</span> */}
                     </DropdownMenuItem>
                 ))}
-                <DropdownMenuSeparator className="bg-gray-200" />
-                <DropdownMenuItem
-                    onClick={() => {
-                        // console.log('Ban ', row.getValue('userId'));
-                        banUnban.mutate(row.getValue('userId'));
-                    }}
-                >
-                    <Ban className="mr-1 max-w-4" />
-                    Блок автора
-                </DropdownMenuItem>
+                 {!isUser && <DropdownMenuSeparator className="bg-gray-200" />}
+                 {!isUser && (
+                    <DropdownMenuItem
+                        onClick={() => {
+                            banUnban.mutate(row.getValue('userId'));
+                        }}
+                    >
+                        <Ban className="mr-1 max-w-4" />
+                        Блок автора
+                    </DropdownMenuItem>
+                )}
                 {/* <DropdownMenuItem
                     onClick={() => {
                         handleDeleteReport(row.getValue('reportId'));

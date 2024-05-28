@@ -75,19 +75,19 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
     let isUserId = false;
     let isReportId = false;
-    if (
-        checkAuthRole([
-            RoleEnum.ADMIN,
-            RoleEnum.MODERATOR,
-            RoleEnum.REGIONAL_MODERATOR,
-        ])
-    ) {
-        if (!columns.some((column) => column.id === 'action')) {
-            columns.push({
-                id: 'action',
-                cell: ({ row }: any) => <DataTableRowActions row={row} />,
-            });
-        }
+
+    const isAdminOrMod = checkAuthRole([
+        RoleEnum.ADMIN,
+        RoleEnum.MODERATOR,
+        RoleEnum.REGIONAL_MODERATOR,
+    ]);
+    const isUser = checkAuthRole([RoleEnum.USER]);
+
+    if (!columns.some((column) => column.id === 'action')) {
+        columns.push({
+            id: 'action',
+            cell: ({ row }: any) => <DataTableRowActions row={row} isUser={isUser} />,
+        });
         isUserId = true;
         isReportId = true;
     }

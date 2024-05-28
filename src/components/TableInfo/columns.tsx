@@ -149,18 +149,18 @@ let tmpColumns: any = [
     },
 ];
 
-if (
-    checkAuthRole([
-        RoleEnum.ADMIN,
-        RoleEnum.MODERATOR,
-        RoleEnum.REGIONAL_MODERATOR,
-    ])
-) {
-    tmpColumns.push({
-        id: 'action',
-        cell: ({ row }: any) => <DataTableRowActions row={row} />,
-    });
-}
+// if (
+//     checkAuthRole([
+//         RoleEnum.ADMIN,
+//         RoleEnum.MODERATOR,
+//         RoleEnum.REGIONAL_MODERATOR,
+//     ])
+// ) {
+//     tmpColumns.push({
+//         id: 'action',
+//         cell: ({ row }: any) => <DataTableRowActions row={row} />,
+//     });
+// }
 
 export const columns = tmpColumns;
 // export const columns;
