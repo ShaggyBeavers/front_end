@@ -27,6 +27,29 @@ interface SideMenuProps {
     currentPage: string;
 }
 
+interface VideoButtonProps {
+    role: RoleEnum[];
+}
+
+const VideoButton:React.FC<VideoButtonProps> = ({ role }) => {
+    const videoUrl = role[0] === RoleEnum.ADMIN
+        ? 'https://www.youtube.com/watch?v=ndy6QYAn49M'
+        : role[0] === RoleEnum.MODERATOR || role[0] === 'REGIONAL_MODERATOR'
+        ? 'https://www.youtube.com/watch?v=vdXfAeYEog8'
+        : 'https://www.youtube.com/watch?v=vvuzXQ5rWZs';
+
+    return (
+        <ProtectedItems role={role}>
+            <DefaultButton
+                height={38}
+                width={290}
+                text="Переглянути відеоінструкцію"
+                action={() => window.open(videoUrl, '_blank')}
+            />
+        </ProtectedItems>
+    );
+};
+
 const SideMenu: React.FC<SideMenuProps> = ({ currentPage }) => {
     const navigate = useNavigate();
     const [isModOpen, setIsModOpen] = useState(false);
@@ -46,7 +69,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ currentPage }) => {
         },
         addModerator: {
             isOpen: false,
-            content: <AddModeratorModal closeModal={closeModal}/>,
+            content: <AddModeratorModal closeModal={closeModal} />,
             styles: 'add-moderator-window',
         },
         // moderatorsList: {
@@ -207,6 +230,9 @@ const SideMenu: React.FC<SideMenuProps> = ({ currentPage }) => {
                         />
                     )}
                 </ProtectedItems>
+              <VideoButton role={[RoleEnum.ADMIN]}/>
+              <VideoButton role={[RoleEnum.MODERATOR,RoleEnum.REGIONAL_MODERATOR]}/>
+              <VideoButton role={[RoleEnum.USER]}/>
             </div>
         </>
     );

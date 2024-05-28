@@ -25,7 +25,7 @@ const NavBar: React.FC<NavBarProps> = ({ styles }) => {
                         {location.pathname === '/' ? (
                             <Logo size="75px" color="black" />
                         ) : (
-                            <h2>Реліквії</h2>
+                            <h2 style={{fontSize:'25px',width:'100px'}}>Реліквії.3D-музей.Тест</h2>
                         )}
                     </Link>
                 </div>

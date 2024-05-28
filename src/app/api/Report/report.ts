@@ -10,10 +10,13 @@ export interface reportData {
     status: statusTypeEN;
     infoReferences: string;
     regionId: number;
+    image?: any;
 }
 
 const ReportAPI = {
     createReport: (values: {}) => authAPi.post('api/report/', values),
+    uploadFiles: (reportId: number, file: any[] ) =>
+        authAPi.post(`api/report/files/upload/${reportId}`, file),
     getAllReports: (page: number, size: number) =>
         authAPi.get(`api/report/?page=${page}&size=${size}`),
     updateReportStatus: (values: {
@@ -28,6 +31,8 @@ const ReportAPI = {
         authAPi.delete(`api/report/delete/${reportId}`),
     deleteReportFiles: (reportId: number) =>
         authAPi.delete(`api/report/files/delete/${reportId}`),
+    getReportFiles: (reportId: number) =>
+        authAPi.get(`api/report/files/download/${reportId}`, {responseType: 'blob'}).then(response => response.data),
 };
 
 export default ReportAPI;

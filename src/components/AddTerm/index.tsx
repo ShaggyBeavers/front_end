@@ -286,6 +286,10 @@ const AddTerm = () => {
                                 >
                                     Зберегти
                                 </button>
+                                <p className="save_note">
+                                    (термін, який використовується, <br />
+                                    видалити неможливо)
+                                </p>
                             </div>
                         </div>
                         <div

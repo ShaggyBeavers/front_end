@@ -91,7 +91,7 @@ export const EditRelic = () => {
         mutationFn: async ({ relicId, file }: { relicId: number; file: any }) =>
             await RelicAPI.uploadRelicFile(relicId, file),
         onSuccess: () => {
-            // console.log('File uploaded');
+            console.log('File uploaded');
             queryClient.invalidateQueries({ queryKey: ['relicImages'] });
         },
         onError: (error) => {
@@ -122,6 +122,9 @@ export const EditRelic = () => {
             setRelicId(data.data);
             // uploadRelicFile.mutate({ relicId: data.data, file: fileFormData });
             console.log('RElic ID:', data.data);
+            
+        },
+        onSettled: () => {
             toast.success(`Реліквія добавлена`, {
                 // description: (
                 //     <>
@@ -131,8 +134,6 @@ export const EditRelic = () => {
                 //     </>
                 // ),
             });
-        },
-        onSettled: () => {
             // console.log('Relid ID:', relicId);
         },
         onError: (error) => {
@@ -305,14 +306,15 @@ export const EditRelic = () => {
         });
 
         setFileFormData(fileData);
-        addRelic
-            .mutateAsync(relic)
-            .then((data: any) => {
-                uploadRelicFile.mutate({ relicId: relicId, file: formData });
-            })
-            .catch((error: any) => {
-                console.log(error);
-            });
+
+        console.log('RELIC FILE',fileData)
+
+        addRelic.mutateAsync(relic).then((data) => {
+            uploadRelicFile.mutate({ relicId: data.data, file: fileData });
+        }).catch((error) => {
+            console.log(error);
+            toast.error('Помилка при додаванні реліквії');
+        });
 
         // addRelic.mutate(relic);
 

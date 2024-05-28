@@ -2,6 +2,9 @@ import { Link } from 'react-router-dom';
 import './w_exhibit.css';
 
 const WeeklyExhibit = () => {
+    const handleClick = () => {
+        window.scrollTo(0, 0);
+    };
     return (
         <div>
             <div className="weekly_exhibit">
@@ -16,7 +19,7 @@ const WeeklyExhibit = () => {
                         <h2>Опис:</h2>
                         <div className="week_descr">
                             <div className="week_title">
-                                <Link to={'/catalogue/1'}>
+                                <Link to={'/catalogue/34'} onClick={handleClick}>
                                     <h6>
                                         Мозаїчне зображення Димитрія Солунського
                                         з Михайлівського Золотоверхого собору

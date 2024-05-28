@@ -40,7 +40,13 @@
 
 .term-input-save {
     display: flex;
-    gap: 2rem;
+    gap: 1rem;
+    align-items: end;
+}
+
+.save_note{
+    color: #c5c5c5;
+    font-size: 0.8125rem;
 }
 
 .term-input-save button {

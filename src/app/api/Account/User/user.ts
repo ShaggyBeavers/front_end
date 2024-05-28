@@ -15,13 +15,14 @@ const UserAPI = {
         requests.post('api/user/password/request-reset', values),
     newPassword: (values: { password: string; passwordConfirmation: string }) =>
         requests.patch('api/user/password/change', values),
+    updatePassword: (values: { oldPassword: string; newPassword: string }) =>
+        authAPi.patch('api/user/password/change-with-old-one', values),
     banUnban: (userId: number) =>
         authAPi.post(`api/user/ban-unban/${userId}`, userId),
     getUserEmail: () => requests.get('api/user/email'),
     // getUserProfile: () => requests.get('api/user/current-profile'),
     getUserProfile: () => authAPi.get('api/user/current-profile'),
     getUsers: () => authAPi.get('api/user/'),
-    
 };
 
 export default UserAPI;

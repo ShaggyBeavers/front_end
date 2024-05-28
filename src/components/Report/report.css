@@ -112,5 +112,7 @@
     justify-content: center;
 }
 
-
+.files-ui-dropzone-children-container span  {
+    display: none
+}
 

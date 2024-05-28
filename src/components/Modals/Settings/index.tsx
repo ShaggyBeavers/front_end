@@ -9,6 +9,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import UserAPI from '../../../../src/app/api/Account/User/user';
 import ProtectedItems from '../../ProtectedItems';
 import { RoleEnum } from '../../../../src/enums/roles';
+import { toast } from 'sonner';
 
 const Settings = () => {
     const queryClient = useQueryClient();
@@ -25,17 +26,23 @@ const Settings = () => {
         }) => UserAPI.editUser(values),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['currentUser'] });
+            toast.success('Інформація успішно оновлена');
         },
     });
 
     const newPassword = useMutation({
         mutationFn: (values: {
-            password: string;
-            passwordConfirmation: string;
-        }) => UserAPI.newPassword(values),
+            oldPassword: string;
+            newPassword: string;
+        }) => UserAPI.updatePassword(values),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['currentUser'] });
+            resetPasswordForm();
+            toast.success('Пароль успішно змінено');
         },
+        onError:(error:any)=>{
+            console.log(error)
+        }
     });
 
     const {
@@ -57,6 +64,7 @@ const Settings = () => {
         formState: { errors: errors2, isValid: isValid2, isDirty: isDirty2 },
         watch: watch2,
         getValues: getValues2,
+        reset: resetPasswordForm
     } = useForm({
         mode: 'onBlur',
     });
@@ -73,6 +81,7 @@ const Settings = () => {
         length: password.length >= 8,
         number: /\d/.test(password),
         uppercase: /[A-Z]/.test(password),
+        latin: /^[A-Za-z0-9]*$/.test(password),
     };
 
     const firstName = 'Іван';
@@ -100,12 +109,11 @@ const Settings = () => {
 
     const onSubmitPassword = (data: any, e?: React.BaseSyntheticEvent) => {
         e?.preventDefault();
-        const password = data.oldPassword;
-        const passwordConfirmation = data.newPassword;
+        console.log(data)
         if (data.newPassword) {
             newPassword.mutate({
-                password,
-                passwordConfirmation,
+                oldPassword: data.oldPassword,
+                newPassword: data.newPassword,
             });
         }
     };
@@ -195,8 +203,8 @@ const Settings = () => {
                             )}
                         </div>
                         <button
-                            disabled={!isDirty || !isValid}
-                            className={`submit-button ${(!isDirty || !isValid) && 'hidden'}`}
+                            disabled={ !isValid}
+                            className={`submit-button ${( !isValid) && 'hidden'}`}
                             type="submit"
                         >
                             Зберегти
@@ -234,6 +242,9 @@ const Settings = () => {
                                             hasUppercase: (value) =>
                                                 /[A-Z]/.test(value) ||
                                                 'Пароль повинен містити принаймні 1 велику літеру',
+                                            hasLatin: (value) =>
+                                                /^[A-Za-z0-9]*$/.test(value) ||
+                                                'Пароль повинен містити тільки латинські символи',
                                         },
                                     })}
                                 />
@@ -278,6 +289,17 @@ const Settings = () => {
                                         >
                                             1 буква у верхньому регістрі
                                         </li>
+                                        <li
+                                            className={
+                                                password
+                                                    ? passwordValidation.latin
+                                                        ? 'password-req-valid'
+                                                        : 'password-req-invalid'
+                                                    : 'password-req-default'
+                                            }
+                                        >
+                                            Тільки латинські символи
+                                        </li>
                                         {/* <li className={passwordValidation.length ? 'requirement-met' : 'requirement-not-met'}>8 символів</li>
                                         <li className={passwordValidation.number ? 'requirement-met' : 'requirement-not-met'}>1 число</li>
                                         <li className={passwordValidation.uppercase ? 'requirement-met' : 'requirement-not-met'}>1 буква у верхньому регістрі</li> */}
@@ -299,16 +321,6 @@ const Settings = () => {
                                             value: true,
                                             message: "Це поле є обов'язковим",
                                         },
-                                        validate: {
-                                            samePassword: (value) => {
-                                                const { oldPassword } =
-                                                    getValues2();
-                                                return (
-                                                    value === oldPassword ||
-                                                    'Паролі повинні співпадати'
-                                                );
-                                            },
-                                        },
                                     })}
                                 />
                                 {errors2.oldPasword && (
@@ -319,8 +331,8 @@ const Settings = () => {
                             </div>
                         </div>
                         <button
-                            disabled={!isValid2 || !isDirty2}
-                            className={`submit-button ${(!isDirty2 || !isValid2) && 'hidden'}`}
+                            disabled={ !isDirty2}
+                            className={`submit-button ${(!isDirty2) && 'hidden'}`}
                             type="submit"
                         >
                             Зберегти
